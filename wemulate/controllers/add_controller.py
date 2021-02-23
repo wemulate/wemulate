@@ -3,7 +3,7 @@ from cement import Controller, ex
 class AddController(Controller):
     class Meta:
         label = 'add'
-
+        help = 'add a new connection or parameter'
         stacked_on = 'base'
         stacked_type = 'nested'
 

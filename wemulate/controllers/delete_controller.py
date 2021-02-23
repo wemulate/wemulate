@@ -3,7 +3,7 @@ from cement import Controller, ex
 class DeleteController(Controller):
     class Meta:
         label = 'delete'
-
+        help = 'delete parameter or connection'
         stacked_on = 'base'
         stacked_type = 'nested'
 

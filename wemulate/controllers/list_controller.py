@@ -3,7 +3,7 @@ from cement import Controller, ex
 class ListController(Controller):
     class Meta:
         label = 'list'
-
+        help = 'list specific informations'
         stacked_on = 'base'
         stacked_type = 'nested'
         

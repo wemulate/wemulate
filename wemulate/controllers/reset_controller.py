@@ -3,7 +3,7 @@ from cement import Controller, ex
 class ResetController(Controller):
     class Meta:
         label = 'reset'
-
+        help = 'reset connection or program'
         stacked_on = 'base'
         stacked_type = 'nested'
 
