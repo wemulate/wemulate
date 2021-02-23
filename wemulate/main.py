@@ -1,4 +1,14 @@
 
+from os import register_at_fork
+from wemulate.controllers.load_controller import LoadController
+from wemulate.controllers.save_controller import SaveController
+from wemulate.controllers.config_controller import ConfigController
+from wemulate.controllers.reset_controller import ResetController
+from wemulate.controllers.delete_controller import DeleteController
+from wemulate.controllers.set_controller import SetController
+from wemulate.controllers.list_controller import ListController
+from wemulate.controllers.add_controller import AddController
+from wemulate.controllers.show_controller import ShowController
 from cement import App, TestApp, init_defaults
 from cement.core.exc import CaughtSignal
 from .core.exc import WEmulateError
@@ -42,7 +52,16 @@ class WEmulate(App):
 
         # register handlers
         handlers = [
-            Base
+            Base,
+            ShowController,
+            AddController,
+            ListController,
+            SetController,
+            DeleteController,
+            ResetController,
+            ConfigController,
+            SaveController,
+            LoadController
         ]
 
 
