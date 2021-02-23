@@ -1,5 +1,4 @@
 
-from os import register_at_fork
 from wemulate.controllers.load_controller import LoadController
 from wemulate.controllers.save_controller import SaveController
 from wemulate.controllers.config_controller import ConfigController
@@ -15,8 +14,8 @@ from .core.exc import WEmulateError
 from .controllers.base import Base
 
 # configuration defaults
-CONFIG = init_defaults('wemulate')
-CONFIG['wemulate']['foo'] = 'bar'
+# CONFIG = init_defaults('wemulate')
+# CONFIG['wemulate']['management_interfaces'] = 'bar'
 
 
 class WEmulate(App):
@@ -26,7 +25,7 @@ class WEmulate(App):
         label = 'wemulate'
 
         # configuration defaults
-        config_defaults = CONFIG
+        # config_defaults = CONFIG
 
         # call sys.exit() on close
         exit_on_close = True
@@ -36,6 +35,7 @@ class WEmulate(App):
             'yaml',
             'colorlog',
             'jinja2',
+            'tabulate'
         ]
 
         # configuration handler
@@ -48,7 +48,10 @@ class WEmulate(App):
         log_handler = 'colorlog'
 
         # set the output handler
-        output_handler = 'jinja2'
+        output_handler = 'tabulate'
+
+        # template directory
+        template_dir = 'templates'
 
         # register handlers
         handlers = [
