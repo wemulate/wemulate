@@ -1,5 +1,7 @@
 from cement import Controller, ex
 
+from wemulate.utils.helper import get_interfaces, get_mgmt_interfaces
+
 class ListController(Controller):
     class Meta:
         label = 'list'
@@ -8,19 +10,21 @@ class ListController(Controller):
         stacked_type = 'nested'
         
     @ex(
-        help='List all Connections',
+        help='list all connections',
     )
     def connections(self):
-        self.app.log.info('All connections will be listed here')
+        self.app.log.info('all connections will be listed here')
         
     @ex(
-        help='List all Interfaces',
+        help='list all interfaces',
     )
     def interfaces(self):
-        self.app.log.info('All Interfaces will be listed here')
+        data = {'interfaces': get_interfaces()}
+        self.app.render(data, 'list_interfaces.jinja2', handler='jinja2')
 
     @ex(
-        help='List all Management Interfaces',
+        help='list all management interfaces',
     )
     def mgmt_interfaces(self):
-        self.app.log.info('All Management Interfaces will be listed here')
+        data = {'interfaces': get_mgmt_interfaces()}
+        self.app.render(data, 'list_interfaces.jinja2', handler='jinja2')
