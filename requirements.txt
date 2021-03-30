@@ -5,3 +5,4 @@ colorlog
 netifaces==0.10.9
 tabulate
 print
+SQLAlchemy==1.4.3
