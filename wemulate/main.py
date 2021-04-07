@@ -1,3 +1,6 @@
+import os
+
+from wemulate.utils.settings import get_db_location
 from wemulate.controllers.load_controller import LoadController
 from wemulate.controllers.save_controller import SaveController
 from wemulate.controllers.config_controller import ConfigController
@@ -8,13 +11,24 @@ from wemulate.controllers.list_controller import ListController
 from wemulate.controllers.add_controller import AddController
 from wemulate.controllers.show_controller import ShowController
 from cement import App, TestApp, init_defaults
+from cement.utils import fs
 from cement.core.exc import CaughtSignal
-from .core.exc import WEmulateError
-from .controllers.base import Base
+from wemulate.core.exc import WEmulateError
+from wemulate.controllers.base import Base
 
-# configuration defaults
-# CONFIG = init_defaults('wemulate')
-# CONFIG['wemulate']['management_interfaces'] = 'bar'
+from wemulate.core.database.setup import (
+    pre_setup_profile,
+    pre_setup_device,
+    pre_setup_interfaces,
+)
+from wemulate.core.database.models import (
+    ProfileModel,
+    DeviceModel,
+    LogicalInterfaceModel,
+    InterfaceModel,
+    ConnectionModel,
+    ParameterModel,
+)
 
 
 class WEmulate(App):
@@ -59,6 +73,13 @@ class WEmulate(App):
             ConfigController,
             SaveController,
             LoadController,
+        ]
+
+        # register hooks
+        hooks = [
+            ("pre_setup", pre_setup_profile, -99),
+            ("pre_setup", pre_setup_device, 0),
+            ("pre_setup", pre_setup_interfaces, 100),
         ]
 
 

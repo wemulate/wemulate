@@ -1,6 +1,10 @@
 import netifaces, yaml
 
 
+def get_config_path():
+    return "/etc/wemulate/wemulate.yml"
+
+
 def _get_config():
     with open("/etc/wemulate/wemulate.yml") as file:
         config = yaml.full_load(file)
