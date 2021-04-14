@@ -112,3 +112,17 @@ config
     mgmt-interfaces
         -n eth0 eth1
 ```
+
+## CLI 
+```bash
+# Add a new connection
+$ wemulate add connection -n connectionname -i LAN-A,LAN-B
+
+# Delete a connection
+$ wemulate delete connection -n connectionname
+
+# Add parameters
+$ wemulate add parameter -n connectionname -j 20 -d 40
+
+# Delete 
+```

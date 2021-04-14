@@ -82,7 +82,7 @@ class DeviceModel(Base):
 class LogicalInterfaceModel(Base):
     __tablename__ = "logical_interface"
     logical_interface_id = Column(Integer, primary_key=True, autoincrement=True)
-    logical_name = Column(String(50), nullable=False)
+    logical_name = Column(String(50), nullable=False, unique=True)
 
     def __init__(self, logical_name):
         self.logical_name = logical_name
@@ -99,7 +99,7 @@ class LogicalInterfaceModel(Base):
 class InterfaceModel(Base):
     __tablename__ = "interface"
     interface_id = Column(Integer, primary_key=True, autoincrement=True)
-    physical_name = Column(String(50), nullable=False)
+    physical_name = Column(String(50), nullable=False, unique=True)
     belongs_to_device_id = Column(
         Integer, ForeignKey("device.device_id"), nullable=False
     )
@@ -162,12 +162,13 @@ class InterfaceModel(Base):
 class ConnectionModel(Base):
     __tablename__ = "connection"
     connection_id = Column(Integer, primary_key=True, autoincrement=True)
-    connection_name = Column(String(50), nullable=False)
+    connection_name = Column(String(50), nullable=False, unique=True)
     bidirectional = Column(Boolean, default=True)
     first_logical_interface_id = Column(
         Integer,
         ForeignKey("logical_interface.logical_interface_id"),
         nullable=False,
+        unique=True,
     )
     first_logical_interface = relationship(
         LogicalInterfaceModel, foreign_keys=[first_logical_interface_id], uselist=False
@@ -176,6 +177,7 @@ class ConnectionModel(Base):
         Integer,
         ForeignKey("logical_interface.logical_interface_id"),
         nullable=False,
+        unique=True,
     )
     second_logical_interface = relationship(
         LogicalInterfaceModel, foreign_keys=[second_logical_interface_id], uselist=False
@@ -279,12 +281,11 @@ class ParameterModel(Base):
     )
     active = Column(Boolean, default=True)
 
-    def __init__(self, parameter_name, value, connection_id, on_off_timer_id=None):
+    def __init__(self, parameter_name, value, connection_id):
         self.parameter_name = parameter_name
         self.value = value
         self.belongs_to_connection_id = connection_id
         self.active = True
-        self.has_on_off_timer_id = on_off_timer_id
 
     def __repr__(self):
         return json.dumps(
@@ -294,7 +295,6 @@ class ParameterModel(Base):
                 "value": self.value,
                 "connection_id": self.belongs_to_connection_id,
                 "active": self.active,
-                "on_off_timer_id": self.has_on_off_timer_id,
             }
         )
 

@@ -2,14 +2,19 @@ import os
 from typing import List, Tuple
 from pyroute2 import IPRoute
 from cement import shell
+from wemulate.core.exc import WEmulateExecutionError
 
 BRIDGE_CONFIG_PATH = "/etc/network/interfaces.d"
 ip = IPRoute()
 
 
 def _execute_in_shell(command: str) -> None:
-    stdout, stderr, exitcode = shell.cmd(command)
-    # TODO implement exitcode strategy
+    try:
+        # stdout, stderr, exitcode = shell.cmd(command)
+        # TODO implement exitcode strategy
+        raise Exception
+    except:
+        raise WEmulateExecutionError
 
 
 def _execute_commands(command_tuple: Tuple) -> None:

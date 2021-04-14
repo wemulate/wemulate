@@ -1,9 +1,14 @@
-from wemulate.core.database.models import ConnectionModel, ProfileModel
+from wemulate.core.database.utils import (
+    connection_exists,
+    get_connection,
+    get_connection_list,
+)
 from cement import Controller, ex
+from wemulate.utils.rendering import rendering
 import netifaces
 
 from wemulate.utils.settings import get_interfaces, get_mgmt_interfaces, get_config_path
-from wemulate.core.database import session
+from wemulate.core.database.utils import get_logical_interface_for_physical_name
 
 
 class ShowController(Controller):
@@ -26,45 +31,61 @@ class ShowController(Controller):
             "PARAMETERS",
         ]
         data = []
-        connection = (
-            session.query(ConnectionModel)
-            .filter(ConnectionModel.connection_name == self.app.pargs.connection_name)
-            .all()
-        )
-        if not connection:
-            self.app.log.info("There are no connections")
-        else:
+        if connection_exists(self.app.pargs.connection_name):
+            connection = get_connection(self.app.pargs.connection_name)
+            parameters = {"parameters": connection[0].parameters}
+            parameter_string = rendering(parameters, "show_connection.jinja2")
             data.append(
                 [
                     connection[0].connection_name,
                     connection[0].bidirectional,
                     connection[0].first_logical_interface.logical_name,
                     connection[0].second_logical_interface.logical_name,
-                    connection[0].parameters,
+                    parameter_string,
                 ]
             )
             self.app.render(data, headers=headers)
-        # TODO improve parameter rendering
-        self.app.log.info(
-            session.query(ProfileModel)
-            .filter_by(profile_name="testprofile")
-            .first()
-            .profile_id
-        )
+        else:
+            self.app.log.info(
+                f"There is no connection with name: {self.app.pargs.connection_name}"
+            )
 
     @ex(
         help="show overview about all connections",
     )
     def connections(self):
-        self.app.log.info("all connections will be listed here")
-        # TODO implement rendering like in connection above
+        headers = [
+            "NAME",
+            "BIDIRECTIONAL",
+            "1. INTERFACE",
+            "2. INTERFACE",
+            "PARAMETERS",
+        ]
+        data = []
+        connections = get_connection_list()
+        if connections:
+            for conn in connections:
+                parameters = {"parameters": conn.parameters}
+                parameter_string = rendering(parameters, "show_connection.jinja2")
+                data.append(
+                    [
+                        conn.connection_name,
+                        conn.bidirectional,
+                        conn.first_logical_interface.logical_name,
+                        conn.second_logical_interface.logical_name,
+                        parameter_string,
+                    ]
+                )
+            self.app.render(data, headers=headers, tablefmt="grid")
+        else:
+            self.app.log.info("There are no connections")
 
     @ex(
         help="show specific interface information",
         arguments=[(["interface_name"], {"help": "name of the interface"})],
     )
     def interface(self):
-        headers = ["NAME", "IP", "MAC"]
+        headers = ["NAME", "PHYSICAL", "IP", "MAC"]
         data = []
         if self.app.pargs.interface_name in get_interfaces():
             if netifaces.AF_INET in netifaces.ifaddresses(
@@ -77,6 +98,9 @@ class ShowController(Controller):
                 ip = "N/A"
             data.append(
                 [
+                    get_logical_interface_for_physical_name(
+                        self.app.pargs.interface_name
+                    ).logical_name,
                     self.app.pargs.interface_name,
                     ip,
                     netifaces.ifaddresses(self.app.pargs.interface_name)[
@@ -84,7 +108,7 @@ class ShowController(Controller):
                     ][0]["addr"],
                 ]
             )
-            self.app.render(data, headers=headers)
+            self.app.render(data, headers=headers, tablefmt="grid")
         else:
             self.app.log.info("The given interface is not available")
 
@@ -92,7 +116,7 @@ class ShowController(Controller):
         help="show overview about all interfaces",
     )
     def interfaces(self):
-        headers = ["NAME", "IP", "MAC"]
+        headers = ["NAME", "PHYSICAL", "IP", "MAC"]
         data = []
 
         for int in get_interfaces():
@@ -102,10 +126,15 @@ class ShowController(Controller):
                 ip = "N/A"
 
             data.append(
-                [int, ip, netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"]]
+                [
+                    get_logical_interface_for_physical_name(int).logical_name,
+                    int,
+                    ip,
+                    netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"],
+                ]
             )
 
-        self.app.render(data, headers=headers)
+        self.app.render(data, headers=headers, tablefmt="grid")
 
     @ex(
         help="show overview about all management interfaces",
@@ -126,7 +155,11 @@ class ShowController(Controller):
                     ip = "N/A"
 
                 data.append(
-                    [int, ip, netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"]]
+                    [
+                        int,
+                        ip,
+                        netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"],
+                    ]
                 )
 
-            self.app.render(data, headers=headers)
+            self.app.render(data, headers=headers, tablefmt="grid")
