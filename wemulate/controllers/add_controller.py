@@ -52,11 +52,11 @@ class AddController(Controller):
                 self.app.close()
             else:
                 try:
-                    # add_connection(
-                    #     self.app.pargs.connection_name,
-                    #     get_physical_interface_for_logical_name(interfaces_list[0]),
-                    #     get_physical_interface_for_logical_name(interfaces_list[1]),
-                    # )
+                    add_connection(
+                        self.app.pargs.connection_name,
+                        get_physical_interface_for_logical_name(interfaces_list[0]),
+                        get_physical_interface_for_logical_name(interfaces_list[1]),
+                    )
                     create_connection(
                         self.app.pargs.connection_name,
                         get_logical_interface_by_name(interfaces_list[0]),

@@ -34,9 +34,13 @@ def pre_setup_logical_interfaces(ascii_index):
 
 def pre_setup_interfaces(app):
     count = 0
-    for int in get_interfaces():
-        if not session.query(InterfaceModel).filter_by(physical_name=int).first():
+    for physical_interface in get_interfaces():
+        if (
+            not session.query(InterfaceModel)
+            .filter_by(physical_name=physical_interface)
+            .first()
+        ):
             pre_setup_logical_interfaces(count)
-            session.add(InterfaceModel(int, 1, count + 1))
+            session.add(InterfaceModel(physical_interface, 1, count + 1))
             session.commit()
             count += 1

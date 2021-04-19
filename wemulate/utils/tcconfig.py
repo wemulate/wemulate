@@ -10,7 +10,7 @@ ip = IPRoute()
 
 def _execute_in_shell(command: str) -> None:
     try:
-        # stdout, stderr, exitcode = shell.cmd(command)
+        stdout, stderr, exitcode = shell.cmd(command)
         # TODO implement exitcode strategy
         raise Exception
     except:
