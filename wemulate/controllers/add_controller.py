@@ -54,10 +54,10 @@ class AddController(Controller):
                 try:
                     physical_interface1_name = get_physical_interface_for_logical_name(
                         interfaces_list[0]
-                    )
+                    ).physical_name
                     physical_interface2_name = get_physical_interface_for_logical_name(
                         interfaces_list[1]
-                    )
+                    ).physical_name
 
                     add_connection(
                         self.app.pargs.connection_name,
