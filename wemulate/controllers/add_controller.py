@@ -1,4 +1,4 @@
-from wemulate.utils.tcconfig import add_connection
+from wemulate.utils.tcconfig import add_connection, set_parameters
 from wemulate.core.exc import WEmulateExecutionError, WEmulateValidationError
 from wemulate.core.database.utils import (
     connection_exists,
@@ -9,6 +9,8 @@ from wemulate.core.database.utils import (
     get_active_profile,
     get_device,
     get_physical_interface_for_logical_name,
+    get_physical_interface_for_logical_id,
+    get_specific_parameter_for_connection_id,
 )
 from cement import Controller, ex
 
@@ -70,7 +72,6 @@ class AddController(Controller):
                         get_logical_interface_by_name(interfaces_list[1]),
                         get_active_profile(get_device(1)),
                     )
-                    # TODO physical connection creation
                     self.app.log.info("successfully added a new connection")
                 except WEmulateValidationError as e:
                     self.app.log.error(f"The {e} already exists in a connection")
@@ -134,30 +135,57 @@ class AddController(Controller):
             self.app.close()
         if connection_exists(self.app.pargs.connection_name):
             connection = get_connection(self.app.pargs.connection_name)
+            parameters = {
+                "bandwidth": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "bandwidth"
+                ),
+                "delay": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "delay"
+                ),
+                "packet_loss": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "packet_loss"
+                ),
+                "jitter": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "jitter"
+                ),
+                "corruption": None,
+                "duplication": None,
+            }
 
             if self.app.pargs.bandwidth:
+                parameters["bandwidth"] = self.app.pargs.bandwidth
                 create_or_update_parameter(
                     connection.connection_id, "bandwidth", self.app.pargs.bandwidth
                 )
             if self.app.pargs.jitter:
+                parameters["jitter"] = self.app.pargs.jitter
                 create_or_update_parameter(
                     connection.connection_id, "jitter", self.app.pargs.jitter
                 )
             if self.app.pargs.delay:
+                parameters["delay"] = self.app.pargs.delay
                 create_or_update_parameter(
                     connection.connection_id, "delay", self.app.pargs.delay
                 )
             if self.app.pargs.packet_loss:
+                parameters["packet_loss"] = self.app.pargs.packet_loss
                 create_or_update_parameter(
                     connection.connection_id, "packet_loss", self.app.pargs.packet_loss
                 )
             self.app.log.info(
                 f"successfully added parameters to connection {self.app.pargs.connection_name}"
             )
+
+            set_parameters(
+                get_physical_interface_for_logical_id(
+                    get_connection(
+                        self.app.pargs.connection_name
+                    ).first_logical_interface_id
+                ),
+                parameters,
+            )
         else:
             self.app.log.info(
                 f"there is no connection {self.app.pargs.connection_name} please create one first"
             )
             self.app.close()
-
-        # TODO write parameters physically down to the device

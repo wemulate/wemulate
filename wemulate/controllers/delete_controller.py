@@ -25,16 +25,16 @@ class DeleteController(Controller):
     )
     def connection(self):
         if self.app.pargs.connection_name is None:
-            self.app.log.error("Please define a connection")
+            self.app.log.error("please define a connection")
         elif get_connection(self.app.pargs.connection_name):
             remove_connection(self.app.pargs.connection_name)
             delete_connection_by_name(self.app.pargs.connection_name)
             self.app.log.info(
-                f"Connection {self.app.pargs.connection_name} successfully deleted"
+                f"connection {self.app.pargs.connection_name} successfully deleted"
             )
         else:
             self.app.log.info(
-                f"There is no connection with name: {self.app.pargs.connection_name}"
+                f"there is no connection with name: {self.app.pargs.connection_name}"
             )
 
     @ex(

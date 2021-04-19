@@ -112,7 +112,7 @@ def remove_connection(connection_name: str) -> bool:
 
     try:
         _execute_in_shell(
-            f"sudo iptables -D DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT"
+            f"sudo iptables -D WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
         )
         return True
     except:

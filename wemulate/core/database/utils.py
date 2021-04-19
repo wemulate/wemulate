@@ -98,6 +98,14 @@ def get_physical_interface_for_logical_name(logical_interface_name):
     )
 
 
+def get_physical_interface_for_logical_id(logical_interface_id):
+    return (
+        session.query(InterfaceModel)
+        .filter_by(has_logical_interface_id=logical_interface_id)
+        .first()
+    )
+
+
 def get_logical_interface_list():
     return session.query(LogicalInterfaceModel).all()
 
