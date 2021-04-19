@@ -39,4 +39,4 @@ def pre_setup_interfaces(app):
             pre_setup_logical_interfaces(count)
             session.add(InterfaceModel(int, 1, count + 1))
             session.commit()
-            ++count
+            count += 1
