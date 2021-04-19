@@ -91,8 +91,10 @@ def get_physical_interface_for_logical_name(logical_interface_name):
         .filter_by(logical_name=logical_interface_name)
         .first()
     )
-    return session.query(InterfaceModel).filter_by(
-        has_logical_interface_id=logical_interface.logical_interface_id
+    return (
+        session.query(InterfaceModel)
+        .filter_by(has_logical_interface_id=logical_interface.logical_interface_id)
+        .first()
     )
 
 

@@ -84,7 +84,7 @@ def add_connection(
         connection_file.write(connection_template)
 
     _execute_in_shell(
-        f"sudo iptables -I DOCKER-USER -i {connection_name} -o {connection_name} -j ACCEPT"
+        f"sudo iptables -I WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
     )
 
     return _execute_in_shell("sudo systemctl restart networking.service")
