@@ -1,3 +1,4 @@
+from wemulate.utils.tcconfig import remove_connection
 from wemulate.core.database.utils import get_connection, delete_connection_by_name
 from cement import Controller, ex
 
@@ -26,6 +27,7 @@ class DeleteController(Controller):
         if self.app.pargs.connection_name is None:
             self.app.log.error("Please define a connection")
         elif get_connection(self.app.pargs.connection_name):
+            remove_connection(self.app.pargs.connection_name)
             delete_connection_by_name(self.app.pargs.connection_name)
             self.app.log.info(
                 f"Connection {self.app.pargs.connection_name} successfully deleted"
