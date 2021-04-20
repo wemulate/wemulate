@@ -133,8 +133,8 @@ def set_parameters(interface_name, parameters):
     Raises:
         KeyError: Raises an exception.
     """
-    outgoing_config_command = f"sudo tcset {interface_name}"
-    incoming_config_command = f"sudo tcset {interface_name}"
+    outgoing_config_command = f"sudo tcset {interface_name} "
+    incoming_config_command = f"sudo tcset {interface_name} "
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if "delay" in parameters:

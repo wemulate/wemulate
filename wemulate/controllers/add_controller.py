@@ -135,23 +135,22 @@ class AddController(Controller):
             self.app.close()
         if connection_exists(self.app.pargs.connection_name):
             connection = get_connection(self.app.pargs.connection_name)
-            parameters = {}
-            # parameters = {
-            #     "bandwidth": get_specific_parameter_for_connection_id(
-            #         connection.connection_id, "bandwidth"
-            #     ),
-            #     "delay": get_specific_parameter_for_connection_id(
-            #         connection.connection_id, "delay"
-            #     ),
-            #     "packet_loss": get_specific_parameter_for_connection_id(
-            #         connection.connection_id, "packet_loss"
-            #     ),
-            #     "jitter": get_specific_parameter_for_connection_id(
-            #         connection.connection_id, "jitter"
-            #     ),
-            #     "corruption": None,
-            #     "duplication": None,
-            # }
+            parameters = {
+                "bandwidth": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "bandwidth"
+                ).value,
+                "delay": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "delay"
+                ).value,
+                "packet_loss": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "packet_loss"
+                ).value,
+                "jitter": get_specific_parameter_for_connection_id(
+                    connection.connection_id, "jitter"
+                ).value,
+                "corruption": None,
+                "duplication": None,
+            }
 
             if self.app.pargs.bandwidth:
                 parameters["bandwidth"] = self.app.pargs.bandwidth
@@ -182,7 +181,7 @@ class AddController(Controller):
                     get_connection(
                         self.app.pargs.connection_name
                     ).first_logical_interface_id
-                ),
+                ).physical_name,
                 parameters,
             )
         else:

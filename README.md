@@ -1,5 +1,5 @@
-# A modern WAN Emulator
-
+# WEmulate
+**A modern WAN Emulator developed by the Institute for Networked Solutions**
 ## Installation
 
 ```
