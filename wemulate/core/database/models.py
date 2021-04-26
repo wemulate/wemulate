@@ -4,8 +4,17 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from wemulate.core.database import database_engine
 
+PARAMETERS = [
+    "bandwidth",
+    "delay",
+    "packet_loss",
+    "jitter",
+    "corruption",
+    "duplication",
+]
+
 DEFAULT_PARAMETERS = {
-    "bandwidth": 1000,
+    "bandwidth": 0,
     "delay": 0,
     "jitter": 0,
     "packet_loss": 0,

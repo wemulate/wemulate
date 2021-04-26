@@ -2,6 +2,7 @@ import string
 from wemulate.core.exc import WEmulateValidationError
 from wemulate.core.database import session
 from wemulate.core.database.models import (
+    DEFAULT_PARAMETERS,
     ProfileModel,
     ConnectionModel,
     InterfaceModel,
@@ -131,29 +132,24 @@ def get_specific_parameter_for_connection_id(connection_id, parameter):
     )
 
 
+def get_specific_parameter_value_for_connection_id(connection_id, parameter):
+    parameter_object = (
+        session.query(ParameterModel)
+        .filter(ParameterModel.belongs_to_connection_id == connection_id)
+        .filter(ParameterModel.parameter_name == parameter)
+        .first()
+    )
+    if not parameter_object:
+        return DEFAULT_PARAMETERS[parameter]
+    return parameter_object.value
+
+
 def get_all_parameters_for_connection_id(connection_id):
     return (
         session.query(ParameterModel)
         .filter(ParameterModel.belongs_to_connection_id == connection_id)
         .all()
     )
-
-
-# def create_profile(device_name):
-#     profile = ProfileModel("default_" + device_name)
-#     db.session.add(profile)
-#     db.session.flush()
-#     return profile
-
-
-# def create_device(device_name, profile_id, management_ip):
-#     if management_ip is None:
-#         device = DeviceModel(device_name, profile_id)
-#     else:
-#         device = DeviceModel(device_name, profile_id, management_ip)
-#     db.session.add(device)
-#     db.session.flush()
-#     return device
 
 
 def create_connection(
@@ -214,6 +210,12 @@ def delete_parameter(parameter):
     session.commit()
 
 
+def delete_parameter_on_connection_id(connection_id, parameter_name):
+    parameter = get_specific_parameter_for_connection_id(connection_id, parameter_name)
+    session.delete(parameter)
+    session.commit()
+
+
 def update_connection(connection, connection_name):
     if connection.connection_name == connection_name:
         return False
@@ -235,13 +237,6 @@ def delete_connection_by_name(connection_name):
     )
     session.delete(connection)
     session.commit()
-
-
-# def create_logical_interfaces():
-#     for character in list(string.ascii_uppercase):
-#         logical_interface = LogicalInterfaceModel("LAN-" + character)
-#         session.add(logical_interface)
-#     session.commit()
 
 
 def delete_present_connection():

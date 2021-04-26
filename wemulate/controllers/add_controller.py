@@ -1,3 +1,4 @@
+from wemulate.core.database.models import DEFAULT_PARAMETERS, PARAMETERS
 from wemulate.utils.tcconfig import add_connection, set_parameters
 from wemulate.core.exc import WEmulateExecutionError, WEmulateValidationError
 from wemulate.core.database.utils import (
@@ -10,7 +11,7 @@ from wemulate.core.database.utils import (
     get_device,
     get_physical_interface_for_logical_name,
     get_physical_interface_for_logical_id,
-    get_specific_parameter_for_connection_id,
+    get_specific_parameter_value_for_connection_id,
 )
 from cement import Controller, ex
 
@@ -95,7 +96,7 @@ class AddController(Controller):
             (
                 ["-b", "--bandwidth"],
                 {
-                    "help": "bandwidth parameter",
+                    "help": "bandwidth parameter in mbps",
                     "action": "store",
                     "dest": "bandwidth",
                 },
@@ -106,12 +107,12 @@ class AddController(Controller):
             ),
             (
                 ["-d", "--delay"],
-                {"help": "delay parameter", "action": "store", "dest": "delay"},
+                {"help": "delay parameter in ms", "action": "store", "dest": "delay"},
             ),
             (
                 ["-l", "--packet-loss"],
                 {
-                    "help": "packet loss parameter",
+                    "help": "packet loss parameter in percentage",
                     "action": "store",
                     "dest": "packet_loss",
                 },
@@ -135,23 +136,13 @@ class AddController(Controller):
             self.app.close()
         if connection_exists(self.app.pargs.connection_name):
             connection = get_connection(self.app.pargs.connection_name)
-            parameters = {
-                "bandwidth": get_specific_parameter_for_connection_id(
-                    connection.connection_id, "bandwidth"
-                ).value,
-                "delay": get_specific_parameter_for_connection_id(
-                    connection.connection_id, "delay"
-                ).value,
-                "packet_loss": get_specific_parameter_for_connection_id(
-                    connection.connection_id, "packet_loss"
-                ).value,
-                "jitter": get_specific_parameter_for_connection_id(
-                    connection.connection_id, "jitter"
-                ).value,
-                "corruption": None,
-                "duplication": None,
-            }
-
+            parameters = {}
+            for param in PARAMETERS:
+                parameter_value = get_specific_parameter_value_for_connection_id(
+                    connection.connection_id, param
+                )
+                if parameter_value:
+                    parameters[param] = parameter_value
             if self.app.pargs.bandwidth:
                 parameters["bandwidth"] = self.app.pargs.bandwidth
                 create_or_update_parameter(
@@ -172,10 +163,6 @@ class AddController(Controller):
                 create_or_update_parameter(
                     connection.connection_id, "packet_loss", self.app.pargs.packet_loss
                 )
-            self.app.log.info(
-                f"successfully added parameters to connection {self.app.pargs.connection_name}"
-            )
-
             set_parameters(
                 get_physical_interface_for_logical_id(
                     get_connection(
@@ -183,6 +170,9 @@ class AddController(Controller):
                     ).first_logical_interface_id
                 ).physical_name,
                 parameters,
+            )
+            self.app.log.info(
+                f"successfully added parameters to connection {self.app.pargs.connection_name}"
             )
         else:
             self.app.log.info(

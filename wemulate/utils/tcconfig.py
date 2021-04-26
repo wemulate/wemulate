@@ -10,6 +10,7 @@ ip = IPRoute()
 
 def _execute_in_shell(command: str) -> None:
     try:
+        print(command)
         # stdout, stderr, exitcode = shell.cmd(command)
         shell.cmd(command)
         # TODO implement exitcode strategy
@@ -25,31 +26,31 @@ def _execute_commands(command_tuple: Tuple) -> None:
 
 
 def _add_delay_command(delay_value) -> str:
-    return f"--delay {delay_value}ms"
+    return f" --delay {delay_value}ms"
 
 
 def _add_jitter_command(mean_delay, jitter_value) -> str:
-    return f"--delay {mean_delay}ms --delay-distro {jitter_value}ms"
+    return f" --delay {mean_delay}ms --delay-distro {jitter_value}ms"
 
 
 def _add_packet_loss_command(packet_loss_value) -> str:
-    return f"--loss {packet_loss_value}%"
+    return f" --loss {packet_loss_value}%"
 
 
 def _add_bandwidth_incoming_command(bandwidth_value) -> str:
-    return f"--direction incoming --rate {bandwidth_value}Mbps"
+    return f" --direction incoming --rate {bandwidth_value}Mbps"
 
 
 def _add_bandwidth_outgoing_command(bandwidth_value) -> str:
-    return f"--direction outgoing --rate {bandwidth_value}Mbps"
+    return f" --direction outgoing --rate {bandwidth_value}Mbps"
 
 
 def _add_duplication_command(duplication_value) -> str:
-    return f"--duplicate {duplication_value}%"
+    return f" --duplicate {duplication_value}%"
 
 
 def _add_corruption_command(corruption_value) -> str:
-    return f"--corrupt {corruption_value}%"
+    return f" --corrupt {corruption_value}%"
 
 
 def add_connection(
@@ -133,9 +134,10 @@ def set_parameters(interface_name, parameters):
     Raises:
         KeyError: Raises an exception.
     """
-    outgoing_config_command = f"sudo tcset {interface_name} "
-    incoming_config_command = f"sudo tcset {interface_name} "
+    outgoing_config_command = f"tcset {interface_name} "
+    incoming_config_command = f"tcset {interface_name} "
     mean_delay = 0.001  # smallest possible delay
+    print(parameters)
     if parameters:
         if "delay" in parameters:
             mean_delay = parameters["delay"]
@@ -162,6 +164,8 @@ def set_parameters(interface_name, parameters):
             incoming_config_command += _add_bandwidth_incoming_command(
                 parameters["bandwidth"]
             )
+        outgoing_config_command += " --change"
+        incoming_config_command += " --change"
         command_tuple = (outgoing_config_command, incoming_config_command)
         return _execute_commands(command_tuple)
     return "No parameters were given!"
@@ -180,5 +184,5 @@ def remove_parameters(interface_name: str):
     Raises:
         KeyError: Raises an exception.
     """
-    command = f"sudo tcdel {interface_name} --all"
+    command = f"tcdel {interface_name} --all"
     return _execute_in_shell(command)

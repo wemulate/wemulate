@@ -4,7 +4,9 @@ from wemulate.core.database.utils import (
     get_connection,
     connection_exists,
     create_or_update_parameter,
+    get_physical_interface_for_logical_id,
 )
+from wemulate.utils.tcconfig import set_parameters
 
 
 class SetController(Controller):
@@ -69,28 +71,41 @@ class SetController(Controller):
         if connection_exists(self.app.pargs.connection_name):
             connection = get_connection(self.app.pargs.connection_name)
             delete_all_parameter_on_connection(connection.connection_id)
+            parameters = {}
             if self.app.pargs.bandwidth:
+                parameters["bandwidth"] = self.app.pargs.bandwidth
                 create_or_update_parameter(
                     connection.connection_id, "bandwidth", self.app.pargs.bandwidth
                 )
             if self.app.pargs.jitter:
+                parameters["jitter"] = self.app.pargs.jitter
                 create_or_update_parameter(
                     connection.connection_id, "jitter", self.app.pargs.jitter
                 )
             if self.app.pargs.delay:
+                parameters["delay"] = self.app.pargs.delay
                 create_or_update_parameter(
                     connection.connection_id, "delay", self.app.pargs.delay
                 )
             if self.app.pargs.packet_loss:
+                parameters["packet_loss"] = self.app.pargs.packet_loss
                 create_or_update_parameter(
                     connection.connection_id, "packet_loss", self.app.pargs.packet_loss
                 )
+            set_parameters(
+                get_physical_interface_for_logical_id(
+                    get_connection(
+                        self.app.pargs.connection_name
+                    ).first_logical_interface_id
+                ).physical_name,
+                parameters,
+            )
             self.app.log.info(
                 f"successfully set parameters to connection {self.app.pargs.connection_name}"
             )
+
         else:
             self.app.log.info(
                 f"there is no connection {self.app.pargs.connection_name} please create one first"
             )
             self.app.close()
-        # TODO implement physical set of the parameters
