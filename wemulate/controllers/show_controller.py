@@ -33,14 +33,14 @@ class ShowController(Controller):
         data = []
         if connection_exists(self.app.pargs.connection_name):
             connection = get_connection(self.app.pargs.connection_name)
-            parameters = {"parameters": connection[0].parameters}
+            parameters = {"parameters": connection.parameters}
             parameter_string = rendering(parameters, "show_connection.jinja2")
             data.append(
                 [
-                    connection[0].connection_name,
-                    connection[0].bidirectional,
-                    connection[0].first_logical_interface.logical_name,
-                    connection[0].second_logical_interface.logical_name,
+                    connection.connection_name,
+                    connection.bidirectional,
+                    connection.first_logical_interface.logical_name,
+                    connection.second_logical_interface.logical_name,
                     parameter_string,
                 ]
             )
