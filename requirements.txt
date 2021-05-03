@@ -6,3 +6,5 @@ netifaces==0.10.9
 tabulate
 print
 SQLAlchemy==1.4.3
+pyroute2==0.5.18
+tcconfig==0.26.0
