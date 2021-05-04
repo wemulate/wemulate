@@ -44,7 +44,7 @@ class ShowController(Controller):
                     parameter_string,
                 ]
             )
-            self.app.render(data, headers=headers)
+            self.app.render(data, headers=headers, tablefmt="grid")
         else:
             self.app.log.info(
                 f"There is no connection with name: {self.app.pargs.connection_name}"

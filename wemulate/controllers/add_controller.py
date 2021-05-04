@@ -24,7 +24,7 @@ class AddController(Controller):
         stacked_type = "nested"
 
     @ex(
-        help="add a new conneciton",
+        help="add a new connection",
         arguments=[
             (
                 ["-n", "--connection-name"],

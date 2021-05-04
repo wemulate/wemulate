@@ -3,7 +3,7 @@ from cement import Controller, ex
 class ConfigController(Controller):
     class Meta:
         label = 'config'
-        help = 'configuration of the application'
+        help = 'configure the application settings'
         stacked_on = 'base'
         stacked_type = 'nested'
 
