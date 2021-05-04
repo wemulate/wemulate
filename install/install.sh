@@ -15,6 +15,12 @@
 #
 #   -r, --release
 #     Override the release which should be installed
+#
+#   -i, --interface
+#     Defines a default management interface
+#
+#   Example:
+#     sh install.sh -i ens2 -y
 
 set -eu
 printf '\n'
@@ -49,6 +55,24 @@ has() {
   command -v "$1" 1>/dev/null 2>&1
 }
 
+confirm() {
+  if [ -z "${FORCE-}" ]; then
+    printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
+    set +e
+    read -r yn </dev/tty
+    rc=$?
+    set -e
+    if [ $rc -ne 0 ]; then
+      error "Error reading from prompt (please re-run with the '--yes' option)"
+      exit 1
+    fi
+    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+      error 'Aborting (please answer "yes" to continue)'
+      exit 1
+    fi
+  fi
+}
+
 test_writeable() {
   local path
   path="${1:-}/test.txt"
@@ -73,25 +97,82 @@ elevate_priv() {
 }
 
 install_dependencies() {
-    elevate_priv
-    info "Install dependencies..."
-    apt-get install --yes libpq-dev 
-    apt-get install --yes python3-pip 
-    apt-get install --yes ifupdown 
-    apt-get install --yes bridge-utils 
-    info "Dependencies successful installed"
+  local sudo="$1"
+  confirm "Install dependencies on system?"
+  info "Install dependencies..."
+  printf '\n'
+  $sudo apt-get install --yes libpq-dev 
+  $sudo apt-get install --yes python3 
+  $sudo apt-get install --yes python3-pip 
+  $sudo apt-get install --yes ifupdown 
+  $sudo apt-get install --yes bridge-utils 
+  printf '\n'
+  completed "Dependencies successful installed"
 }
 
-create_user() {
-    adduser wemulate --disabled-password
-    echo "wemulate:wemulate" | chpasswd
-    echo 'wemulate  ALL=(ALL:ALL) ALL' >> /etc/sudoers
+check_configuration_dir() {
+  local configuration_dir="$1"
+  local sudo="$2"
+
+  if [ ! -d "$CONFIGURATION_DIR" ]; then
+    warn "Configuration location $CONFIGURATION_DIR does not appear to be a directory"
+    confirm "Do you want to create the directory"
+    $sudo bash -c "mkdir "${CONFIGURATION_DIR}""
+    completed "Directory $CONFIGURATION_DIR created"
+  fi
+}
+
+create_default_configuration() {
+  local sudo="$1"
+  local path="$CONFIGURATION_DIR/wemulate.yml"
+  $sudo bash -c "cat > "${path}"" << EOF
+---
+wemulate:
+  management_interfaces:
+    - $INTERFACE
+  db_location: /etc/wemulate/wemulate.db
+EOF
+  completed "Default configuration $path with management interface $INTERFACE is generated"
+}
+
+read_management_interface() {
+  local sudo="$1"
+  if [ -z "${FORCE-}" ]; then
+    printf "%s " "${MAGENTA}?${NO_COLOR} "Do you want to define a management interface" ${BOLD}[y/N]${NO_COLOR}"
+    set +e
+    read -r yn </dev/tty
+    rc=$?
+    set -e
+    if [ $rc -ne 0 ]; then
+      error "Error reading from prompt (please re-run with the 'yes or no' option)"
+      exit 1
+    fi
+    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+      info "The default interface $INTERFACE has been added to the configuration"
+    else
+      printf "%s " "${MAGENTA}?${NO_COLOR} "Enter the desired name of the management interface" ${BOLD}[interface_name]${NO_COLOR}" 
+      set +e
+      read -r intname </dev/tty
+      rc=$?
+      set -e
+      if [ $rc -ne 0 ]; then
+        error "Error reading from prompt (please re-run with an interface name option)"
+        exit 1
+      fi
+      if ! echo "$(ip a)" | grep -q $intname; then
+        error "Interface is not available"
+        exit 1
+      fi
+      INTERFACE="$intname"
+    fi
+  fi
+  create_default_configuration $sudo
 }
 
 install() {
   local msg
   local sudo
-
+  
   if test_writeable "${CONFIGURATION_DIR}"; then
     sudo=""
     msg="Installing WEmulate, please wait…"
@@ -102,38 +183,12 @@ install() {
     msg="Installing WEmulate as root, please wait…"
   fi
   info "$msg"
-
-  pip3 install wemulate
-
-}
-
-
-confirm() {
-  if [ -z "${FORCE-}" ]; then
-    printf "%s " "${MAGENTA}?${NO_COLOR} $* ${BOLD}[y/N]${NO_COLOR}"
-    set +e
-    read -r yn </dev/tty
-    rc=$?
-    set -e
-    if [ $rc -ne 0 ]; then
-      error "Error reading from prompt (please re-run with the '--yes' option)"
-      exit 1
-    fi
-    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
-      error 'Aborting (please answer "yes" to continue)'
-      exit 1
-    fi
-  fi
-}
-
-check_configuration_dir() {
-  local configuration_dir="$1"
-
-  if [ ! -d "$CONFIGURATION_DIR" ]; then
-    error "Configuration location $CONFIGURATION_DIR does not appear to be a directory"
-    info "Make sure the location exists and is a directory, then try again."
-    exit 1
-  fi
+  check_configuration_dir "${CONFIGURATION_DIR}" $sudo
+  install_dependencies $sudo
+  read_management_interface $sudo
+  completed "Install wemulate $RELEASE"
+  printf '\n'
+  $sudo pip3 install wemulate${RELEASE}
 }
 
 if [ -z "${CONFIGURATION_DIR-}" ]; then
@@ -141,7 +196,11 @@ if [ -z "${CONFIGURATION_DIR-}" ]; then
 fi
 
 if [ -z "${RELEASE-}" ]; then
-  RELEASE="latest"
+  RELEASE=""
+fi
+
+if [ -z "${INTERFACE-}" ]; then
+  INTERFACE="ens2"
 fi
 
 # parse argv variables
@@ -152,7 +211,12 @@ while [ "$#" -gt 0 ]; do
     shift 2
     ;;
   -r | --release)
-    RELEASE="$2"
+    RELEASE="==$2"
+    shift 2
+    ;;
+
+  -i | --interface)
+    INTERFACE="$2"
     shift 2
     ;;
 
@@ -170,7 +234,11 @@ while [ "$#" -gt 0 ]; do
     shift 1
     ;;
   -r=* | --release=*)
-    RELEASE="${1#*=}"
+    RELEASE="==${1#*=}"
+    shift 1
+    ;;
+  -i=* | --interace=*)
+    INTERFACE="${1#*=}"
     shift 1
     ;;
   -V=* | --verbose=*)
@@ -203,16 +271,9 @@ fi
 
 printf '\n'
 
-confirm "Install dependencies on system?"
-install_dependencies
-
-confirm "Create wemulate user on system?"
-# create_user
-
 confirm "Install WEmulate ${GREEN}${RELEASE}${NO_COLOR}?"
-check_configuration_dir "${CONFIGURATION_DIR}"
 install
-
+printf '\n'
 completed "WEmulate installed"
 
 URL="https://github.com/wemulate/wemulate"
@@ -221,18 +282,18 @@ printf '\n'
 info "Please follow the steps to use WEmulate on your machine:
 
   ${BOLD}${UNDERLINE}Change user${NO_COLOR}
-  Change to the user ${BOLD}wemulate${NO_COLOR} with the following command:
+  Execute the application with ${BOLD}sudo${NO_COLOR} e.g:
 
-      su wemulate
+      sudo wemulate --help
 
   ${BOLD}${UNDERLINE}Create configuration${NO_COLOR}
-  Create a configuration file ${BOLD}${CONFIGURATION_DIR}/wemulate.yml${NO_COLOR} take a look at the example below:
+  You can edit the configuration file ${BOLD}${CONFIGURATION_DIR}/wemulate.yml${NO_COLOR} default is:
 
       ---
       wemulate:
         management_interfaces:
-            - ens2
-        db_location: /etc/wemulate/wemulate.db
+            - $INTERFACE
+        db_location: $CONFIGURATION_DIR/wemulate.db
 
   ${BOLD}${UNDERLINE}Documentation${NO_COLOR}
   To check out the documentation go to:
