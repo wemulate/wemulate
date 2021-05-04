@@ -1,6 +1,6 @@
 import string
 from wemulate.core.exc import WEmulateValidationError
-from wemulate.core.database import session
+from wemulate.core.database.session import session
 from wemulate.core.database.models import (
     DEFAULT_PARAMETERS,
     ProfileModel,
@@ -150,6 +150,9 @@ def get_all_parameters_for_connection_id(connection_id):
         .filter(ParameterModel.belongs_to_connection_id == connection_id)
         .all()
     )
+
+def get_all_connections():
+    return session.query(ConnectionModel).all()
 
 
 def create_connection(

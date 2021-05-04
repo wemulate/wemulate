@@ -7,7 +7,6 @@ from wemulate.controllers.config_controller import ConfigController
 from wemulate.controllers.reset_controller import ResetController
 from wemulate.controllers.delete_controller import DeleteController
 from wemulate.controllers.set_controller import SetController
-from wemulate.controllers.list_controller import ListController
 from wemulate.controllers.add_controller import AddController
 from wemulate.controllers.show_controller import ShowController
 from cement import App, TestApp, init_defaults
@@ -16,11 +15,6 @@ from cement.core.exc import CaughtSignal
 from wemulate.core.exc import WEmulateError
 from wemulate.controllers.base import Base
 
-from wemulate.core.database.setup import (
-    pre_setup_profile,
-    pre_setup_device,
-    pre_setup_interfaces,
-)
 from wemulate.core.database.models import (
     ProfileModel,
     DeviceModel,
@@ -66,7 +60,6 @@ class WEmulate(App):
             Base,
             ShowController,
             AddController,
-            ListController,
             SetController,
             DeleteController,
             ResetController,
@@ -75,12 +68,6 @@ class WEmulate(App):
             LoadController,
         ]
 
-        # register hooks
-        hooks = [
-            ("pre_setup", pre_setup_profile, -99),
-            ("pre_setup", pre_setup_device, 0),
-            ("pre_setup", pre_setup_interfaces, 100),
-        ]
 
 
 class WEmulateTest(TestApp, WEmulate):

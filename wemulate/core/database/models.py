@@ -2,7 +2,7 @@ import json
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
-from wemulate.core.database import database_engine
+from wemulate.core.database.session import database_engine
 
 PARAMETERS = [
     "bandwidth",

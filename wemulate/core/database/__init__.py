@@ -1,10 +1,5 @@
-from sqlalchemy import create_engine
-from sqlalchemy.engine.base import Engine
-from wemulate.utils.settings import get_db_location
+import wemulate.core.database.session
 from sqlalchemy.orm import sessionmaker
+from wemulate.core.database.setup import pre_setup_database
 
-database_engine: Engine = create_engine(
-    f"sqlite+pysqlite:///{get_db_location()}", future=True
-)
-Session = sessionmaker(bind=database_engine)
-session = Session()
+pre_setup_database()

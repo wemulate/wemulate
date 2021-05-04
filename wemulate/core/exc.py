@@ -14,3 +14,8 @@ class WEmulateExecutionError(WEmulateError):
     def __init__(self, message="An execution error occured"):
         self.message = message
         super().__init__(self.message)
+
+class WEmulateConfigNotFound(WEmulateError):
+    def __init__(self, message="No configuration file was found"):
+        self.message = message
+        super().__init__(self.message)

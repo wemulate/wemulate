@@ -10,8 +10,6 @@ ip = IPRoute()
 
 def _execute_in_shell(command: str) -> None:
     try:
-        print(command)
-        # stdout, stderr, exitcode = shell.cmd(command)
         shell.cmd(command)
         # TODO implement exitcode strategy
         # raise Exception
@@ -137,7 +135,6 @@ def set_parameters(interface_name, parameters):
     outgoing_config_command = f"tcset {interface_name} "
     incoming_config_command = f"tcset {interface_name} "
     mean_delay = 0.001  # smallest possible delay
-    print(parameters)
     if parameters:
         if "delay" in parameters:
             mean_delay = parameters["delay"]
@@ -145,7 +142,7 @@ def set_parameters(interface_name, parameters):
                 outgoing_config_command += _add_delay_command(mean_delay)
         if "jitter" in parameters:
             outgoing_config_command += _add_jitter_command(
-                mean_delay, 2 * parameters["jitter"]
+                mean_delay, 2 * int(parameters["jitter"])
             )
         if "packet_loss" in parameters:
             outgoing_config_command += _add_packet_loss_command(

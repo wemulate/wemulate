@@ -1,3 +1,4 @@
+from wemulate.core.exc import WEmulateConfigNotFound, WEmulateError
 import netifaces, yaml
 
 
@@ -6,9 +7,12 @@ def get_config_path():
 
 
 def _get_config():
-    with open("/etc/wemulate/wemulate.yml") as file:
-        config = yaml.full_load(file)
-    return config
+    try:
+        with open("/etc/wemulate/wemulate.yml") as file:
+            config = yaml.full_load(file)
+        return config
+    except FileNotFoundError:
+        raise WEmulateConfigNotFound 
 
 
 def get_mgmt_interfaces():
