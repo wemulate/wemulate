@@ -3,8 +3,6 @@ on:
   release:
     types: [published]
 
-# ${{steps.vars.outputs.tag}}
-
 jobs:
   build-n-publish:
     name: Build and publish WEmulate to PyPi
