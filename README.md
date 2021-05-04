@@ -1,3 +1,4 @@
+[![Publish WEmulate package to PyPi](https://github.com/wemulate/wemulate/actions/workflows/publish-package.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/publish-package.yml)
 # WEmulate
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 
