@@ -10,20 +10,10 @@
 * Root permissions 
 
 ### Getting Started
-1. Install WEmulate cli application  
-    ```bash
-    $ sh -c "$(curl -fsSL https://github.com/wemulate/wemulate/blob/main/install/install.sh)"
-    ```
-2. Create a configuration file `~/.config/wemualte/wemulate.yml`. Have a look at the example below.
-    ```yaml
-    ---
-    wemulate:
-        management_interfaces:
-            - ens2
-        db_location: /home/jklaiber/.config/wemulate/wemulate.db
-    ```
-
-
+Install wemulate cli application  
+```bash
+$ sh -c "$(curl -fsSL https://github.com/wemulate/wemulate/blob/main/install/install.sh)"
+```
 
 ## Usage 
 ```bash
