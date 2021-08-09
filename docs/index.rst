@@ -1,7 +1,7 @@
 WEmulate a modern WAN Emulator
 ====================================
 
-:WEmulate: is a simple and modern WAN emulator, developed to fullfill the needs of students and network engineers.
+WEmulate is a simple and modern WAN emulator, developed to fullfill the needs of students and network engineers.
 
 The User Guide
 --------------

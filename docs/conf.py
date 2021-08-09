@@ -19,7 +19,7 @@ sys.path.insert(0, os.path.abspath(".."))
 # -- Project information -----------------------------------------------------
 
 project = "WEmulate"
-copyright = "2020, Julian Klaiber & Severin Dellsperger"
+copyright = "2021, Institute for Networked Solutions"
 author = "Julian Klaiber & Severin Dellsperger"
 
 # The full version, including alpha/beta/rc tags
@@ -36,6 +36,7 @@ extensions = [
     "sphinx.ext.intersphinx",
     "sphinx.ext.todo",
     "sphinx.ext.viewcode",
+    "sphinx.ext.napoleon",
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -71,6 +72,4 @@ epub_exclude_files = ["search.html"]
 master_doc = "index"
 
 # add sourcecode to path
-import sys, os
-
-sys.path.insert(0, os.path.abspath("../src"))
+sys.path.insert(0, os.path.abspath("../wemulate"))

@@ -7,6 +7,14 @@ Developer Interface
 
 This part of the documentation covers all the interfaces of WEmulate.
 
+Trafic Control
+--------------
+.. automodule:: wemulate.utils
+    .. autoclass:: tcconfig
+
+        .. autofunction:: add_connection
+
+
 Exceptions
 ----------
 
