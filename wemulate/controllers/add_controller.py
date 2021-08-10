@@ -1,4 +1,4 @@
-from wemulate.core.database.models import DEFAULT_PARAMETERS, PARAMETERS
+from wemulate.core.database.models import PARAMETERS
 from wemulate.utils.tcconfig import add_connection, set_parameters
 from wemulate.core.exc import WEmulateExecutionError, WEmulateValidationError
 from wemulate.core.database.utils import (

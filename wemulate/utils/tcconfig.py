@@ -2,25 +2,27 @@ import os
 from typing import List, Tuple
 from pyroute2 import IPRoute
 from cement import shell
-from wemulate.core.exc import WEmulateExecutionError
+from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
-BRIDGE_CONFIG_PATH = "/etc/network/interfaces.d"
-ip = IPRoute()
+BRIDGE_CONFIG_PATH: str = "/etc/network/interfaces.d"
+
+ip: IPRoute = IPRoute()
 
 
 def _execute_in_shell(command: str) -> None:
     try:
-        shell.cmd(command)
-        # TODO implement exitcode strategy
-        # raise Exception
-    except:
+        stdout, stderr, exitcode = shell.cmd(command)
+        if stderr:
+            raise WEmulateExecutionError(
+                f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
+            )
+    except Exception:
         raise WEmulateExecutionError
 
 
-def _execute_commands(command_tuple: Tuple) -> None:
-    outgoing_command, incomming_command = command_tuple
-    _execute_in_shell(outgoing_command)
-    _execute_in_shell(incomming_command)
+def _execute_commands(commands: Tuple) -> None:
+    for command in commands:
+        _execute_in_shell(command)
 
 
 def _add_delay_command(delay_value) -> str:
@@ -51,74 +53,94 @@ def _add_corruption_command(corruption_value) -> str:
     return f" --corrupt {corruption_value}%"
 
 
-def add_connection(
+def _add_linux_bridge(
     connection_name: str, interface1_name: str, interface2_name: str
 ) -> None:
-    """
-    Adds a new connection.
+    INTERFACE_CONFIG_PATH: str = "/etc/network/interfaces"
+    try:
+        with open(INTERFACE_CONFIG_PATH, "r+") as interfaces_config_file:
+            if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
+                interfaces_config_file.write(f"source {BRIDGE_CONFIG_PATH}/*\n")
 
-    Args:
-        connection_name: This is the name of the connection which should be configured.
-        interface1_name: This is the first interface which should be added to the connection.
-        inteface2_name: This is the second interface which should be added to the connection.
+        connection_template: str = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
-    Returns:
-        This is a description of what is returned.
+        if not os.path.exists("BRIDGE_CONFIG_PATH"):
+            os.makedirs("BRIDGE_CONFIG_PATH", exist_ok=True)
 
-    Raises:
-        KeyError: Raises an exception.
-    """
-    INTERFACE_CONFIG_PATH = "/etc/network/interfaces"
+        with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
+            connection_file.write(connection_template)
 
-    with open(INTERFACE_CONFIG_PATH, "r+") as interfaces_config_file:
-        if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
-            interfaces_config_file.write(f"source {BRIDGE_CONFIG_PATH}/*\n")
+    except OSError as e:
+        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
-    connection_template = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
 
-    if not os.path.exists("BRIDGE_CONFIG_PATH"):
-        os.makedirs("BRIDGE_CONFIG_PATH")
-
-    with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
-        connection_file.write(connection_template)
-
+def _add_iptables_rule(connection_name: str) -> None:
     _execute_in_shell(
         f"sudo iptables -I WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
     )
 
-    return _execute_in_shell("sudo systemctl restart networking.service")
+
+def _restart_network_service() -> None:
+    _execute_in_shell("sudo systemctl restart networking.service")
 
 
-def remove_connection(connection_name: str) -> bool:
+def _delete_linux_bridge(connection_name: str) -> None:
+    connection_file: str = f"{BRIDGE_CONFIG_PATH}/{connection_name}"
+    try:
+        if os.path.exists(connection_file):
+            os.remove(connection_file)
+    except OSError as e:
+        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
+
+
+def _remove_iptables_rule(connection_name: str) -> None:
+    _execute_in_shell(
+        f"sudo iptables -D WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
+    )
+
+
+def add_connection(
+    connection_name: str, interface1_name: str, interface2_name: str
+) -> None:
     """
-    Removes the specified connection.
+    Adds a new logical connection in the WEmulate context and creates a linux bridge on the host system.
+
+    Args:
+        connection_name: This is the name of the connection which should be configured.
+        interface1_name: This is the first interface which should be added to the connection/bridge.
+        interface2_name: This is the second interface which should be added to the connection/bridge.
+
+    Returns:
+        None
+
+    Raises:
+        WEmulateExecutionError: if the bridge could not be added successfully
+        WEmulateFileError: if the configuration files could not be created or modified
+    """
+    _add_linux_bridge(connection_name, interface1_name, interface2_name)
+    _add_iptables_rule(connection_name)
+    _restart_network_service()
+
+
+def remove_connection(connection_name: str) -> None:
+    """
+    Removes the specified connection and deletes the linux bridge on the host system.
 
     Args:
         connection_name: This is the name of the connection which should be removed.
 
     Returns:
-        True if the execution was successful. False when the execution failed.
+        None
 
     Raises:
-        KeyError: Raises an exception.
+        WEmulateExecutionError: if the bridge could not be added successfully
+        WEmulateFileError: if the connection configuration file could not be removed successfully
     """
-    ip.link("set", index=ip.link_lookup(ifname=connection_name)[0], state="down")
-    _execute_in_shell(f"sudo brctl delbr {connection_name}")
-
-    connection_file = f"{BRIDGE_CONFIG_PATH}/{connection_name}"
-    if os.path.exists(connection_file):
-        os.remove(connection_file)
-
-    try:
-        _execute_in_shell(
-            f"sudo iptables -D WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
-        )
-        return True
-    except:
-        return False
+    _delete_linux_bridge(connection_name)
+    _remove_iptables_rule(connection_name)
 
 
-def set_parameters(interface_name, parameters):
+def set_parameters(interface_name: str, parameters: List) -> None:
     """
     Sets the given parameters on the specified interface.
 
@@ -127,13 +149,13 @@ def set_parameters(interface_name, parameters):
         parameters: This is a list of parameters which should be applied.
 
     Returns:
-        This is a description of what is returned.
+        None
 
     Raises:
-        KeyError: Raises an exception.
+        WEmulateExecutionError: if the parameters could not be applied to the interface
     """
-    outgoing_config_command = f"tcset {interface_name} "
-    incoming_config_command = f"tcset {interface_name} "
+    outgoing_config_command: str = f"tcset {interface_name} "
+    incoming_config_command: str = f"tcset {interface_name} "
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if "delay" in parameters:
@@ -163,12 +185,11 @@ def set_parameters(interface_name, parameters):
             )
         outgoing_config_command += " --change"
         incoming_config_command += " --change"
-        command_tuple = (outgoing_config_command, incoming_config_command)
-        return _execute_commands(command_tuple)
-    return "No parameters were given!"
+        commands: Tuple = (outgoing_config_command, incoming_config_command)
+        _execute_commands(commands)
 
 
-def remove_parameters(interface_name: str):
+def remove_parameters(interface_name: str) -> None:
     """
     Deletes all configured parameters on the given interface.
 
@@ -176,10 +197,9 @@ def remove_parameters(interface_name: str):
         interface_name: This is the name of the interface which should be configured.
 
     Returns:
-        This is a description of what is returned.
+        None
 
     Raises:
-        KeyError: Raises an exception.
+        WEmulateExecutionError: if the parameters could not be removed from the interface
     """
-    command = f"tcdel {interface_name} --all"
-    return _execute_in_shell(command)
+    _execute_in_shell(f"tcdel {interface_name} --all")
