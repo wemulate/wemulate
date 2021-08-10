@@ -1,7 +1,7 @@
 name: docs_pages_workflow
 on:
-  release:
-    types: [published]
+  push:
+    branches: [master]
 
 jobs:
   build_docs_job:

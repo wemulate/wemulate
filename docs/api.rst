@@ -1,14 +1,14 @@
 .. _api:
 
 Developer Interface
-===================
+#####################
 
 .. module:: wemulate
 
 This part of the documentation covers all the interfaces of WEmulate.
 
-Trafic Control
---------------
+Traffic Control
+******************
 .. automodule:: wemulate.utils
     .. autoclass:: tcconfig
 
@@ -16,7 +16,7 @@ Trafic Control
 
 
 Exceptions
-----------
+*************
 
 .. autoexception:: wemulate.core.exc.WEmulateError
 .. autoexception:: wemulate.core.exc.WEmulateValidationError

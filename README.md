@@ -2,6 +2,8 @@
 # WEmulate
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 
+## Documentation
+Have a look at the [documentation](https://wemulate.github.io/wemulate) for detailed documentation.
 
 ## Installation
 
