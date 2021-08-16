@@ -1,10 +1,11 @@
 import json
+from typing import Dict, List
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from wemulate.core.database.session import database_engine
 
-PARAMETERS = [
+PARAMETERS: List[str] = [
     "bandwidth",
     "delay",
     "packet_loss",
@@ -13,7 +14,7 @@ PARAMETERS = [
     "duplication",
 ]
 
-DEFAULT_PARAMETERS = {
+DEFAULT_PARAMETERS: Dict[str, int] = {
     "bandwidth": 0,
     "delay": 0,
     "jitter": 0,

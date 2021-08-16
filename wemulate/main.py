@@ -31,9 +31,6 @@ class WEmulate(App):
     class Meta:
         label = "wemulate"
 
-        # configuration defaults
-        # config_defaults = CONFIG
-
         # call sys.exit() on close
         exit_on_close = True
 
@@ -67,7 +64,6 @@ class WEmulate(App):
             SaveController,
             LoadController,
         ]
-
 
 
 class WEmulateTest(TestApp, WEmulate):

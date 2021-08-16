@@ -133,7 +133,7 @@ def remove_connection(connection_name: str) -> None:
         None
 
     Raises:
-        WEmulateExecutionError: if the bridge could not be added successfully
+        WEmulateExecutionError: if the bridge could not be removed successfully
         WEmulateFileError: if the connection configuration file could not be removed successfully
     """
     _delete_linux_bridge(connection_name)
@@ -194,7 +194,7 @@ def remove_parameters(interface_name: str) -> None:
     Deletes all configured parameters on the given interface.
 
     Args:
-        interface_name: This is the name of the interface which should be configured.
+        interface_name: This is the name of the interface on which the parameters should be removed.
 
     Returns:
         None
