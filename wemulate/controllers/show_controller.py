@@ -14,7 +14,7 @@ from wemulate.core.database.utils import get_logical_interface_for_physical_name
 class ShowController(Controller):
     class Meta:
         label = "show"
-        help = "show specific informations"
+        help = "show specific information"
         stacked_on = "base"
         stacked_type = "nested"
 

@@ -1,5 +1,5 @@
 import os
-from typing import List, Tuple
+from typing import Dict, Tuple
 from pyroute2 import IPRoute
 from cement import shell
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
@@ -140,13 +140,13 @@ def remove_connection(connection_name: str) -> None:
     _remove_iptables_rule(connection_name)
 
 
-def set_parameters(interface_name: str, parameters: List) -> None:
+def set_parameters(interface_name: str, parameters: Dict[str, int]) -> None:
     """
     Sets the given parameters on the specified interface.
 
     Args:
         interface_name: This is the name of the interface which should be configured.
-        parameters: This is a list of parameters which should be applied.
+        parameters: This is a dict of parameters which should be applied {parameter_name: parameter_value}.
 
     Returns:
         None

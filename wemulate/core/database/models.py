@@ -5,22 +5,18 @@ from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 from wemulate.core.database.session import database_engine
 
-PARAMETERS: List[str] = [
-    "bandwidth",
-    "delay",
-    "packet_loss",
-    "jitter",
-    "corruption",
-    "duplication",
-]
+BANDWIDTH: str = "bandwidth"
+DELAY: str = "delay"
+PACKET_LOSS: str = "packet_loss"
+JITTER: str = "jitter"
+
+PARAMETERS: List[str] = [BANDWIDTH, DELAY, PACKET_LOSS, JITTER]
 
 DEFAULT_PARAMETERS: Dict[str, int] = {
-    "bandwidth": 0,
-    "delay": 0,
-    "jitter": 0,
-    "packet_loss": 0,
-    "corruption": 0,
-    "duplication": 0,
+    BANDWIDTH: 0,
+    DELAY: 0,
+    PACKET_LOSS: 0,
+    JITTER: 0,
 }
 
 Base = declarative_base()
@@ -232,41 +228,32 @@ class ConnectionModel(Base):
         )
 
     def serialize(self):
-        delay = DEFAULT_PARAMETERS["delay"]
-        packet_loss = DEFAULT_PARAMETERS["packet_loss"]
-        bandwidth = DEFAULT_PARAMETERS["bandwidth"]
-        jitter = DEFAULT_PARAMETERS["jitter"]
-        corruption = DEFAULT_PARAMETERS["corruption"]
-        duplication = DEFAULT_PARAMETERS["duplication"]
+        delay = DEFAULT_PARAMETERS[DELAY]
+        packet_loss = DEFAULT_PARAMETERS[PACKET_LOSS]
+        bandwidth = DEFAULT_PARAMETERS[BANDWIDTH]
+        jitter = DEFAULT_PARAMETERS[JITTER]
 
         for parameter in self.parameters:
-            if parameter.parameter_name == "delay":
+            if parameter.parameter_name == DELAY:
                 delay = parameter.value
 
-            if parameter.parameter_name == "packet_loss":
+            if parameter.parameter_name == PACKET_LOSS:
                 packet_loss = parameter.value
 
-            if parameter.parameter_name == "bandwidth":
+            if parameter.parameter_name == BANDWIDTH:
                 bandwidth = parameter.value
 
-            if parameter.parameter_name == "jitter":
+            if parameter.parameter_name == JITTER:
                 jitter = parameter.value
 
-            if parameter.parameter_name == "corruption":
-                corruption = parameter.value
-
-            if parameter.parameter_name == "duplication":
-                duplication = parameter.value
         return {
             "connection_name": self.connection_name,
             "interface1": self.first_logical_interface.logical_name,
             "interface2": self.second_logical_interface.logical_name,
-            "corruption": corruption,
-            "delay": delay,
-            "duplication": duplication,
-            "packet_loss": packet_loss,
-            "bandwidth": bandwidth,
-            "jitter": jitter,
+            DELAY: delay,
+            PACKET_LOSS: packet_loss,
+            BANDWIDTH: bandwidth,
+            JITTER: jitter,
         }
 
 
@@ -275,12 +262,10 @@ class ParameterModel(Base):
     parameter_id = Column(Integer, primary_key=True, autoincrement=True)
     parameter_name = Column(
         Enum(
-            "bandwidth",
-            "delay",
-            "packet_loss",
-            "jitter",
-            "corruption",
-            "duplication",
+            BANDWIDTH,
+            DELAY,
+            PACKET_LOSS,
+            JITTER,
             name="parameter_name_enum",
         ),
         nullable=False,
@@ -289,13 +274,11 @@ class ParameterModel(Base):
     belongs_to_connection_id = Column(
         Integer, ForeignKey("connection.connection_id"), nullable=False
     )
-    active = Column(Boolean, default=True)
 
     def __init__(self, parameter_name, value, connection_id):
         self.parameter_name = parameter_name
         self.value = value
         self.belongs_to_connection_id = connection_id
-        self.active = True
 
     def __repr__(self):
         return json.dumps(
@@ -304,7 +287,6 @@ class ParameterModel(Base):
                 "parameter_name": self.parameter_name,
                 "value": self.value,
                 "connection_id": self.belongs_to_connection_id,
-                "active": self.active,
             }
         )
 
