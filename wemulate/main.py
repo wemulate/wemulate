@@ -1,6 +1,3 @@
-import os
-
-from wemulate.utils.settings import get_db_location
 from wemulate.controllers.load_controller import LoadController
 from wemulate.controllers.save_controller import SaveController
 from wemulate.controllers.config_controller import ConfigController
@@ -9,20 +6,10 @@ from wemulate.controllers.delete_controller import DeleteController
 from wemulate.controllers.set_controller import SetController
 from wemulate.controllers.add_controller import AddController
 from wemulate.controllers.show_controller import ShowController
-from cement import App, TestApp, init_defaults
-from cement.utils import fs
+from cement import App, TestApp
 from cement.core.exc import CaughtSignal
 from wemulate.core.exc import WEmulateError
-from wemulate.controllers.base import Base
-
-from wemulate.core.database.models import (
-    ProfileModel,
-    DeviceModel,
-    LogicalInterfaceModel,
-    InterfaceModel,
-    ConnectionModel,
-    ParameterModel,
-)
+from wemulate.controllers.base_controller import Base
 
 
 class WEmulate(App):
