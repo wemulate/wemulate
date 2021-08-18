@@ -1,4 +1,3 @@
-from re import I
 import wemulate.core.database.utils as dbutils
 from wemulate.core.database.models import (
     BANDWIDTH,

@@ -97,12 +97,10 @@ class DeleteController(Controller):
             connection: ConnectionModel = dbutils.get_connection(
                 self.app.pargs.connection_name
             )
-            parameters: Dict[
-                str, int
-            ] = dbutils.get_all_parameter_values_for_connection_id(
-                connection.connection_id
-            )
-
+            parameters: Dict[str, int] = {
+                parameter.parameter_name: parameter.value
+                for parameter in connection.parameters
+            }
             if not parameters:
                 self.app.log.info("There are no parameters set on this connection")
                 self.app.close()

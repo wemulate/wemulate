@@ -1,19 +1,13 @@
-from typing import Dict, List, Optional, Tuple
-from wemulate.core.database.models import (
-    BANDWIDTH,
-    ConnectionModel,
-    DELAY,
-    JITTER,
-    PACKET_LOSS,
-)
-import wemulate.utils.tcconfig as tcutils
+import wemulate.controllers.common as common
 import wemulate.core.database.utils as dbutils
+import wemulate.utils.tcconfig as tcutils
+from typing import Dict, List, Optional, Tuple
+from wemulate.core.database.models import ConnectionModel
 from wemulate.core.exc import (
     WEmulateDatabaseError,
     WEmulateExecutionError,
     WEmulateValidationError,
 )
-import wemulate.controllers.common as common
 from cement import Controller, ex
 
 
@@ -113,11 +107,10 @@ class AddController(Controller):
                 connection: ConnectionModel = dbutils.get_connection(
                     self.app.pargs.connection_name
                 )
-                parameters: Dict[
-                    str, int
-                ] = dbutils.get_all_parameter_values_for_connection_id(
-                    connection.connection_id
-                )
+                parameters: Dict[str, int] = {
+                    parameter.parameter_name: parameter.value
+                    for parameter in connection.parameters
+                }
                 common.create_or_update_parameters_in_db(self, connection, parameters)
                 tcutils.set_parameters(
                     dbutils.get_physical_interface_for_logical_id(

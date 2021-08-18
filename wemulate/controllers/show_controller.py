@@ -1,165 +1,142 @@
-from wemulate.core.database.utils import (
-    connection_exists,
-    get_connection,
-    get_connection_list,
-)
+from typing import List
+from wemulate.core.database.models import ConnectionModel
+import netifaces
+import wemulate.core.database.utils as dbutils
+import wemulate.controllers.common as common
 from cement import Controller, ex
 from wemulate.utils.rendering import rendering
-import netifaces
-
 from wemulate.utils.settings import get_interfaces, get_mgmt_interfaces, get_config_path
-from wemulate.core.database.utils import get_logical_interface_for_physical_name
 
 
 class ShowController(Controller):
+    CONNECTION_HEADERS: List[str] = [
+        "NAME",
+        "BIDIRECTIONAL",
+        "1. INTERFACE",
+        "2. INTERFACE",
+        "PARAMETERS",
+    ]
+    SHOW_CONNECTION_TEMPLATE_FILE: str = "show_connection.jinja2"
+
+    INTERFACE_HEADER = ["NAME", "PHYSICAL", "IP", "MAC"]
+
     class Meta:
-        label = "show"
-        help = "show specific information"
-        stacked_on = "base"
-        stacked_type = "nested"
+        label: str = "show"
+        help: str = "show specific information"
+        stacked_on: str = "base"
+        stacked_type: str = "nested"
+
+    def _construct_connection_data_to_render(
+        self, connection: ConnectionModel, render_data: List
+    ) -> None:
+        render_data.append(
+            [
+                connection.connection_name,
+                connection.bidirectional,
+                connection.first_logical_interface.logical_name,
+                connection.second_logical_interface.logical_name,
+                rendering(
+                    {"parameters": connection.parameters},
+                    self.SHOW_CONNECTION_TEMPLATE_FILE,
+                ),
+            ]
+        )
+
+    def _construct_interface_data_to_render(
+        self, render_data: List, interface: str, is_mgmt_interface: bool = False
+    ) -> None:
+        data_to_append: List = []
+        if not is_mgmt_interface:
+            data_to_append.append(
+                dbutils.get_logical_interface_for_physical_name(interface).logical_name,
+            )
+        data_to_append.extend(
+            [
+                interface,
+                self._get_interface_ip(interface),
+                self._get_interface_mac_address(interface),
+            ]
+        )
+        render_data.append(data_to_append)
+
+    def _get_interface_ip(self, interface: str) -> str:
+        if netifaces.AF_INET in netifaces.ifaddresses(interface):
+            return netifaces.ifaddresses(interface)[netifaces.AF_INET][0]["addr"]
+        else:
+            "N/A"
+
+    def _get_interface_mac_address(self, interface: str) -> str:
+        return netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
 
     @ex(
         help="show specific connection information",
-        arguments=[(["connection_name"], {"help": "name of the connection"})],
+        arguments=[([common.CONNECTION_NAME], {"help": "name of the connection"})],
     )
     def connection(self):
-        headers = [
-            "NAME",
-            "BIDIRECTIONAL",
-            "1. INTERFACE",
-            "2. INTERFACE",
-            "PARAMETERS",
-        ]
-        data = []
-        if connection_exists(self.app.pargs.connection_name):
-            connection = get_connection(self.app.pargs.connection_name)
-            parameters = {"parameters": connection.parameters}
-            parameter_string = rendering(parameters, "show_connection.jinja2")
-            data.append(
-                [
-                    connection.connection_name,
-                    connection.bidirectional,
-                    connection.first_logical_interface.logical_name,
-                    connection.second_logical_interface.logical_name,
-                    parameter_string,
-                ]
-            )
-            self.app.render(data, headers=headers, tablefmt="grid")
+        if not common.connection_exists_in_db(self):
+            self.app.close()
         else:
-            self.app.log.info(
-                f"There is no connection with name: {self.app.pargs.connection_name}"
+            connection: ConnectionModel = dbutils.get_connection(
+                self.app.pargs.connection_name
+            )
+            render_data: List = []
+            self._construct_connection_data_to_render(connection, render_data)
+            self.app.render(
+                render_data, headers=self.CONNECTION_HEADERS, tablefmt="grid"
             )
 
     @ex(
         help="show overview about all connections",
     )
     def connections(self):
-        headers = [
-            "NAME",
-            "BIDIRECTIONAL",
-            "1. INTERFACE",
-            "2. INTERFACE",
-            "PARAMETERS",
-        ]
-        data = []
-        connections = get_connection_list()
-        if connections:
-            for conn in connections:
-                parameters = {"parameters": conn.parameters}
-                parameter_string = rendering(parameters, "show_connection.jinja2")
-                data.append(
-                    [
-                        conn.connection_name,
-                        conn.bidirectional,
-                        conn.first_logical_interface.logical_name,
-                        conn.second_logical_interface.logical_name,
-                        parameter_string,
-                    ]
-                )
-            self.app.render(data, headers=headers, tablefmt="grid")
-        else:
+        connections: List[ConnectionModel] = dbutils.get_connection_list()
+        if not connections:
             self.app.log.info("There are no connections")
+            self.app.close()
+        else:
+            render_data: List = []
+            for connection in connections:
+                self._construct_connection_data_to_render(connection, render_data)
+            self.app.render(
+                render_data, headers=self.CONNECTION_HEADERS, tablefmt="grid"
+            )
 
     @ex(
         help="show specific interface information",
         arguments=[(["interface_name"], {"help": "name of the interface"})],
     )
     def interface(self):
-        headers = ["NAME", "PHYSICAL", "IP", "MAC"]
-        data = []
-        if self.app.pargs.interface_name in get_interfaces():
-            if netifaces.AF_INET in netifaces.ifaddresses(
-                self.app.pargs.interface_name
-            ):
-                ip = netifaces.ifaddresses(self.app.pargs.interface_name)[
-                    netifaces.AF_INET
-                ][0]["addr"]
-            else:
-                ip = "N/A"
-            data.append(
-                [
-                    get_logical_interface_for_physical_name(
-                        self.app.pargs.interface_name
-                    ).logical_name,
-                    self.app.pargs.interface_name,
-                    ip,
-                    netifaces.ifaddresses(self.app.pargs.interface_name)[
-                        netifaces.AF_LINK
-                    ][0]["addr"],
-                ]
-            )
-            self.app.render(data, headers=headers, tablefmt="grid")
-        else:
+        if not self.app.pargs.interface_name in get_interfaces():
             self.app.log.info("The given interface is not available")
+        else:
+            render_data: List = []
+            self._construct_interface_data_to_render(
+                render_data,
+                self.app.pargs.interface_name,
+            )
+            self.app.render(render_data, headers=self.INTERFACE_HEADER, tablefmt="grid")
 
     @ex(
         help="show overview about all interfaces",
     )
     def interfaces(self):
-        headers = ["NAME", "PHYSICAL", "IP", "MAC"]
-        data = []
-
-        for int in get_interfaces():
-            if netifaces.AF_INET in netifaces.ifaddresses(int):
-                ip = netifaces.ifaddresses(int)[netifaces.AF_INET][0]["addr"]
-            else:
-                ip = "N/A"
-
-            data.append(
-                [
-                    get_logical_interface_for_physical_name(int).logical_name,
-                    int,
-                    ip,
-                    netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"],
-                ]
-            )
-
-        self.app.render(data, headers=headers, tablefmt="grid")
+        render_data: List = []
+        for interface in get_interfaces():
+            self._construct_interface_data_to_render(render_data, interface)
+        self.app.render(render_data, headers=self.INTERFACE_HEADER, tablefmt="grid")
 
     @ex(
         help="show overview about all management interfaces",
     )
     def mgmt_interfaces(self):
-        headers = ["NAME", "IP", "MAC"]
-        data = []
-        mgmt_interfaces = get_mgmt_interfaces()
-        if mgmt_interfaces == None:
+        mgmt_interfaces: List[str] = get_mgmt_interfaces()
+        if not mgmt_interfaces:
             self.app.log.info(
                 "There are no mgmt interfaces defined in %s" % get_config_path()
             )
+            self.app.close()
         else:
-            for int in get_mgmt_interfaces():
-                if netifaces.AF_INET in netifaces.ifaddresses(int):
-                    ip = netifaces.ifaddresses(int)[netifaces.AF_INET][0]["addr"]
-                else:
-                    ip = "N/A"
-
-                data.append(
-                    [
-                        int,
-                        ip,
-                        netifaces.ifaddresses(int)[netifaces.AF_LINK][0]["addr"],
-                    ]
-                )
-
-            self.app.render(data, headers=headers, tablefmt="grid")
+            render_data: List = []
+            for interface in mgmt_interfaces:
+                self._construct_interface_data_to_render(render_data, interface, True)
+            self.app.render(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")

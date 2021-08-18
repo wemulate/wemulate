@@ -136,18 +136,6 @@ def get_connection(connection_name) -> ConnectionModel:
 
 
 @use_db_session
-def get_all_parameter_values_for_connection_id(connection_id) -> Dict[str, int]:
-    parameters_from_db: List[ParameterModel] = (
-        session.query(ParameterModel)
-        .filter(ParameterModel.belongs_to_connection_id == connection_id)
-        .all()
-    )
-    return {
-        parameter.parameter_name: parameter.value for parameter in parameters_from_db
-    }
-
-
-@use_db_session
 def create_connection(
     connection_name, logical_interface1, logical_interface2, active_device_profile
 ) -> None:
