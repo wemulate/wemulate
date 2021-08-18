@@ -11,7 +11,7 @@ def use_db_session(method: Callable) -> Callable:
     def inner(*method_args, **method_kwargs) -> None:
         try:
             with db_session.begin() as session:
-                method(*method_args, **method_kwargs)
+                method(session, *method_args, **method_kwargs)
         except IntegrityError as e:
             splitting = e.args[0].split(
                 "(sqlite3.IntegrityError) UNIQUE constraint failed: connection.", 1
