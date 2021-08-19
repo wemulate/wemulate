@@ -42,14 +42,14 @@ class WEmulate(App):
         # register handlers
         handlers = [
             Base,
+            ResetController,
             ShowController,
-            AddController,
             SetController,
             DeleteController,
-            ResetController,
-            ConfigController,
-            SaveController,
-            LoadController,
+            AddController,
+            # ConfigController,# Not implemented yet
+            # SaveController, # Not implemented yet
+            # LoadController,# Not implemented yet
         ]
 
 

@@ -1,4 +1,5 @@
-from typing import Dict, List
+from typing import List, Optional
+from sqlalchemy.orm.session import Session
 from wemulate.core.database.decorators import use_db_session
 from wemulate.core.database.models import (
     ProfileModel,
@@ -10,72 +11,75 @@ from wemulate.core.database.models import (
 )
 
 
-@use_db_session
-def _get_interface_by_name(interface_name) -> InterfaceModel:
+def _get_interface_by_name(
+    session: Session,
+    interface_name: str,
+) -> Optional[InterfaceModel]:
     return session.query(InterfaceModel).filter_by(physical_name=interface_name).first()
 
 
 @use_db_session
 def _get_specific_parameter_for_connection_id(
-    connection_id, parameter
-) -> ParameterModel:
+    session: Session, connection_id: int, parameter_name: str
+) -> Optional[ParameterModel]:
     return (
         session.query(ParameterModel)
         .filter(ParameterModel.belongs_to_connection_id == connection_id)
-        .filter(ParameterModel.parameter_name == parameter)
+        .filter(ParameterModel.parameter_name == parameter_name)
         .first()
     )
 
 
 @use_db_session
-def _create_parameter(parameter_name, value, connection_id) -> None:
-    parameter = ParameterModel(parameter_name, value, connection_id)
+def _create_parameter(
+    session: Session, parameter_name: str, value: int, connection_id: int
+) -> None:
+    parameter: ParameterModel = ParameterModel(parameter_name, value, connection_id)
     session.add(parameter)
 
 
 @use_db_session
-def _update_parameter(parameter, value) -> None:
-    if parameter.value == value:
-        return False
-    parameter.value = value
-    session.add(parameter)
+def _update_parameter(session: Session, parameter, value) -> None:
+    if parameter.value != value:
+        parameter.value = value
+        session.add(parameter)
 
 
 @use_db_session
-def _delete_all_connections() -> None:
+def _delete_all_connections(session: Session) -> None:
     session.query(ConnectionModel).delete()
-    session.commit()
 
 
 @use_db_session
-def _delete_all_parameters() -> None:
+def _delete_all_parameters(session: Session) -> None:
     session.query(ParameterModel).delete()
-    session.commit()
 
 
 @use_db_session
-def connection_exists(connection_name: str) -> bool:
+def connection_exists(session: Session, connection_name: str) -> bool:
     if (
-        not session.query(ConnectionModel)
+        session.query(ConnectionModel)
         .filter_by(connection_name=connection_name)
         .first()
     ):
-        return False
-    return True
+        return True
+    return False
 
 
 @use_db_session
-def get_device(device_id) -> DeviceModel:
+def get_device(session: Session, device_id: int) -> Optional[DeviceModel]:
     return session.query(DeviceModel).filter_by(device_id=device_id).first()
 
 
 @use_db_session
-def get_active_profile(device) -> ProfileModel:
+def get_active_profile(session: Session, device: DeviceModel) -> Optional[ProfileModel]:
     return session.query(ProfileModel).filter_by(belongs_to_device=device).first()
 
 
 @use_db_session
-def get_logical_interface_by_name(logical_interface_name) -> LogicalInterfaceModel:
+def get_logical_interface_by_name(
+    session: Session, logical_interface_name: str
+) -> Optional[LogicalInterfaceModel]:
     return (
         session.query(LogicalInterfaceModel)
         .filter_by(logical_name=logical_interface_name)
@@ -85,13 +89,14 @@ def get_logical_interface_by_name(logical_interface_name) -> LogicalInterfaceMod
 
 @use_db_session
 def get_logical_interface_for_physical_name(
-    physical_interface_name,
-) -> LogicalInterfaceModel:
+    session: Session,
+    physical_interface_name: str,
+) -> Optional[LogicalInterfaceModel]:
     return (
         session.query(LogicalInterfaceModel)
         .filter_by(
             logical_interface_id=_get_interface_by_name(
-                physical_interface_name
+                session, physical_interface_name
             ).has_logical_interface_id
         )
         .first()
@@ -99,21 +104,26 @@ def get_logical_interface_for_physical_name(
 
 
 @use_db_session
-def get_physical_interface_for_logical_name(logical_interface_name) -> InterfaceModel:
-    logical_interface = (
+def get_physical_interface_for_logical_name(
+    session: Session, logical_interface_name: str
+) -> Optional[InterfaceModel]:
+    logical_interface: Optional[LogicalInterfaceModel] = (
         session.query(LogicalInterfaceModel)
         .filter_by(logical_name=logical_interface_name)
         .first()
     )
-    return (
-        session.query(InterfaceModel)
-        .filter_by(has_logical_interface_id=logical_interface.logical_interface_id)
-        .first()
-    )
+    if logical_interface:
+        return (
+            session.query(InterfaceModel)
+            .filter_by(has_logical_interface_id=logical_interface.logical_interface_id)
+            .first()
+        )
 
 
 @use_db_session
-def get_physical_interface_for_logical_id(logical_interface_id) -> InterfaceModel:
+def get_physical_interface_for_logical_id(
+    session: Session, logical_interface_id: int
+) -> Optional[InterfaceModel]:
     return (
         session.query(InterfaceModel)
         .filter_by(has_logical_interface_id=logical_interface_id)
@@ -122,12 +132,12 @@ def get_physical_interface_for_logical_id(logical_interface_id) -> InterfaceMode
 
 
 @use_db_session
-def get_connection_list() -> List[ConnectionModel]:
+def get_connection_list(session: Session) -> List[ConnectionModel]:
     return session.query(ConnectionModel).all()
 
 
 @use_db_session
-def get_connection(connection_name) -> ConnectionModel:
+def get_connection(session: Session, connection_name: str) -> Optional[ConnectionModel]:
     return (
         session.query(ConnectionModel)
         .filter(ConnectionModel.connection_name == connection_name)
@@ -137,9 +147,13 @@ def get_connection(connection_name) -> ConnectionModel:
 
 @use_db_session
 def create_connection(
-    connection_name, logical_interface1, logical_interface2, active_device_profile
+    session: Session,
+    connection_name: str,
+    logical_interface1: LogicalInterfaceModel,
+    logical_interface2: LogicalInterfaceModel,
+    active_device_profile: DeviceModel,
 ) -> None:
-    connection = ConnectionModel(
+    connection: ConnectionModel = ConnectionModel(
         connection_name,
         logical_interface1.logical_interface_id,
         logical_interface2.logical_interface_id,
@@ -149,7 +163,7 @@ def create_connection(
 
 
 @use_db_session
-def delete_all_parameter_on_connection(connection_id) -> None:
+def delete_all_parameter_on_connection(session: Session, connection_id: int) -> None:
     (
         session.query(ParameterModel)
         .filter(ParameterModel.belongs_to_connection_id == connection_id)
@@ -157,31 +171,38 @@ def delete_all_parameter_on_connection(connection_id) -> None:
     )
 
 
-@use_db_session
-def create_or_update_parameter(connection_id, parameter_value, value) -> None:
-    parameter = _get_specific_parameter_for_connection_id(
-        connection_id, parameter_value
+def create_or_update_parameter(
+    connection_id: int, parameter_name: str, value: int
+) -> None:
+    parameter: Optional[ParameterModel] = _get_specific_parameter_for_connection_id(
+        connection_id, parameter_name
     )
     if parameter:
         _update_parameter(parameter, value)
     else:
-        _create_parameter(parameter_value, value, connection_id)
+        _create_parameter(parameter_name, value, connection_id)
 
 
 @use_db_session
-def delete_parameter_on_connection_id(connection_id, parameter_name) -> None:
-    parameter = _get_specific_parameter_for_connection_id(connection_id, parameter_name)
-    session.delete(parameter)
+def delete_parameter_on_connection_id(
+    session: Session, connection_id: int, parameter_name: str
+) -> None:
+    parameter: Optional[ParameterModel] = _get_specific_parameter_for_connection_id(
+        connection_id, parameter_name
+    )
+    if parameter:
+        session.delete(parameter)
 
 
 @use_db_session
-def delete_connection_by_name(connection_name) -> None:
-    connection = (
+def delete_connection_by_name(session: Session, connection_name: str) -> None:
+    connection: Optional[ConnectionModel] = (
         session.query(ConnectionModel)
         .filter_by(connection_name=connection_name)
         .first()
     )
-    session.delete(connection)
+    if connection:
+        session.delete(connection)
 
 
 def reset_all_connections() -> None:

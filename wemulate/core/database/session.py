@@ -7,4 +7,4 @@ from sqlalchemy.orm import sessionmaker
 database_engine: Engine = create_engine(
     f"sqlite+pysqlite:///{get_db_location()}", future=True
 )
-db_session: Session = sessionmaker(bind=database_engine)
+db_session: sessionmaker = sessionmaker(bind=database_engine, expire_on_commit=False)

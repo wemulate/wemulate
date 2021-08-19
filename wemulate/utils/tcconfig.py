@@ -1,9 +1,11 @@
 import os
 from typing import Dict, Tuple
+from cement.core import interface
 from pyroute2 import IPRoute
 from cement import shell
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
+INTERFACE_CONFIG_PATH: str = "/etc/network/interfaces"
 BRIDGE_CONFIG_PATH: str = "/etc/network/interfaces.d"
 
 ip: IPRoute = IPRoute()
@@ -16,7 +18,9 @@ def _execute_in_shell(command: str) -> None:
             raise WEmulateExecutionError(
                 f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
             )
-    except Exception:
+    except WEmulateExecutionError as e:
+        raise e
+    except Exception as e:
         raise WEmulateExecutionError
 
 
@@ -53,30 +57,37 @@ def _add_corruption_command(corruption_value) -> str:
     return f" --corrupt {corruption_value}%"
 
 
+def _add_bridge_config_path_to_interface_config() -> None:
+    if not os.path.exists(INTERFACE_CONFIG_PATH):
+        open(INTERFACE_CONFIG_PATH, "a").close()
+    with open(INTERFACE_CONFIG_PATH, "r+") as interfaces_config_file:
+        if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
+            interfaces_config_file.write(f"source {BRIDGE_CONFIG_PATH}/*\n")
+
+
+def _add_bridge_config(
+    connection_name: str, interface1_name: str, interface2_name: str
+) -> None:
+    os.makedirs(BRIDGE_CONFIG_PATH, exist_ok=True)
+    with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w+") as connection_file:
+        connection_file.write(
+            f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
+        )
+
+
 def _add_linux_bridge(
     connection_name: str, interface1_name: str, interface2_name: str
 ) -> None:
-    INTERFACE_CONFIG_PATH: str = "/etc/network/interfaces"
     try:
-        with open(INTERFACE_CONFIG_PATH, "r+") as interfaces_config_file:
-            if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
-                interfaces_config_file.write(f"source {BRIDGE_CONFIG_PATH}/*\n")
-
-        connection_template: str = f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
-
-        if not os.path.exists("BRIDGE_CONFIG_PATH"):
-            os.makedirs("BRIDGE_CONFIG_PATH", exist_ok=True)
-
-        with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w") as connection_file:
-            connection_file.write(connection_template)
-
+        _add_bridge_config_path_to_interface_config()
+        _add_bridge_config(connection_name, interface1_name, interface2_name)
     except OSError as e:
         raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
 
 def _add_iptables_rule(connection_name: str) -> None:
     _execute_in_shell(
-        f"sudo iptables -I WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
+        f"sudo iptables -I FORWARD -i {connection_name} -o {connection_name} -j ACCEPT"
     )
 
 
