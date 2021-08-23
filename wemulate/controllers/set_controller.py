@@ -30,9 +30,11 @@ class SetController(Controller):
         ],
     )
     def parameter(self):
-        if not common.connection_exists_in_db(
-            self
-        ) or not common.validate_parameter_arguments(self):
+        if (
+            not common.connection_name_is_set(self)
+            or not common.connection_exists_in_db(self)
+            or not common.validate_parameter_arguments(self)
+        ):
             self.app.close()
         else:
             connection: ConnectionModel = dbutils.get_connection(
@@ -42,6 +44,7 @@ class SetController(Controller):
             parameters: Dict[str, int] = {}
             common.create_or_update_parameters_in_db(self, connection, parameters)
             tcutils.set_parameters(
+                self.app.pargs.connection_name,
                 dbutils.get_physical_interface_for_logical_id(
                     connection.first_logical_interface_id
                 ).physical_name,

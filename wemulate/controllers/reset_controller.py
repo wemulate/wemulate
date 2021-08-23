@@ -19,7 +19,7 @@ class ResetController(Controller):
     def connection(self):
         if not common.connection_name_is_set(
             self
-        ) or not common.connection_exists_in_db(self.app.pargs.connection_name):
+        ) or not common.connection_exists_in_db(self):
             self.app.close()
         else:
             connection: ConnectionModel = dbutils.get_connection(

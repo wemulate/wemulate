@@ -1,13 +1,11 @@
 import os
-from typing import Dict, Tuple
+from typing import Dict, List, Tuple
 from cement.core import interface
 from pyroute2 import IPRoute
 from cement import shell
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
-INTERFACE_CONFIG_PATH: str = "/etc/network/interfaces"
-BRIDGE_CONFIG_PATH: str = "/etc/network/interfaces.d"
-
+CONFIG_PATH: str = "/etc/wemulate/config/"
 ip: IPRoute = IPRoute()
 
 
@@ -24,8 +22,9 @@ def _execute_in_shell(command: str) -> None:
         raise WEmulateExecutionError
 
 
-def _execute_commands(commands: Tuple) -> None:
+def _execute_commands(commands: List[str]) -> None:
     for command in commands:
+        print(command)
         _execute_in_shell(command)
 
 
@@ -57,30 +56,30 @@ def _add_corruption_command(corruption_value) -> str:
     return f" --corrupt {corruption_value}%"
 
 
-def _add_bridge_config_path_to_interface_config() -> None:
-    if not os.path.exists(INTERFACE_CONFIG_PATH):
-        open(INTERFACE_CONFIG_PATH, "a").close()
-    with open(INTERFACE_CONFIG_PATH, "r+") as interfaces_config_file:
-        if BRIDGE_CONFIG_PATH not in interfaces_config_file.read():
-            interfaces_config_file.write(f"source {BRIDGE_CONFIG_PATH}/*\n")
+def _add_config_folder_if_not_exist() -> None:
+    if not os.path.exists(CONFIG_PATH):
+        os.makedirs(CONFIG_PATH)
 
 
-def _add_bridge_config(
+def _add_and_activate_linux_bridge(connection_name: str) -> None:
+    _execute_in_shell(f"ip link add name {connection_name} type bridge")
+    _execute_in_shell(f"ip link set dev {connection_name} up")
+
+
+def _add_interfaces_to_bridge(
     connection_name: str, interface1_name: str, interface2_name: str
 ) -> None:
-    os.makedirs(BRIDGE_CONFIG_PATH, exist_ok=True)
-    with open(f"{BRIDGE_CONFIG_PATH}/{connection_name}", "w+") as connection_file:
-        connection_file.write(
-            f"# Bridge Setup {connection_name}\nauto {connection_name}\niface {connection_name} inet manual\n    bridge_ports {interface1_name} {interface2_name}\n    bridge_stp off\n"
-        )
+    for interface in (interface1_name, interface2_name):
+        _execute_in_shell(f"ip link set dev {interface} master {connection_name}")
 
 
 def _add_linux_bridge(
     connection_name: str, interface1_name: str, interface2_name: str
 ) -> None:
     try:
-        _add_bridge_config_path_to_interface_config()
-        _add_bridge_config(connection_name, interface1_name, interface2_name)
+        _add_config_folder_if_not_exist()
+        _add_and_activate_linux_bridge(connection_name)
+        _add_interfaces_to_bridge(connection_name, interface1_name, interface2_name)
     except OSError as e:
         raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
@@ -96,12 +95,7 @@ def _restart_network_service() -> None:
 
 
 def _delete_linux_bridge(connection_name: str) -> None:
-    connection_file: str = f"{BRIDGE_CONFIG_PATH}/{connection_name}"
-    try:
-        if os.path.exists(connection_file):
-            os.remove(connection_file)
-    except OSError as e:
-        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
+    _execute_in_shell(f"ip link del {connection_name}")
 
 
 def _remove_iptables_rule(connection_name: str) -> None:
@@ -129,8 +123,8 @@ def add_connection(
         WEmulateFileError: if the configuration files could not be created or modified
     """
     _add_linux_bridge(connection_name, interface1_name, interface2_name)
-    _add_iptables_rule(connection_name)
-    _restart_network_service()
+    # _add_iptables_rule(connection_name)
+    # _restart_network_service()
 
 
 def remove_connection(connection_name: str) -> None:
@@ -148,10 +142,12 @@ def remove_connection(connection_name: str) -> None:
         WEmulateFileError: if the connection configuration file could not be removed successfully
     """
     _delete_linux_bridge(connection_name)
-    _remove_iptables_rule(connection_name)
+    # _remove_iptables_rule(connection_name)
 
 
-def set_parameters(interface_name: str, parameters: Dict[str, int]) -> None:
+def set_parameters(
+    connection_name: str, interface_name: str, parameters: Dict[str, int]
+) -> None:
     """
     Sets the given parameters on the specified interface.
 
@@ -166,7 +162,7 @@ def set_parameters(interface_name: str, parameters: Dict[str, int]) -> None:
         WEmulateExecutionError: if the parameters could not be applied to the interface
     """
     outgoing_config_command: str = f"tcset {interface_name} "
-    incoming_config_command: str = f"tcset {interface_name} "
+    commands_to_execute: List[str] = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
         if "delay" in parameters:
@@ -191,13 +187,15 @@ def set_parameters(interface_name: str, parameters: Dict[str, int]) -> None:
             outgoing_config_command += _add_bandwidth_outgoing_command(
                 parameters["bandwidth"]
             )
+            incoming_config_command: str = f"tcset {interface_name} "
             incoming_config_command += _add_bandwidth_incoming_command(
                 parameters["bandwidth"]
             )
+            incoming_config_command += " --change"
+            commands_to_execute.append(incoming_config_command)
         outgoing_config_command += " --change"
-        incoming_config_command += " --change"
-        commands: Tuple = (outgoing_config_command, incoming_config_command)
-        _execute_commands(commands)
+        commands_to_execute.append(outgoing_config_command)
+        _execute_commands(commands_to_execute)
 
 
 def remove_parameters(interface_name: str) -> None:

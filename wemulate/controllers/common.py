@@ -19,19 +19,19 @@ CONNECTION_NAME_ARGUMENT = (
 )
 BANDWIDTH_ARGUMENT = (
     ["-b", "--bandwidth"],
-    {"help": "delete bandwidth parameter", "action": "store_true"},
+    {"help": "delete bandwidth parameter", "action": "store"},
 )
 JITTER_ARGUMENT = (
     ["-j", "--jitter"],
-    {"help": "delete jitter parameter", "action": "store_true"},
+    {"help": "delete jitter parameter", "action": "store"},
 )
 DELAY_ARGUMENT = (
     ["-d", "--delay"],
-    {"help": "delete delay parameter", "action": "store_true"},
+    {"help": "delete delay parameter", "action": "store"},
 )
 PACKET_LOSS_ARGUMENT = (
     ["-l", "--packet-loss"],
-    {"help": "delete packet loss parameter", "action": "store_true"},
+    {"help": "delete packet loss parameter", "action": "store"},
 )
 
 
@@ -101,7 +101,7 @@ def validate_parameter_arguments(obj) -> bool:
         and not obj.app.pargs.packet_loss
     ):
         obj.app.log.info(
-            "Please specifiy at least one parameter which should be applied on the connection"
+            "Please specifiy at least one parameter which should be applied on the connection | -b, --bandwidth [ms] | -j, --jitter [ms] | -d, --delay [ms], -l, --packet-loss [%]"
         )
         return False
     return True

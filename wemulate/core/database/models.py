@@ -177,7 +177,10 @@ class ConnectionModel(Base):
         unique=True,
     )
     first_logical_interface = relationship(
-        LogicalInterfaceModel, foreign_keys=[first_logical_interface_id], uselist=False
+        LogicalInterfaceModel,
+        lazy=False,
+        foreign_keys=[first_logical_interface_id],
+        uselist=False,
     )
     second_logical_interface_id = Column(
         Integer,
@@ -186,7 +189,10 @@ class ConnectionModel(Base):
         unique=True,
     )
     second_logical_interface = relationship(
-        LogicalInterfaceModel, foreign_keys=[second_logical_interface_id], uselist=False
+        LogicalInterfaceModel,
+        lazy=False,
+        foreign_keys=[second_logical_interface_id],
+        uselist=False,
     )
     belongs_to_profile_id = Column(
         Integer, ForeignKey("profile.profile_id"), nullable=False

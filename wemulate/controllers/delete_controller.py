@@ -70,7 +70,7 @@ class DeleteController(Controller):
     def connection(self):
         if not common.connection_name_is_set(
             self
-        ) or not common.connection_exists_in_db(self.app.pargs.connection_name):
+        ) or not common.connection_exists_in_db(self):
             self.app.close()
         else:
             tcutils.remove_connection(self.app.pargs.connection_name)
@@ -111,6 +111,7 @@ class DeleteController(Controller):
                 ).physical_name
                 tcutils.remove_parameters(physical_interface_name)
                 tcutils.set_parameters(
+                    self.app.pargs.connection_name,
                     physical_interface_name,
                     parameters,
                 )
