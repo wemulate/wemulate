@@ -91,10 +91,10 @@ class AddController(Controller):
         help="add parameter on a specific connection, previously added parameters will not be changed",
         arguments=[
             common.CONNECTION_NAME_ARGUMENT,
-            common.BANDWIDTH_ARGUMENT,
-            common.DELAY_ARGUMENT,
-            common.JITTER_ARGUMENT,
-            common.PACKET_LOSS_ARGUMENT,
+            common.PARAMETER_ARGUMENT_MAP["DELAY_STORE"],
+            common.PARAMETER_ARGUMENT_MAP["JITTER_STORE"],
+            common.PARAMETER_ARGUMENT_MAP["BANDWIDTH_STORE"],
+            common.PARAMETER_ARGUMENT_MAP["PACKET_LOSS_STORE"],
         ],
     )
     def parameter(self):

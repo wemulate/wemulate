@@ -10,16 +10,16 @@ ip: IPRoute = IPRoute()
 
 
 def _execute_in_shell(command: str) -> None:
-    try:
-        stdout, stderr, exitcode = shell.cmd(command)
-        if stderr:
-            raise WEmulateExecutionError(
-                f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
-            )
-    except WEmulateExecutionError as e:
-        raise e
-    except Exception as e:
-        raise WEmulateExecutionError
+    # try:
+    stdout, stderr, exitcode = shell.cmd(command)
+    #     if stderr:
+    #         raise WEmulateExecutionError(
+    #             f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
+    #         )
+    # except WEmulateExecutionError as e:
+    #     raise e
+    # except Exception as e:
+    #     raise WEmulateExecutionError
 
 
 def _execute_commands(commands: List[str]) -> None:
@@ -165,6 +165,7 @@ def set_parameters(
     commands_to_execute: List[str] = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
+        remove_parameters(interface_name)
         if "delay" in parameters:
             mean_delay = parameters["delay"]
             if "jitter" not in parameters:

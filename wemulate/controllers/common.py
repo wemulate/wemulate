@@ -17,22 +17,49 @@ CONNECTION_NAME_ARGUMENT = (
         "dest": CONNECTION_NAME,
     },
 )
-BANDWIDTH_ARGUMENT = (
-    ["-b", "--bandwidth"],
-    {"help": "delete bandwidth parameter", "action": "store"},
-)
-JITTER_ARGUMENT = (
-    ["-j", "--jitter"],
-    {"help": "delete jitter parameter", "action": "store"},
-)
-DELAY_ARGUMENT = (
-    ["-d", "--delay"],
-    {"help": "delete delay parameter", "action": "store"},
-)
-PACKET_LOSS_ARGUMENT = (
-    ["-l", "--packet-loss"],
-    {"help": "delete packet loss parameter", "action": "store"},
-)
+BANDWIDTH_PARAMETER = ["-b", "--bandwidth"]
+BANDWIDTH_HELP_DESCRIPTION = "delete bandwidth parameter"
+JITTER_PARAMETER = ["-j", "--jitter"]
+JITTER_HELP_DESCRIPTION = "delete jitter parameter"
+DELAY_PARAMETER = ["-d", "--delay"]
+DELAY_HELP_DESCRIPTION = "delete delay parameter"
+PACKET_LOSS_PARAMETER = ["-l", "--packet-loss"]
+PACKET_LOSS_HELP_DESCRIPTION = "delete packet loss parameter"
+
+PARAMETER_ARGUMENT_MAP = {
+    "BANDWIDTH_STORE": (
+        BANDWIDTH_PARAMETER,
+        {"help": BANDWIDTH_HELP_DESCRIPTION, "action": "store"},
+    ),
+    "BANDWIDTH_STORE_TRUE": (
+        BANDWIDTH_PARAMETER,
+        {"help": BANDWIDTH_HELP_DESCRIPTION, "action": "store_true"},
+    ),
+    "DELAY_STORE": (
+        DELAY_PARAMETER,
+        {"help": DELAY_PARAMETER, "action": "store"},
+    ),
+    "DELAY_STORE_TRUE": (
+        DELAY_PARAMETER,
+        {"help": DELAY_PARAMETER, "action": "store_true"},
+    ),
+    "JITTER_STORE": (
+        JITTER_PARAMETER,
+        {"help": JITTER_HELP_DESCRIPTION, "action": "store"},
+    ),
+    "JITTER_STORE_TRUE": (
+        JITTER_PARAMETER,
+        {"help": JITTER_HELP_DESCRIPTION, "action": "store_true"},
+    ),
+    "PACKET_LOSS_STORE": (
+        PACKET_LOSS_PARAMETER,
+        {"help": PACKET_LOSS_HELP_DESCRIPTION, "action": "store"},
+    ),
+    "PACKET_LOSS_STORE_TRUE": (
+        PACKET_LOSS_PARAMETER,
+        {"help": PACKET_LOSS_HELP_DESCRIPTION, "action": "store_true"},
+    ),
+}
 
 
 def _set_bandwidth(
