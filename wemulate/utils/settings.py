@@ -1,25 +1,26 @@
-from wemulate.core.exc import WEmulateConfigNotFound, WEmulateError
+from typing import Dict, List
+from wemulate.core.exc import WEmulateConfigNotFoundError
+
 import netifaces, yaml
 
 
-def get_config_path():
+def get_config_path() -> str:
     return "/etc/wemulate/wemulate.yml"
 
 
-def _get_config():
+def _get_config() -> Dict:
     try:
-        with open("/etc/wemulate/wemulate.yml") as file:
-            config = yaml.full_load(file)
-        return config
+        with open(get_config_path()) as file:
+            return yaml.full_load(file)
     except FileNotFoundError:
-        raise WEmulateConfigNotFound 
+        raise WEmulateConfigNotFoundError
 
 
-def get_mgmt_interfaces():
+def get_mgmt_interfaces() -> List[str]:
     return _get_config()["wemulate"]["management_interfaces"]
 
 
-def get_interfaces():
+def get_interfaces() -> List[str]:
     return [
         name
         for name in netifaces.interfaces()
@@ -28,5 +29,5 @@ def get_interfaces():
     ]
 
 
-def get_db_location():
+def get_db_location() -> str:
     return _get_config()["wemulate"]["db_location"]
