@@ -10,6 +10,7 @@ ip: IPRoute = IPRoute()
 
 
 def _execute_in_shell(command: str) -> None:
+    # TODO: Improve Exception Handling for shell commannd execution
     # try:
     stdout, stderr, exitcode = shell.cmd(command)
     #     if stderr:
@@ -84,24 +85,8 @@ def _add_linux_bridge(
         raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
 
-def _add_iptables_rule(connection_name: str) -> None:
-    _execute_in_shell(
-        f"sudo iptables -I FORWARD -i {connection_name} -o {connection_name} -j ACCEPT"
-    )
-
-
-def _restart_network_service() -> None:
-    _execute_in_shell("sudo systemctl restart networking.service")
-
-
 def _delete_linux_bridge(connection_name: str) -> None:
     _execute_in_shell(f"ip link del {connection_name}")
-
-
-def _remove_iptables_rule(connection_name: str) -> None:
-    _execute_in_shell(
-        f"sudo iptables -D WEMULATE -i {connection_name} -o {connection_name} -j ACCEPT"
-    )
 
 
 def add_connection(
@@ -123,8 +108,6 @@ def add_connection(
         WEmulateFileError: if the configuration files could not be created or modified
     """
     _add_linux_bridge(connection_name, interface1_name, interface2_name)
-    # _add_iptables_rule(connection_name)
-    # _restart_network_service()
 
 
 def remove_connection(connection_name: str) -> None:
@@ -142,7 +125,6 @@ def remove_connection(connection_name: str) -> None:
         WEmulateFileError: if the connection configuration file could not be removed successfully
     """
     _delete_linux_bridge(connection_name)
-    # _remove_iptables_rule(connection_name)
 
 
 def set_parameters(
