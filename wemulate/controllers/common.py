@@ -1,11 +1,5 @@
+from wemulate.core.database.models import BANDWIDTH, DELAY, JITTER, PACKET_LOSS
 import wemulate.core.database.utils as dbutils
-from wemulate.core.database.models import (
-    BANDWIDTH,
-    JITTER,
-    DELAY,
-    PACKET_LOSS,
-    ConnectionModel,
-)
 from typing import Dict
 
 CONNECTION_NAME = "connection_name"
@@ -62,55 +56,6 @@ PARAMETER_ARGUMENT_MAP = {
 }
 
 
-def _set_bandwidth(
-    obj, connection: ConnectionModel, parameters: Dict[str, int]
-) -> None:
-    if obj.app.pargs.bandwidth:
-        parameters[BANDWIDTH] = obj.app.pargs.bandwidth
-        dbutils.create_or_update_parameter(
-            connection.connection_id, BANDWIDTH, obj.app.pargs.bandwidth
-        )
-
-
-def _set_jitter(obj, connection: ConnectionModel, parameters: Dict[str, int]) -> None:
-    if obj.app.pargs.jitter:
-        parameters[JITTER] = obj.app.pargs.jitter
-        dbutils.create_or_update_parameter(
-            connection.connection_id, JITTER, obj.app.pargs.jitter
-        )
-
-
-def _set_delay(
-    obj,
-    connection: ConnectionModel,
-    parameters: Dict[str, int],
-) -> None:
-    if obj.app.pargs.delay:
-        parameters[DELAY] = obj.app.pargs.delay
-        dbutils.create_or_update_parameter(
-            connection.connection_id, DELAY, obj.app.pargs.delay
-        )
-
-
-def _set_packet_loss(
-    obj, connection: ConnectionModel, parameters: Dict[str, int]
-) -> None:
-    if obj.app.pargs.packet_loss:
-        parameters[PACKET_LOSS] = obj.app.pargs.packet_loss
-        dbutils.create_or_update_parameter(
-            connection.connection_id, PACKET_LOSS, obj.app.pargs.packet_loss
-        )
-
-
-def create_or_update_parameters_in_db(
-    obj, connection: ConnectionModel, parameters: Dict[str, int]
-) -> None:
-    _set_bandwidth(obj, connection, parameters)
-    _set_jitter(obj, connection, parameters)
-    _set_delay(obj, connection, parameters)
-    _set_packet_loss(obj, connection, parameters)
-
-
 def connection_name_is_set(obj) -> bool:
     if not obj.app.pargs.connection_name:
         obj.app.log.info("Please define a connection name | -n connectionname")
@@ -141,3 +86,16 @@ def connection_exists_in_db(obj) -> bool:
         )
         return False
     return True
+
+
+def generate_pargs(obj) -> Dict[str, int]:
+    parameters: Dict[str, int] = {}
+    if obj.app.pargs.bandwidth:
+        parameters[BANDWIDTH] = obj.app.pargs.bandwidth
+    if obj.app.pargs.delay:
+        parameters[DELAY] = obj.app.pargs.delay
+    if obj.app.pargs.jitter:
+        parameters[JITTER] = obj.app.pargs.jitter
+    if obj.app.pargs.packet_loss:
+        parameters[PACKET_LOSS] = obj.app.pargs.packet_loss
+    return parameters
