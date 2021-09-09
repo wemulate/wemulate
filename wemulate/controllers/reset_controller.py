@@ -1,8 +1,6 @@
-import wemulate.core.database.utils as dbutils
-import wemulate.utils.tcconfig as tcutils
 import wemulate.controllers.common as common
+import wemulate.ext.utils as utils
 from cement import Controller, ex
-from wemulate.core.database.models import ConnectionModel
 
 
 class ResetController(Controller):
@@ -13,7 +11,7 @@ class ResetController(Controller):
         stacked_type = "nested"
 
     @ex(
-        help="reset connection",
+        help="delete all parameters on a specific connection",
         arguments=[common.CONNECTION_NAME_ARGUMENT],
     )
     def connection(self):
@@ -22,28 +20,15 @@ class ResetController(Controller):
         ) or not common.connection_exists_in_db(self):
             self.app.close()
         else:
-            connection: ConnectionModel = dbutils.get_connection(
-                self.app.pargs.connection_name
-            )
-            dbutils.delete_all_parameter_on_connection(connection.connection_id)
-            physical_interface_name = dbutils.get_physical_interface_for_logical_id(
-                connection.first_logical_interface_id
-            ).physical_name
-            tcutils.remove_parameters(physical_interface_name)
+            utils.reset_connection(self.app.pargs.connection_name)
             self.app.log.info(
                 f"Successfully resetted connection {self.app.pargs.connection_name}"
             )
             self.app.close()
 
     @ex(
-        help="deletes all parameters and connection",
+        help="deletes all parameters and connection on the device",
     )
-    def all(self):
-        for connection in dbutils.get_connection_list():
-            physical_interface_name = dbutils.get_physical_interface_for_logical_id(
-                connection.first_logical_interface_id
-            ).physical_name
-            tcutils.remove_parameters(physical_interface_name)
-            tcutils.remove_connection(connection.connection_name)
-        dbutils.reset_all_connections()
+    def device(self):
+        utils.reset_device()
         self.app.log.info("Successfullty resetted device")

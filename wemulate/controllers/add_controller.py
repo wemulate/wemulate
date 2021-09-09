@@ -1,6 +1,8 @@
 import wemulate.controllers.common as common
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
+
+import wemulate.ext.utils as utils
 from typing import Dict, List, Optional, Tuple
 from wemulate.core.database.models import ConnectionModel
 from wemulate.core.exc import (
@@ -18,18 +20,7 @@ class AddController(Controller):
         stacked_on: str = "base"
         stacked_type: str = "nested"
 
-    def _get_physical_interface_names(
-        self, logical_interfaces: List[str]
-    ) -> Tuple[str, str]:
-        physical_interface1_name: str = dbutils.get_physical_interface_for_logical_name(
-            logical_interfaces[0]
-        ).physical_name
-        physical_interface2_name: str = dbutils.get_physical_interface_for_logical_name(
-            logical_interfaces[1]
-        ).physical_name
-        return physical_interface1_name, physical_interface2_name
-
-    def _validate_connection_arguments(self) -> Optional[List[str]]:
+    def _validate_connection_arguments(self) -> Optional[Tuple[str]]:
         if not common.connection_name_is_set(self):
             return
         if not self.app.pargs.interfaces_list:
@@ -42,7 +33,12 @@ class AddController(Controller):
                     "Please define exactly two interfaces | -i LAN-A,LAN-B"
                 )
                 return
-            return logical_interfaces
+            if not dbutils.get_logical_interface_by_name(
+                logical_interfaces[0]
+            ) or not dbutils.get_logical_interface_by_name(logical_interfaces[1]):
+                self.app.log.info("Please define existing logical interface names")
+                return None, None
+            return logical_interfaces[0], logical_interfaces[1]
 
     @ex(
         help="add a new connection",
@@ -59,25 +55,18 @@ class AddController(Controller):
         ],
     )
     def connection(self):
-        logical_interfaces: Optional[List[str]] = self._validate_connection_arguments()
-        if not logical_interfaces:
+        (
+            first_logical_interface,
+            second_logical_interface,
+        ) = self._validate_connection_arguments()
+        if not first_logical_interface or not second_logical_interface:
             self.app.close()
         else:
             try:
-                (
-                    physical_interface1_name,
-                    physical_interface2_name,
-                ) = self._get_physical_interface_names(logical_interfaces)
-                tcutils.add_connection(
+                utils.add_connection(
                     self.app.pargs.connection_name,
-                    physical_interface1_name,
-                    physical_interface2_name,
-                )
-                dbutils.create_connection(
-                    self.app.pargs.connection_name,
-                    dbutils.get_logical_interface_by_name(logical_interfaces[0]),
-                    dbutils.get_logical_interface_by_name(logical_interfaces[1]),
-                    dbutils.get_active_profile(dbutils.get_device(1)),
+                    first_logical_interface,
+                    second_logical_interface,
                 )
                 self.app.log.info("Successfully added a new connection")
             except WEmulateValidationError as e:
@@ -106,20 +95,8 @@ class AddController(Controller):
             self.app.close()
         else:
             try:
-                connection: ConnectionModel = dbutils.get_connection(
-                    self.app.pargs.connection_name
-                )
-                parameters: Dict[str, int] = {
-                    parameter.parameter_name: parameter.value
-                    for parameter in connection.parameters
-                }
-                common.create_or_update_parameters_in_db(self, connection, parameters)
-                tcutils.set_parameters(
-                    self.app.pargs.connection_name,
-                    dbutils.get_physical_interface_for_logical_id(
-                        connection.first_logical_interface_id
-                    ).physical_name,
-                    parameters,
+                utils.add_parameter(
+                    self.app.pargs.connection_name, common.generate_pargs(self)
                 )
                 self.app.log.info(
                     f"successfully added parameters to connection {self.app.pargs.connection_name}"

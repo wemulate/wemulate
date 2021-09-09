@@ -1,8 +1,9 @@
-from typing import Dict
+import wemulate.ext.utils as utils
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
 import wemulate.controllers.common as common
 from cement import Controller, ex
+from typing import Dict
 from wemulate.core.database.models import (
     BANDWIDTH,
     ConnectionModel,
@@ -37,18 +38,8 @@ class SetController(Controller):
         ):
             self.app.close()
         else:
-            connection: ConnectionModel = dbutils.get_connection(
-                self.app.pargs.connection_name
-            )
-            dbutils.delete_all_parameter_on_connection(connection.connection_id)
-            parameters: Dict[str, int] = {}
-            common.create_or_update_parameters_in_db(self, connection, parameters)
-            tcutils.set_parameters(
-                self.app.pargs.connection_name,
-                dbutils.get_physical_interface_for_logical_id(
-                    connection.first_logical_interface_id
-                ).physical_name,
-                parameters,
+            utils.set_parameter(
+                self.app.pargs.connection_name, common.generate_pargs(self)
             )
             self.app.log.info(
                 f"Successfully set parameters on connection {self.app.pargs.connection_name}"
