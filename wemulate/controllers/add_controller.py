@@ -1,10 +1,6 @@
 import wemulate.controllers.common as common
-import wemulate.core.database.utils as dbutils
-import wemulate.utils.tcconfig as tcutils
-
 import wemulate.ext.utils as utils
-from typing import Dict, List, Optional, Tuple
-from wemulate.core.database.models import ConnectionModel
+from typing import List, Optional, Tuple
 from wemulate.core.exc import (
     WEmulateDatabaseError,
     WEmulateExecutionError,
@@ -20,22 +16,22 @@ class AddController(Controller):
         stacked_on: str = "base"
         stacked_type: str = "nested"
 
-    def _validate_connection_arguments(self) -> Optional[Tuple[str]]:
+    def _validate_connection_arguments(self) -> Tuple[Optional[str], Optional[str]]:
         if not common.connection_name_is_set(self):
-            return
+            return None, None
         if not self.app.pargs.interfaces_list:
             self.app.log.info("Please define the logical interfaces | -i LAN-A,LAN-B")
-            return
+            return None, None
         else:
             logical_interfaces: List[str] = self.app.pargs.interfaces_list.split(",")
             if len(logical_interfaces) != 2:
                 self.app.log.info(
                     "Please define exactly two interfaces | -i LAN-A,LAN-B"
                 )
-                return
-            if not dbutils.get_logical_interface_by_name(
+                return None, None
+            if not utils.get_logical_interface_by_name(
                 logical_interfaces[0]
-            ) or not dbutils.get_logical_interface_by_name(logical_interfaces[1]):
+            ) or not utils.get_logical_interface_by_name(logical_interfaces[1]):
                 self.app.log.info("Please define existing logical interface names")
                 return None, None
             return logical_interfaces[0], logical_interfaces[1]

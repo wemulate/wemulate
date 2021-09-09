@@ -1,5 +1,5 @@
+from wemulate.ext import utils
 from wemulate.core.database.models import BANDWIDTH, DELAY, JITTER, PACKET_LOSS
-import wemulate.core.database.utils as dbutils
 from typing import Dict
 
 CONNECTION_NAME = "connection_name"
@@ -80,7 +80,7 @@ def validate_parameter_arguments(obj) -> bool:
 
 
 def connection_exists_in_db(obj) -> bool:
-    if not dbutils.connection_exists(obj.app.pargs.connection_name):
+    if not utils.connection_exists_in_db(obj.app.pargs.connection_name):
         obj.app.log.info(
             f"There is no connection {obj.app.pargs.connection_name} please create a connection first"
         )

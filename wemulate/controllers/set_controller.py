@@ -1,16 +1,6 @@
 import wemulate.ext.utils as utils
-import wemulate.core.database.utils as dbutils
-import wemulate.utils.tcconfig as tcutils
 import wemulate.controllers.common as common
 from cement import Controller, ex
-from typing import Dict
-from wemulate.core.database.models import (
-    BANDWIDTH,
-    ConnectionModel,
-    JITTER,
-    DELAY,
-    PACKET_LOSS,
-)
 
 
 class SetController(Controller):

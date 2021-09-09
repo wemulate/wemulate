@@ -1,4 +1,11 @@
-from wemulate.ext.utils.retrieve import get_physical_interface_names
+from wemulate.ext.utils.retrieve import (
+    get_physical_interface_names,
+    get_logical_interface_by_name,
+    connection_exists_in_db,
+    get_connection,
+    get_logical_interface_for_physical_name,
+    get_connection_list,
+)
 from wemulate.ext.utils.reset import reset_device, reset_connection
 from wemulate.ext.utils.add import add_connection, add_parameter
 from wemulate.ext.utils.set import set_parameter
