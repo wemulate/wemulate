@@ -38,7 +38,7 @@ def delete_parameter(connection_name: str, parameters: Dict[str, int]) -> None:
     physical_interface_name = dbutils.get_physical_interface_for_logical_id(
         connection.first_logical_interface_id
     ).physical_name
-    tcutils.remove_parameters(physical_interface_name)
+    tcutils.remove_parameters(connection_name, physical_interface_name)
     common.set_parameters_with_tc(
         connection,
         common.delete_parameters_in_db(parameters, current_parameters, connection),

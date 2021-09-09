@@ -182,7 +182,7 @@ def set_parameters(
     commands_to_execute: List[str] = []
     mean_delay = 0.001  # smallest possible delay
     if parameters:
-        remove_parameters(interface_name)
+        remove_parameters(connection_name, interface_name)
         if "delay" in parameters:
             mean_delay = parameters["delay"]
             if "jitter" not in parameters:
@@ -217,7 +217,7 @@ def set_parameters(
         _write_commands_to_tc_config_file(connection_name, commands_to_execute)
 
 
-def remove_parameters(interface_name: str) -> None:
+def remove_parameters(connection_name: str, interface_name: str) -> None:
     """
     Deletes all configured parameters on the given interface.
 
@@ -231,4 +231,5 @@ def remove_parameters(interface_name: str) -> None:
         WEmulateExecutionError: if the parameters could not be removed from the interface
     """
     _execute_in_shell(f"tcdel {interface_name} --all")
+    _write_commands_to_tc_config_file(connection_name, [""])
     # Here we have to delete the whole input in the tc.conf file -> we need the connection_name
