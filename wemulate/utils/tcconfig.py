@@ -1,31 +1,32 @@
 import os
+import shutil
 from typing import Dict, List, Tuple
 from cement.core import interface
 from pyroute2 import IPRoute
 from cement import shell
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
-CONFIG_PATH: str = "/etc/wemulate/config/"
+CONFIG_PATH: str = "/etc/wemulate/config"
+BRIDGE_CONFIG_FILE: str = "bridge.conf"
+TC_CONFIG_FILE: str = "tc.conf"
 ip: IPRoute = IPRoute()
 
 
 def _execute_in_shell(command: str) -> None:
-    # TODO: Improve Exception Handling for shell commannd execution
-    # try:
-    stdout, stderr, exitcode = shell.cmd(command)
-    #     if stderr:
-    #         raise WEmulateExecutionError(
-    #             f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
-    #         )
-    # except WEmulateExecutionError as e:
-    #     raise e
-    # except Exception as e:
-    #     raise WEmulateExecutionError
+    try:
+        stdout, stderr, exitcode = shell.cmd(command)
+        if stderr and exitcode != 0:
+            raise WEmulateExecutionError(
+                f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
+            )
+    except WEmulateExecutionError as e:
+        raise e
+    except Exception as e:
+        raise WEmulateExecutionError
 
 
 def _execute_commands(commands: List[str]) -> None:
     for command in commands:
-        print(command)
         _execute_in_shell(command)
 
 
@@ -57,32 +58,57 @@ def _add_corruption_command(corruption_value) -> str:
     return f" --corrupt {corruption_value}%"
 
 
-def _add_config_folder_if_not_exist() -> None:
-    if not os.path.exists(CONFIG_PATH):
-        os.makedirs(CONFIG_PATH)
+def _add_config_files_if_not_exist(connection_name: str) -> None:
+    connection_config_path: str = f"{CONFIG_PATH}/{connection_name}/"
+    if not os.path.exists(connection_config_path):
+        os.makedirs(connection_config_path)
+
+
+def _delete_config_files(connection_name: str) -> None:
+    connection_config_path: str = f"{CONFIG_PATH}/{connection_name}/"
+    if os.path.exists(connection_config_path):
+        shutil.rmtree(connection_config_path, ignore_errors=True)
+
+
+def _write_commands_into_config_file(
+    connection_name: str, config_file_name: str, write_mode: str, commands: List[str]
+) -> None:
+    config_file_path: str = f"{CONFIG_PATH}/{connection_name}/{config_file_name}"
+    with open(config_file_path, write_mode) as config_file:
+        for command in commands:
+            config_file.write(f"{command}\n")
+
+
+def _write_commands_to_bridge_config_file(
+    connection_name: str, commands: List[str]
+) -> None:
+    _write_commands_into_config_file(connection_name, BRIDGE_CONFIG_FILE, "a", commands)
+
+
+def _write_commands_to_tc_config_file(
+    connection_name: str, commands: List[str]
+) -> None:
+    _write_commands_into_config_file(connection_name, TC_CONFIG_FILE, "w", commands)
 
 
 def _add_and_activate_linux_bridge(connection_name: str) -> None:
-    _execute_in_shell(f"ip link add name {connection_name} type bridge")
-    _execute_in_shell(f"ip link set dev {connection_name} up")
+    commands: List[str] = [
+        f"ip link add name {connection_name} type bridge",
+        f"ip link set dev {connection_name} up",
+    ]
+    _execute_commands(commands)
+    _write_commands_to_bridge_config_file(connection_name, commands)
 
 
 def _add_interfaces_to_bridge(
     connection_name: str, interface1_name: str, interface2_name: str
 ) -> None:
-    for interface in (interface1_name, interface2_name):
-        _execute_in_shell(f"ip link set dev {interface} master {connection_name}")
-
-
-def _add_linux_bridge(
-    connection_name: str, interface1_name: str, interface2_name: str
-) -> None:
-    try:
-        _add_config_folder_if_not_exist()
-        _add_and_activate_linux_bridge(connection_name)
-        _add_interfaces_to_bridge(connection_name, interface1_name, interface2_name)
-    except OSError as e:
-        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
+    commands: List[str] = [
+        f"ip link set dev {interface} master {connection_name}"
+        for interface in (interface1_name, interface2_name)
+    ]
+    _execute_commands(commands)
+    _write_commands_to_bridge_config_file(connection_name, commands)
 
 
 def _delete_linux_bridge(connection_name: str) -> None:
@@ -107,7 +133,12 @@ def add_connection(
         WEmulateExecutionError: if the bridge could not be added successfully
         WEmulateFileError: if the configuration files could not be created or modified
     """
-    _add_linux_bridge(connection_name, interface1_name, interface2_name)
+    try:
+        _add_config_files_if_not_exist(connection_name)
+        _add_and_activate_linux_bridge(connection_name)
+        _add_interfaces_to_bridge(connection_name, interface1_name, interface2_name)
+    except OSError as e:
+        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
 
 def remove_connection(connection_name: str) -> None:
@@ -124,7 +155,11 @@ def remove_connection(connection_name: str) -> None:
         WEmulateExecutionError: if the bridge could not be removed successfully
         WEmulateFileError: if the connection configuration file could not be removed successfully
     """
-    _delete_linux_bridge(connection_name)
+    try:
+        _delete_linux_bridge(connection_name)
+        _delete_config_files(connection_name)
+    except OSError as e:
+        raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
 
 def set_parameters(
@@ -179,6 +214,7 @@ def set_parameters(
         outgoing_config_command += " --change"
         commands_to_execute.append(outgoing_config_command)
         _execute_commands(commands_to_execute)
+        _write_commands_to_tc_config_file(connection_name, commands_to_execute)
 
 
 def remove_parameters(interface_name: str) -> None:
@@ -195,3 +231,4 @@ def remove_parameters(interface_name: str) -> None:
         WEmulateExecutionError: if the parameters could not be removed from the interface
     """
     _execute_in_shell(f"tcdel {interface_name} --all")
+    # Here we have to delete the whole input in the tc.conf file -> we need the connection_name
