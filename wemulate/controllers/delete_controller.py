@@ -1,4 +1,3 @@
-import wemulate.core.database.utils as dbutils
 import wemulate.ext.utils as utils
 import wemulate.controllers.common as common
 from typing import Dict
@@ -48,7 +47,7 @@ class DeleteController(Controller):
         ):
             self.app.close()
         else:
-            connection: ConnectionModel = dbutils.get_connection(
+            connection: ConnectionModel = utils.get_connection(
                 self.app.pargs.connection_name
             )
             parameters: Dict[str, int] = {

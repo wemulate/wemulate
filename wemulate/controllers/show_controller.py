@@ -1,8 +1,8 @@
+import netifaces
+import wemulate.controllers.common as common
+import wemulate.ext.utils as utils
 from typing import List
 from wemulate.core.database.models import ConnectionModel
-import netifaces
-import wemulate.core.database.utils as dbutils
-import wemulate.controllers.common as common
 from cement import Controller, ex
 from wemulate.utils.rendering import rendering
 from wemulate.utils.settings import get_interfaces, get_mgmt_interfaces, get_config_path
@@ -48,7 +48,7 @@ class ShowController(Controller):
         data_to_append: List = []
         if not is_mgmt_interface:
             data_to_append.append(
-                dbutils.get_logical_interface_for_physical_name(interface).logical_name,
+                utils.get_logical_interface_for_physical_name(interface).logical_name,
             )
         data_to_append.extend(
             [
@@ -76,7 +76,7 @@ class ShowController(Controller):
         if not common.connection_exists_in_db(self):
             self.app.close()
         else:
-            connection: ConnectionModel = dbutils.get_connection(
+            connection: ConnectionModel = utils.get_connection(
                 self.app.pargs.connection_name
             )
             render_data: List = []
@@ -89,7 +89,7 @@ class ShowController(Controller):
         help="show overview about all connections",
     )
     def connections(self):
-        connections: List[ConnectionModel] = dbutils.get_connection_list()
+        connections: List[ConnectionModel] = utils.get_connection_list()
         if not connections:
             self.app.log.info("There are no connections")
             self.app.close()

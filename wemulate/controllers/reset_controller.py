@@ -31,4 +31,4 @@ class ResetController(Controller):
     )
     def device(self):
         utils.reset_device()
-        self.app.log.info("Successfullty resetted device")
+        self.app.log.info("Successfully resetted device")

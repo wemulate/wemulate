@@ -1,5 +1,6 @@
+from wemulate.core.database.models import ConnectionModel, LogicalInterfaceModel
 import wemulate.core.database.utils as dbutils
-from typing import Dict, List, Optional, Tuple
+from typing import List, Optional, Tuple
 
 
 def get_physical_interface_names(
@@ -22,3 +23,27 @@ def get_physical_interface_names(
         second_logical_interface
     ).physical_name
     return physical_interface1_name, physical_interface2_name
+
+
+def get_logical_interface_by_name(
+    logical_interface_name: str,
+) -> Optional[LogicalInterfaceModel]:
+    return dbutils.get_logical_interface_by_name(logical_interface_name)
+
+
+def connection_exists_in_db(connection_name: str) -> bool:
+    return dbutils.connection_exists(connection_name)
+
+
+def get_connection(connection_name: str) -> ConnectionModel:
+    return dbutils.get_connection(connection_name)
+
+
+def get_logical_interface_for_physical_name(
+    physical_interface_name: str,
+) -> LogicalInterfaceModel:
+    return dbutils.get_logical_interface_for_physical_name(physical_interface_name)
+
+
+def get_connection_list() -> List[ConnectionModel]:
+    return dbutils.get_connection_list()

@@ -1,6 +1,6 @@
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
-from typing import Dict, Optional
+from typing import Dict
 from wemulate.core.database.models import (
     BANDWIDTH,
     JITTER,
@@ -13,53 +13,49 @@ from wemulate.core.database.models import (
 def _set_bandwidth(
     connection: ConnectionModel,
     parameters: Dict[str, int],
-    current_parameters: Optional[Dict[str, int]],
+    current_parameters: Dict[str, int],
 ) -> None:
     if BANDWIDTH in parameters:
-        parameters[BANDWIDTH] = parameters[BANDWIDTH]
+        current_parameters[BANDWIDTH] = parameters[BANDWIDTH]
         dbutils.create_or_update_parameter(
             connection.connection_id, BANDWIDTH, parameters[BANDWIDTH]
         )
-        return current_parameters
 
 
 def _set_jitter(
     connection: ConnectionModel,
     parameters: Dict[str, int],
-    current_parameters: Optional[Dict[str, int]],
+    current_parameters: Dict[str, int],
 ) -> None:
     if JITTER in parameters:
-        parameters[JITTER] = parameters[JITTER]
+        current_parameters[JITTER] = parameters[JITTER]
         dbutils.create_or_update_parameter(
             connection.connection_id, JITTER, parameters[JITTER]
         )
-        return current_parameters
 
 
 def _set_delay(
     connection: ConnectionModel,
     parameters: Dict[str, int],
-    current_parameters: Optional[Dict[str, int]],
+    current_parameters: Dict[str, int],
 ) -> None:
     if DELAY in parameters:
         current_parameters[DELAY] = parameters[DELAY]
         dbutils.create_or_update_parameter(
             connection.connection_id, DELAY, parameters[DELAY]
         )
-        return current_parameters
 
 
 def _set_packet_loss(
     connection: ConnectionModel,
     parameters: Dict[str, int],
-    current_parameters: Optional[Dict[str, int]],
+    current_parameters: Dict[str, int],
 ) -> None:
     if PACKET_LOSS in parameters:
         current_parameters[PACKET_LOSS] = parameters[PACKET_LOSS]
         dbutils.create_or_update_parameter(
             connection.connection_id, PACKET_LOSS, parameters[PACKET_LOSS]
         )
-        return current_parameters
 
 
 def create_or_update_parameters_in_db(
@@ -116,7 +112,6 @@ def _delete_bandwidth(
             connection.connection_id,
             BANDWIDTH,
         )
-        return current_parameters
 
 
 def _delete_jitter(
@@ -127,7 +122,6 @@ def _delete_jitter(
     if JITTER in parameters:
         current_parameters.pop(JITTER)
         dbutils.delete_parameter_on_connection_id(connection.connection_id, JITTER)
-        return current_parameters
 
 
 def _delete_delay(
@@ -138,7 +132,6 @@ def _delete_delay(
     if DELAY in parameters:
         current_parameters.pop(DELAY)
         dbutils.delete_parameter_on_connection_id(connection.connection_id, DELAY)
-        return current_parameters
 
 
 def _delete_packet_loss(
@@ -152,7 +145,6 @@ def _delete_packet_loss(
             connection.connection_id,
             PACKET_LOSS,
         )
-        return current_parameters
 
 
 def delete_parameters_in_db(
