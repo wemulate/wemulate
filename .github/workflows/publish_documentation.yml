@@ -1,7 +1,7 @@
 name: docs_pages_workflow
 on:
   push:
-    branches: [init-documentation]
+    branches: [main]
 
 jobs:
   build_docs_job:

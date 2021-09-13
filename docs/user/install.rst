@@ -29,7 +29,7 @@ You can also install WEmulate from source, please follow the instructions below:
 
 .. code-block:: console
 
-    $ sudo apt install --yes libpq-dev python3 python3-pip ifupdown bridge-utils 
+    $ sudo apt install --yes python3 python3-pip 
 
 * Create a new configuration file: ``/etc/wemulate/wemulate.yml``
 
