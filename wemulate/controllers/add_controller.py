@@ -7,7 +7,7 @@ from wemulate.core.exc import (
     WEmulateValidationError,
 )
 from cement import Controller, ex
-from wemulate.core.database.models import ConnectionModel
+from wemulate.core.database.models import ConnectionModel, LogicalInterfaceModel
 
 
 class AddController(Controller):
@@ -19,7 +19,9 @@ class AddController(Controller):
 
     def _logical_interface_used(self, logical_interface_name: str) -> bool:
         connections: Optional[List[ConnectionModel]] = utils.get_connection_list()
-        logical_interface_id = utils.get_logical_interface_by_name(
+        logical_interface_id: Optional[
+            LogicalInterfaceModel
+        ] = utils.get_logical_interface_by_name(
             logical_interface_name
         ).logical_interface_id
         for conn in connections:
