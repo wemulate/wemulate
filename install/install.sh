@@ -101,11 +101,8 @@ install_dependencies() {
   confirm "Install dependencies on system?"
   info "Install dependencies..."
   printf '\n'
-  $sudo apt-get install --yes libpq-dev 
   $sudo apt-get install --yes python3 
   $sudo apt-get install --yes python3-pip 
-  $sudo apt-get install --yes ifupdown 
-  $sudo apt-get install --yes bridge-utils 
   printf '\n'
   completed "Dependencies successful installed"
 }
