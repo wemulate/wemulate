@@ -148,7 +148,9 @@ for directory in $conf_folder/*; do
 done
 EOF
   completed "Startup configuration $path is generated"
-  echo "@reboot root    bash $path" >> $cron_config_file 
+  $sudo bash -c "cat >> "${cron_config_file}"" << EOF
+@reboot root    bash $path >> $cron_config_file
+EOF
   completed "Cron job configuration $cron_config_file is generated"
   }
 
