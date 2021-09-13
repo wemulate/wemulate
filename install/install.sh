@@ -101,11 +101,8 @@ install_dependencies() {
   confirm "Install dependencies on system?"
   info "Install dependencies..."
   printf '\n'
-  $sudo apt-get install --yes libpq-dev 
   $sudo apt-get install --yes python3 
   $sudo apt-get install --yes python3-pip 
-  $sudo apt-get install --yes ifupdown 
-  $sudo apt-get install --yes bridge-utils 
   printf '\n'
   completed "Dependencies successful installed"
 }
@@ -148,7 +145,9 @@ for directory in $conf_folder/*; do
 done
 EOF
   completed "Startup configuration $path is generated"
-  echo "@reboot root    bash $path" >> $cron_config_file 
+  $sudo bash -c "cat >> "${cron_config_file}"" << EOF
+@reboot root    bash $path >> $cron_config_file
+EOF
   completed "Cron job configuration $cron_config_file is generated"
   }
 
