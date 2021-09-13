@@ -1,11 +1,10 @@
-import netifaces
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
+import wemulate.ext.settings as settings
 from typing import List
 from wemulate.core.database.models import ConnectionModel
 from cement import Controller, ex
 from wemulate.utils.rendering import rendering
-from wemulate.utils.settings import get_interfaces, get_mgmt_interfaces, get_config_path
 
 
 class ShowController(Controller):
@@ -17,7 +16,6 @@ class ShowController(Controller):
         "PARAMETERS",
     ]
     SHOW_CONNECTION_TEMPLATE_FILE: str = "show_connection.jinja2"
-
     INTERFACE_HEADER = ["NAME", "PHYSICAL", "IP", "MAC"]
 
     class Meta:
@@ -53,20 +51,11 @@ class ShowController(Controller):
         data_to_append.extend(
             [
                 interface,
-                self._get_interface_ip(interface),
-                self._get_interface_mac_address(interface),
+                settings.get_interface_ip(interface),
+                settings.get_interface_mac_address(interface),
             ]
         )
         render_data.append(data_to_append)
-
-    def _get_interface_ip(self, interface: str) -> str:
-        if netifaces.AF_INET in netifaces.ifaddresses(interface):
-            return netifaces.ifaddresses(interface)[netifaces.AF_INET][0]["addr"]
-        else:
-            "N/A"
-
-    def _get_interface_mac_address(self, interface: str) -> str:
-        return netifaces.ifaddresses(interface)[netifaces.AF_LINK][0]["addr"]
 
     @ex(
         help="show specific connection information",
@@ -106,7 +95,7 @@ class ShowController(Controller):
         arguments=[(["interface_name"], {"help": "name of the interface"})],
     )
     def interface(self):
-        if not self.app.pargs.interface_name in get_interfaces():
+        if not self.app.pargs.interface_name in settings.get_interfaces():
             self.app.log.info("The given interface is not available")
         else:
             render_data: List = []
@@ -121,7 +110,7 @@ class ShowController(Controller):
     )
     def interfaces(self):
         render_data: List = []
-        for interface in get_interfaces():
+        for interface in settings.get_interfaces():
             self._construct_interface_data_to_render(render_data, interface)
         self.app.render(render_data, headers=self.INTERFACE_HEADER, tablefmt="grid")
 
@@ -129,10 +118,11 @@ class ShowController(Controller):
         help="show overview about all management interfaces",
     )
     def mgmt_interfaces(self):
-        mgmt_interfaces: List[str] = get_mgmt_interfaces()
+        mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
         if not mgmt_interfaces:
             self.app.log.info(
-                "There are no mgmt interfaces defined in %s" % get_config_path()
+                "There are no mgmt interfaces defined in %s"
+                % settings.get_config_path()
             )
             self.app.close()
         else:

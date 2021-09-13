@@ -1,5 +1,4 @@
 from typing import Callable
-import wemulate
 from wemulate.core.exc import WEmulateDatabaseError, WEmulateValidationError
 from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from functools import wraps

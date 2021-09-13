@@ -1,4 +1,3 @@
-from sqlalchemy.orm import sessionmaker
-from wemulate.core.database.setup import pre_setup_database
+import wemulate.core.database.setup as setup
 
-pre_setup_database()
+setup.pre_setup_database()
