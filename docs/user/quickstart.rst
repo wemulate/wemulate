@@ -175,5 +175,5 @@ All parameters and connections will be resettet.
 
 .. code-block:: console
 
-    $ wemulate reset all
+    $ wemulate reset device
 
