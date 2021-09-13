@@ -1,6 +1,6 @@
 import os
 
-if os.geteuid == 0:
+if os.geteuid() == 0:
     from wemulate.controllers.reset_controller import ResetController
     from wemulate.controllers.delete_controller import DeleteController
     from wemulate.controllers.set_controller import SetController
