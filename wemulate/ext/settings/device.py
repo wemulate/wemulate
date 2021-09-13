@@ -36,8 +36,6 @@ def get_mgmt_interfaces() -> List[str]:
     """
     Returns all management interfaces defined in the configuration as list.
 
-    Args: Takes no arguments.
-
     Returns:
         Returns the management interfaces as list of strings.
     """
@@ -47,8 +45,6 @@ def get_mgmt_interfaces() -> List[str]:
 def get_interfaces() -> List[str]:
     """
     Returns all interfaces which usable to connect different devices.
-
-    Args: Takes no arguments.
 
     Returns:
         Returns the interfaces as list of strings.

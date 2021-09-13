@@ -85,8 +85,6 @@ def get_connection_list() -> List[ConnectionModel]:
     """
     Returns all existing connection objects as a list.
 
-    Args: Takes no arguments.
-
     Returns:
         Returns a list of connection objects.
     """

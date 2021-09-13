@@ -7,8 +7,6 @@ def reset_device() -> None:
     """
     Deletes all parameters and connection in the database and on the host system.
 
-    Args: Takes no arguments
-
     Returns:
         None
     """

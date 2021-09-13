@@ -7,8 +7,6 @@ def get_config_path() -> str:
     """
     Returns the current path of the config.
 
-    Args: Takes no arguments
-
     Returns:
         Returns the path as string.
     """
@@ -18,8 +16,6 @@ def get_config_path() -> str:
 def get_config() -> Dict:
     """
     Returns the current configuration as dict.
-
-    Args: Takes no arguments
 
     Returns:
         Returns the whole configuration as dict.
@@ -34,8 +30,6 @@ def get_config() -> Dict:
 def get_db_location() -> str:
     """
     Returns the current database path from the configuration file.
-
-    Args: Takes no arguments
 
     Returns:
         Returns the path to the database as string.
