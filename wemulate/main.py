@@ -1,16 +1,18 @@
-from wemulate.controllers.load_controller import LoadController
-from wemulate.controllers.save_controller import SaveController
-from wemulate.controllers.config_controller import ConfigController
-from wemulate.controllers.reset_controller import ResetController
-from wemulate.controllers.delete_controller import DeleteController
-from wemulate.controllers.set_controller import SetController
-from wemulate.controllers.add_controller import AddController
-from wemulate.controllers.show_controller import ShowController
-from cement import App, TestApp
-from cement.core.exc import CaughtSignal
-from wemulate.core.exc import WEmulateError
-from wemulate.controllers.base_controller import Base
 import os
+
+if os.geteuid == 0:
+    from wemulate.controllers.reset_controller import ResetController
+    from wemulate.controllers.delete_controller import DeleteController
+    from wemulate.controllers.set_controller import SetController
+    from wemulate.controllers.add_controller import AddController
+    from wemulate.controllers.show_controller import ShowController
+    from cement import App, TestApp
+    from cement.core.exc import CaughtSignal
+    from wemulate.core.exc import WEmulateError
+    from wemulate.controllers.base_controller import Base
+else:
+    print("Please start as root user")
+    quit()
 
 
 class WEmulate(App):
@@ -63,9 +65,6 @@ class WEmulateTest(TestApp, WEmulate):
 
 def main():
     with WEmulate() as app:
-        if os.geteuid() != 0:
-            app.log.info("Please start as root user")
-            app.close()
 
         try:
             app.run()
