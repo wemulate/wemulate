@@ -10,6 +10,7 @@ from cement import App, TestApp
 from cement.core.exc import CaughtSignal
 from wemulate.core.exc import WEmulateError
 from wemulate.controllers.base_controller import Base
+import os
 
 
 class WEmulate(App):
@@ -62,6 +63,10 @@ class WEmulateTest(TestApp, WEmulate):
 
 def main():
     with WEmulate() as app:
+        if os.geteuid() != 0:
+            app.log.info("Please start as root user")
+            app.close()
+
         try:
             app.run()
 
