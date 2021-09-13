@@ -7,6 +7,7 @@ from wemulate.core.exc import (
     WEmulateValidationError,
 )
 from cement import Controller, ex
+from wemulate.core.database.models import ConnectionModel, LogicalInterfaceModel
 
 
 class AddController(Controller):
@@ -15,6 +16,21 @@ class AddController(Controller):
         help: str = "add a new connection or parameter"
         stacked_on: str = "base"
         stacked_type: str = "nested"
+
+    def _logical_interface_used(self, logical_interface_name: str) -> bool:
+        connections: Optional[List[ConnectionModel]] = utils.get_connection_list()
+        logical_interface_id: Optional[
+            LogicalInterfaceModel
+        ] = utils.get_logical_interface_by_name(
+            logical_interface_name
+        ).logical_interface_id
+        for conn in connections:
+            if (
+                conn.first_logical_interface_id == logical_interface_id
+                or conn.second_logical_interface_id == logical_interface_id
+            ):
+                return True
+        return False
 
     def _validate_connection_arguments(self) -> Tuple[Optional[str], Optional[str]]:
         if not common.connection_name_is_set(self):
@@ -33,6 +49,11 @@ class AddController(Controller):
                 logical_interfaces[0]
             ) or not utils.get_logical_interface_by_name(logical_interfaces[1]):
                 self.app.log.info("Please define existing logical interface names")
+                return None, None
+            if self._logical_interface_used(
+                logical_interfaces[0]
+            ) or self._logical_interface_used(logical_interfaces[1]):
+                self.app.log.info("Please use an unused logical interface name")
                 return None, None
             return logical_interfaces[0], logical_interfaces[1]
 
