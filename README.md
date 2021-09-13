@@ -1,9 +1,7 @@
-[![Publish WEmulate package to PyPi](https://github.com/wemulate/wemulate/actions/workflows/publish-package.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/publish-package.yml)
-# WEmulate
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
+# WEmulate
 
-## Documentation
-Have a look at the [documentation](https://wemulate.github.io/wemulate) for detailed documentation.
+Have a look at the [documentation](https://wemulate.github.io/wemulate) for detailed information.
 
 ## Installation
 
