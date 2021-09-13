@@ -1,19 +1,26 @@
 from cement import Controller, ex
 
+
 class ConfigController(Controller):
     class Meta:
-        label = 'config'
-        help = 'configuration of the application'
-        stacked_on = 'base'
-        stacked_type = 'nested'
+        label = "config"
+        help = "configure the application settings"
+        stacked_on = "base"
+        stacked_type = "nested"
+
+    #### NOT IMPLEMENTED YET ###
 
     @ex(
-        help='example sub command1',
+        help="example sub command1",
         arguments=[
-            ( [ '-i', '--interfaces' ],
-              { 'help' : 'notorious foo option',
-                'action'  : 'store',
-                'dest' : 'interfaces' } )
+            (
+                ["-i", "--interfaces"],
+                {
+                    "help": "notorious foo option",
+                    "action": "store",
+                    "dest": "interfaces",
+                },
+            )
         ],
     )
     def mgmt_interfaces(self):

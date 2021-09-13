@@ -1,152 +1,66 @@
-from wemulate.core.database.models import DEFAULT_PARAMETERS, PARAMETERS
-from wemulate.utils.tcconfig import remove_connection, remove_parameters
-from wemulate.core.database.utils import (
-    delete_parameter_on_connection_id,
-    get_connection,
-    delete_connection_by_name,
-)
+import wemulate.ext.utils as utils
+import wemulate.controllers.common as common
+from typing import Dict
+from wemulate.core.database.models import ConnectionModel
 from cement import Controller, ex
-from wemulate.core.database.utils import (
-    connection_exists,
-    create_connection,
-    create_or_update_parameter,
-    get_connection,
-    get_logical_interface_by_name,
-    get_active_profile,
-    get_device,
-    get_physical_interface_for_logical_name,
-    get_physical_interface_for_logical_id,
-    get_specific_parameter_value_for_connection_id,
-)
-from wemulate.utils.tcconfig import add_connection, set_parameters
 
 
 class DeleteController(Controller):
     class Meta:
         label = "delete"
-        help = "delete parameter or connection"
+        help = "delete connection or parameter"
         stacked_on = "base"
         stacked_type = "nested"
 
     @ex(
         help="delete a specific connection",
         arguments=[
-            (
-                ["-n", "--connection-name"],
-                {
-                    "help": "name of the desired connection",
-                    "action": "store",
-                    "dest": "connection_name",
-                },
-            )
+            common.CONNECTION_NAME_ARGUMENT,
         ],
     )
     def connection(self):
-        if self.app.pargs.connection_name is None:
-            self.app.log.error("please define a connection")
-        elif get_connection(self.app.pargs.connection_name):
-            remove_connection(self.app.pargs.connection_name)
-            delete_connection_by_name(self.app.pargs.connection_name)
+        if not common.connection_name_is_set(
+            self
+        ) or not common.connection_exists_in_db(self):
+            self.app.close()
+        else:
+            utils.delete_connection(self.app.pargs.connection_name)
             self.app.log.info(
                 f"connection {self.app.pargs.connection_name} successfully deleted"
-            )
-        else:
-            self.app.log.info(
-                f"there is no connection with name: {self.app.pargs.connection_name}"
             )
 
     @ex(
         help="delete a specific parameter on a connection",
         arguments=[
-            (
-                ["-n", "--connection-name"],
-                {
-                    "help": "name of the desired connection",
-                    "action": "store",
-                    "dest": "connection_name",
-                },
-            ),
-            (
-                ["-b", "--bandwidth"],
-                {"help": "delete bandwidth parameter", "action": "store_true"},
-            ),
-            (
-                ["-j", "--jitter"],
-                {"help": "delete jitter parameter", "action": "store_true"},
-            ),
-            (
-                ["-d", "--delay"],
-                {"help": "delete delay parameter", "action": "store_true"},
-            ),
-            (
-                ["-l", "--packet-loss"],
-                {"help": "delete packet loss parameter", "action": "store_true"},
-            ),
+            common.CONNECTION_NAME_ARGUMENT,
+            common.PARAMETER_ARGUMENT_MAP["DELAY_STORE_TRUE"],
+            common.PARAMETER_ARGUMENT_MAP["JITTER_STORE_TRUE"],
+            common.PARAMETER_ARGUMENT_MAP["BANDWIDTH_STORE_TRUE"],
+            common.PARAMETER_ARGUMENT_MAP["PACKET_LOSS_STORE_TRUE"],
         ],
     )
     def parameter(self):
-        if not self.app.pargs.connection_name:
-            self.app.log.info("please define a connection name | -n name")
-            self.app.close()
         if (
-            not self.app.pargs.bandwidth
-            and not self.app.pargs.jitter
-            and not self.app.pargs.delay
-            and not self.app.pargs.packet_loss
+            not common.connection_name_is_set(self)
+            or not common.connection_exists_in_db(self)
+            or not common.validate_parameter_arguments(self)
         ):
-            self.app.log.info(
-                "please specifiy at least one parameter to delete on the connection"
-            )
             self.app.close()
-        if connection_exists(self.app.pargs.connection_name):
-            connection = get_connection(self.app.pargs.connection_name)
-            parameters = {}
-            for param in PARAMETERS:
-                parameter_value = get_specific_parameter_value_for_connection_id(
-                    connection.connection_id, param
-                )
-                if parameter_value:
-                    parameters[param] = parameter_value
-
-            if not parameters:
-                self.app.log.info("there are no parameters set on this connection")
-                self.app.close()
-
-            if self.app.pargs.bandwidth:
-                parameters.pop("bandwidth")
-                delete_parameter_on_connection_id(
-                    connection.connection_id,
-                    "bandwidth",
-                )
-            if self.app.pargs.jitter:
-                parameters.pop("jitter")
-                delete_parameter_on_connection_id(connection.connection_id, "jitter")
-            if self.app.pargs.delay:
-                parameters.pop("delay")
-                delete_parameter_on_connection_id(connection.connection_id, "delay")
-            if self.app.pargs.packet_loss:
-                parameters.pop("packet_loss")
-                delete_parameter_on_connection_id(
-                    connection.connection_id,
-                    "packet_loss",
-                )
-            self.app.log.info(
-                f"successfully deleted parameter on connection {self.app.pargs.connection_name}"
-            )
-
-            physical_interface_name = get_physical_interface_for_logical_id(
-                get_connection(
-                    self.app.pargs.connection_name
-                ).first_logical_interface_id
-            ).physical_name
-
-            remove_parameters(physical_interface_name)
-            set_parameters(
-                physical_interface_name,
-                parameters,
-            )
         else:
-            self.app.log.info(
-                f"there is no connection {self.app.pargs.connection_name} please create one first"
+            connection: ConnectionModel = utils.get_connection(
+                self.app.pargs.connection_name
             )
-            self.app.close()
+            parameters: Dict[str, int] = {
+                parameter.parameter_name: parameter.value
+                for parameter in connection.parameters
+            }
+            if not parameters:
+                self.app.log.info("There are no parameters set on this connection")
+                self.app.close()
+            else:
+                utils.delete_parameter(
+                    self.app.pargs.connection_name, common.generate_pargs(self)
+                )
+                self.app.log.info(
+                    f"Successfully deleted parameter on connection {self.app.pargs.connection_name}"
+                )
