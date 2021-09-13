@@ -135,6 +135,23 @@ EOF
   completed "Default configuration $path with management interface $INTERFACE is generated"
 }
 
+create_startup_configuration() {
+  local sudo="$1"
+  local path="$CONFIGURATION_DIR/startup.sh"
+  local conf_folder=$CONFIGURATION_DIR/config
+  local cron_config_file=/etc/crontab
+  $sudo bash -c "cat > "${path}"" << EOF
+#!/bin/bash
+for directory in $conf_folder/*; do
+    bash \$directory/bridge.conf
+    bash \$directory/tc.conf
+done
+EOF
+  completed "Startup configuration $path is generated"
+  echo "@reboot root    bash $path" >> $cron_config_file 
+  completed "Cron job configuration $cron_config_file is generated"
+  }
+
 read_management_interface() {
   local sudo="$1"
   if [ -z "${FORCE-}" ]; then
@@ -167,6 +184,7 @@ read_management_interface() {
     fi
   fi
   create_default_configuration $sudo
+  create_startup_configuration $sudo
 }
 
 install() {
