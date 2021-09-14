@@ -17,7 +17,7 @@ jobs:
           git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
           python -m venv venv
           source venv/bin/activate
-          python -m pip install requirements.txt
+          python -m pip install -r requirements.txt
         shell: bash
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v1
