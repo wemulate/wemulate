@@ -15,14 +15,12 @@ jobs:
           apt-get update
           apt-get install -y git
           git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
-        shell: bash
-      - uses: actions/checkout@v2
-      - uses: actions/setup-python@v1
-      - name: Python Reqs
-        run: |
           python -m venv venv
           source venv/bin/activate
           python -m pip install requirements.txt
+        shell: bash
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v1
       - name: Execute script to build our documentation and update pages
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
