@@ -13,7 +13,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           apt-get update
-          apt-get install -y git
+          apt-get install -y git gcc
           git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
           python -m venv venv
           source venv/bin/activate
