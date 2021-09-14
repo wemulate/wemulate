@@ -15,6 +15,11 @@ def delete_connection(connection_name: str) -> None:
     Returns:
         None
     """
+    connection: ConnectionModel = dbutils.get_connection(connection_name)
+    physical_interface_name = dbutils.get_physical_interface_for_logical_id(
+        connection.first_logical_interface_id
+    ).physical_name
+    tcutils.remove_parameters(connection_name, physical_interface_name)
     tcutils.remove_connection(connection_name)
     dbutils.delete_connection_by_name(connection_name)
 
