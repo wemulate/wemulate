@@ -18,7 +18,7 @@ Install with bash
 **************************
 To install WEmulate with bash, simply run this simple command in your terminal of choice::
 
-    $ sh -c "$(curl -fsSL https://github.com/wemulate/wemulate/blob/main/install/install.sh)"
+    $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 
 
 Install from source

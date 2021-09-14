@@ -12,7 +12,7 @@ Have a look at the [documentation](https://wemulate.github.io/wemulate) for deta
 ### Getting Started
 Install wemulate cli application  
 ```bash
-$ sh -c "$(curl -fsSL https://github.com/wemulate/wemulate/blob/main/install/install.sh)"
+$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 ```
 
 ## Usage 
