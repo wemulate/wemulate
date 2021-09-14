@@ -6,8 +6,7 @@ set -x
 ###################
  
 apt-get update
-apt-get -y install git rsync python3-pip python3-sphinx python3-sphinx-rtd-theme python3-netifaces
-pip3 install requirements.txt
+apt-get -y install git rsync python3-pip python3-sphinx python3-sphinx-rtd-theme
  
 #####################
 # DECLARE VARIABLES #
