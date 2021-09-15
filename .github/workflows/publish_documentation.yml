@@ -31,6 +31,14 @@ jobs:
           python3 -m venv ./venv
           pip3 install -r requirements-dev.txt
           python3 setup.py develop
+          mkdir /etc/wemulate
+          bash -c "cat > "/etc/wemulate/wemulate.yml"" << EOF
+          ---
+          wemulate:
+            management_interfaces:
+              - ens1
+            db_location: /etc/wemulate/wemulate.db
+          EOF
           source venv/bin/activate
           make -C docs clean
           make -C docs html
