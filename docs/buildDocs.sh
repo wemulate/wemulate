@@ -15,15 +15,15 @@ apt-get -y install git rsync python3-pip python3-sphinx python3-sphinx-rtd-theme
 pwd
 ls -lah
 export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
- 
+pip freeze
 ##############
 # BUILD DOCS #
 ##############
  
 # build our documentation with sphinx (see docs/conf.py)
 # * https://www.sphinx-doc.org/en/master/usage/quickstart.html#running-the-build
-make -C docs clean
-make -C docs html
+# make -C docs clean
+# make -C docs html
  
 #######################
 # Update GitHub Pages #
