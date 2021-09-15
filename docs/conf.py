@@ -14,6 +14,10 @@ import os
 import sys
 
 sys.path.insert(0, os.path.abspath(".."))
+sys.path.insert(0, os.path.abspath('../wemulate'))
+sys.path.insert(0, os.path.abspath('../wemulate/ext'))
+sys.path.insert(0, os.path.abspath('../wemulate/ext/utils'))
+sys.path.insert(0, os.path.abspath('../wemulate/ext/settings'))
 
 
 # -- Project information -----------------------------------------------------
@@ -73,3 +77,4 @@ master_doc = "index"
 
 # add sourcecode to path
 sys.path.insert(0, os.path.abspath("../wemulate"))
+
