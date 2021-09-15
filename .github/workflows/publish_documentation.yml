@@ -25,6 +25,7 @@ jobs:
           apt-get update
           apt-get install -y git gcc virtualenv
           git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          pwd
           make virtualenv
           source env/bin/activate
           ./docs/buildDocs.sh
