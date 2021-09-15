@@ -77,3 +77,18 @@ master_doc = "index"
 
 # add sourcecode to path
 sys.path.insert(0, os.path.abspath("../wemulate"))
+
+# Mock external dependencies
+autodoc_mock_imports = [
+    "cement",
+    "jinja2",
+    "pyyaml",
+    "colorlog",
+    "netifaces",
+    "tabulate",
+    "print",
+    "SQLAlchemy",
+    "pyroute2",
+    "tcconfig"
+]
+
