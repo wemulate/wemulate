@@ -25,8 +25,9 @@ jobs:
           apt-get update
           apt-get install -y git gcc virtualenv make
           git clone --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
-          pwd
-          make virtualenv
+          virtualenv --prompt '|> wemulate <| ' env
+          pip3 install -r requirements-dev.txt
+          python3 setup.py develop
           source env/bin/activate
           ./docs/buildDocs.sh
         shell: bash
