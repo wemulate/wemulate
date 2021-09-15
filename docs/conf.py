@@ -79,17 +79,23 @@ master_doc = "index"
 sys.path.insert(0, os.path.abspath("../wemulate"))
 
 # Mock external dependencies
+# autodoc_mock_imports = [
+#     "cement",
+#     "jinja2",
+#     "pyyaml",
+#     "colorlog",
+#     "netifaces",
+#     "tabulate",
+#     "print",
+#     "SQLAlchemy",
+#     "pyroute2",
+#     "tcconfig",
+#     "yaml",
+#     "sqlalchemy"
+# ]
 autodoc_mock_imports = [
-    "cement",
-    "jinja2",
-    "pyyaml",
-    "colorlog",
-    "netifaces",
-    "tabulate",
-    "print",
-    "SQLAlchemy",
-    "pyroute2",
-    "tcconfig",
-    "yaml"
+    "wemulate.core.database.utils",
+    "wemulate.utils.tcconfig",
+    "wemulate.ext.utils.common",
+    "wemulate.core.database.models",
 ]
-
