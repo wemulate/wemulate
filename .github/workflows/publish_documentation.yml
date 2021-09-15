@@ -29,5 +29,7 @@ jobs:
           pip3 install -r requirements-dev.txt
           python3 setup.py develop
           source venv/bin/activate
-          ./docs/buildDocs.sh
+          make -C docs clean
+          make -C docs html
         shell: bash
+# ./docs/buildDocs.sh
