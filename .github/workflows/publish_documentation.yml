@@ -24,7 +24,7 @@ jobs:
         run: |
           apt-get update
           apt-get install -y git gcc virtualenv make git rsync python3-pip python3-sphinx python3-sphinx-rtd-theme
-          git clone -branch fix-doc --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
+          git clone --branch fix-doc --depth 1 "https://token:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" .
           pwd
           ls -lah
           export SOURCE_DATE_EPOCH=$(git log -1 --pretty=%ct)
