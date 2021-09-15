@@ -89,6 +89,7 @@ autodoc_mock_imports = [
     "print",
     "SQLAlchemy",
     "pyroute2",
-    "tcconfig"
+    "tcconfig",
+    "yaml"
 ]
 
