@@ -1,4 +1,4 @@
-.. _api:
+.. _developer-interface:
 
 Developer Interface
 #####################
