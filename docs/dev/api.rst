@@ -136,7 +136,7 @@ Request
         "jitter": 6
     }
 
-POST ``/api/v2/connections/<connection_id>/``
+PUT ``/api/v2/connections/<connection_id>/``
 **********************************************
 
 Update specific connection information.
