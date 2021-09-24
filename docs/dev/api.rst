@@ -15,6 +15,7 @@ Response
 ======================
 
 .. code-block:: json 
+
     {
         "mgmt_interfaces" : [
             {
@@ -52,7 +53,7 @@ Response
 
 
 GET ``/api/v1/connections/``
-***********************
+******************************
 
 Get all connection information.
 
@@ -60,6 +61,7 @@ Response
 ======================
 
 .. code-block:: json
+
     {
         "connections": [
             {
@@ -86,7 +88,7 @@ Response
     }
 
 POST ``/api/v1/connections/``
-***********************
+*******************************
 
 Create a single connection.
 
@@ -94,6 +96,7 @@ Request
 ======================
 
 .. code-block:: json
+
     {
         "connection_name": "new_name",
         "first_logical_interface": 2,
@@ -104,6 +107,7 @@ Response
 ======================
 
 .. code-block:: json
+
     {
         "connection_name": "new_name",
         "connection_id": 2,
@@ -112,7 +116,7 @@ Response
     }
 
 GET ``/api/v2/connections/<connection_id>/``
-***********************
+**********************************************
 
 Get specific connection information.
 
@@ -120,6 +124,7 @@ Request
 ======================
 
 .. code-block:: json
+
     {
         "connection_name": "Connection2",
         "connection_id": 2,
@@ -132,7 +137,7 @@ Request
     }
 
 POST ``/api/v2/connections/<connection_id>/``
-***********************
+**********************************************
 
 Update specific connection information.
 
@@ -140,6 +145,7 @@ Request
 ======================
 
 .. code-block:: json
+
     {
         "connection_name": "new-name",
         "connection_id": 2,
@@ -156,6 +162,7 @@ Response
 ======================
 
 .. code-block:: json
+
     {
         "connection_name": "new-name",
         "connection_id": 2,
