@@ -27,7 +27,7 @@ Response
                 "physical_name": "ens1"
             }
         ],
-        "interfaces": [
+        "logical_interfaces": [
             {
                 "interface_id": 1,
                 "logical_name": "LAN A",
@@ -67,8 +67,8 @@ Response
             {
                 "connection_name": "Connection1",
                 "connection_id": 1,
-                "first_logical_interface": 1,
-                "second_logical_interface": 2,
+                "first_logical_interface_id": 1,
+                "second_logical_interface_id": 2,
                 "delay": 0,
                 "packet_loss": 5,
                 "bandwidth": 100,
@@ -77,8 +77,8 @@ Response
             {
                 "connection": "Connection2",
                 "connection_id": 2,
-                "first_logical_interface": "LAN C",
-                "second_logical_interface": "LAN D",
+                "first_logical_interface_id": 3,
+                "second_logical_interface_id": 4,
                 "delay": 0,
                 "packet_loss": 5,
                 "bandwidth": 100,
@@ -99,8 +99,8 @@ Request
 
     {
         "connection_name": "new_name",
-        "first_logical_interface": 2,
-        "second_logical_interface": 3,
+        "first_logical_interface_id": 2,
+        "second_logical_interface_id": 3,
     }
 
 Response
@@ -111,8 +111,8 @@ Response
     {
         "connection_name": "new_name",
         "connection_id": 2,
-        "first_logical_interface": 2,
-        "second_logical_interface": 3,
+        "first_logical_interface_id": 2,
+        "second_logical_interface_id": 3,
     }
 
 GET ``/api/v2/connections/<connection_id>/``
@@ -120,7 +120,7 @@ GET ``/api/v2/connections/<connection_id>/``
 
 Get specific connection information.
 
-Request
+Response
 ======================
 
 .. code-block:: json
@@ -128,15 +128,15 @@ Request
     {
         "connection_name": "Connection2",
         "connection_id": 2,
-        "first_logical_interface": 2,
-        "second_logical_interface": 3,
+        "first_logical_interface_id": 2,
+        "second_logical_interface_id": 3,
         "delay": 1,
         "packet_loss": 6,
         "bandwidth": 101,
         "jitter": 6
     }
 
-POST ``/api/v2/connections/<connection_id>/``
+PUT ``/api/v2/connections/<connection_id>/``
 **********************************************
 
 Update specific connection information.
@@ -149,8 +149,8 @@ Request
     {
         "connection_name": "new-name",
         "connection_id": 2,
-        "first_logical_interface": 2,
-        "second_logical_interface": 3,
+        "first_logical_interface_id": 2,
+        "second_logical_interface_id": 3,
         "delay": 1,
         "packet_loss": 6,
         "bandwidth": 101,
@@ -166,8 +166,8 @@ Response
     {
         "connection_name": "new-name",
         "connection_id": 2,
-        "first_logical_interface": 2,
-        "second_logical_interface": 3,
+        "first_logical_interface_id": 2,
+        "second_logical_interface_id": 3,
         "delay": 1,
         "packet_loss": 6,
         "bandwidth": 101,
