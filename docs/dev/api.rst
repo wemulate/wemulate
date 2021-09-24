@@ -120,7 +120,7 @@ GET ``/api/v2/connections/<connection_id>/``
 
 Get specific connection information.
 
-Request
+Response
 ======================
 
 .. code-block:: json
