@@ -115,7 +115,7 @@ Response
         "second_logical_interface_id": 3,
     }
 
-GET ``/api/v2/connections/<connection_id>/``
+GET ``/api/v1/connections/<connection_id>/``
 **********************************************
 
 Get specific connection information.
@@ -136,7 +136,7 @@ Response
         "jitter": 6
     }
 
-PUT ``/api/v2/connections/<connection_id>/``
+PUT ``/api/v1/connections/<connection_id>/``
 **********************************************
 
 Update specific connection information.
