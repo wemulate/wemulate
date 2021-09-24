@@ -6,3 +6,5 @@ coverage
 twine>=1.11.0
 setuptools>=38.6.0
 wheel>=0.31.0
+sqlalchemy
+pyroute2
