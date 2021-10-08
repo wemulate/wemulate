@@ -2,7 +2,7 @@ import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
 import wemulate.ext.utils.common as common
 from wemulate.ext.utils import retrieve
-from typing import List, Dict
+from typing import Dict
 from wemulate.core.database.models import ConnectionModel
 
 

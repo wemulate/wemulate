@@ -11,9 +11,11 @@ def reset_device() -> None:
         None
     """
     for connection in dbutils.get_connection_list():
-        physical_interface_name = dbutils.get_physical_interface_for_logical_id(
-            connection.first_logical_interface_id
-        ).physical_name
+        physical_interface_name = (
+            dbutils.get_physical_interface_by_logical_interface_id(
+                connection.first_logical_interface_id
+            ).physical_name
+        )
         tcutils.remove_parameters(connection.connection_name, physical_interface_name)
         tcutils.remove_connection(connection.connection_name)
     dbutils.reset_all_connections()
@@ -31,7 +33,7 @@ def reset_connection(connection_name: str) -> None:
     """
     connection: ConnectionModel = dbutils.get_connection(connection_name)
     dbutils.delete_all_parameter_on_connection(connection.connection_id)
-    physical_interface_name = dbutils.get_physical_interface_for_logical_id(
+    physical_interface_name = dbutils.get_physical_interface_by_logical_interface_id(
         connection.first_logical_interface_id
     ).physical_name
     tcutils.remove_parameters(connection.connection_name, physical_interface_name)

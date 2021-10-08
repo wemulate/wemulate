@@ -46,7 +46,7 @@ class ShowController(Controller):
         data_to_append: List = []
         if not is_mgmt_interface:
             data_to_append.append(
-                utils.get_logical_interface_for_physical_name(interface).logical_name,
+                utils.get_logical_interface_by_physical_name(interface).logical_name,
             )
         data_to_append.extend(
             [

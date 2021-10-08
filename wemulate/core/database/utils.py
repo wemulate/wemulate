@@ -19,7 +19,7 @@ def _get_interface_by_name(
 
 
 @use_db_session
-def _get_specific_parameter_for_connection_id(
+def _get_specific_parameter_by_connection_id(
     session: Session, connection_id: int, parameter_name: str
 ) -> Optional[ParameterModel]:
     return (
@@ -77,6 +77,17 @@ def get_active_profile(session: Session, device: DeviceModel) -> Optional[Profil
 
 
 @use_db_session
+def get_logical_interface_by_id(
+    session: Session, logical_interface_id: int
+) -> Optional[LogicalInterfaceModel]:
+    return (
+        session.query(LogicalInterfaceModel)
+        .filter_by(logical_interface_id=logical_interface_id)
+        .first()
+    )
+
+
+@use_db_session
 def get_logical_interface_by_name(
     session: Session, logical_interface_name: str
 ) -> Optional[LogicalInterfaceModel]:
@@ -88,7 +99,7 @@ def get_logical_interface_by_name(
 
 
 @use_db_session
-def get_logical_interface_for_physical_name(
+def get_logical_interface_by_physical_name(
     session: Session,
     physical_interface_name: str,
 ) -> Optional[LogicalInterfaceModel]:
@@ -104,7 +115,18 @@ def get_logical_interface_for_physical_name(
 
 
 @use_db_session
-def get_physical_interface_for_logical_name(
+def get_physical_interface_by_logical_interface_id(
+    session: Session, logical_interface_id: int
+) -> Optional[InterfaceModel]:
+    return (
+        session.query(InterfaceModel)
+        .filter_by(has_logical_interface_id=logical_interface_id)
+        .first()
+    )
+
+
+@use_db_session
+def get_physical_interface_by_logical_name(
     session: Session, logical_interface_name: str
 ) -> Optional[InterfaceModel]:
     logical_interface: Optional[LogicalInterfaceModel] = (
@@ -118,17 +140,6 @@ def get_physical_interface_for_logical_name(
             .filter_by(has_logical_interface_id=logical_interface.logical_interface_id)
             .first()
         )
-
-
-@use_db_session
-def get_physical_interface_for_logical_id(
-    session: Session, logical_interface_id: int
-) -> Optional[InterfaceModel]:
-    return (
-        session.query(InterfaceModel)
-        .filter_by(has_logical_interface_id=logical_interface_id)
-        .first()
-    )
 
 
 @use_db_session
@@ -174,7 +185,7 @@ def delete_all_parameter_on_connection(session: Session, connection_id: int) -> 
 def create_or_update_parameter(
     connection_id: int, parameter_name: str, value: int
 ) -> None:
-    parameter: Optional[ParameterModel] = _get_specific_parameter_for_connection_id(
+    parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
         connection_id, parameter_name
     )
     if parameter:
@@ -187,7 +198,7 @@ def create_or_update_parameter(
 def delete_parameter_on_connection_id(
     session: Session, connection_id: int, parameter_name: str
 ) -> None:
-    parameter: Optional[ParameterModel] = _get_specific_parameter_for_connection_id(
+    parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
         connection_id, parameter_name
     )
     if parameter:
