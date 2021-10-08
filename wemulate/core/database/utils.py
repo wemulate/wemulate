@@ -153,7 +153,7 @@ def get_connection_by_id(
 ) -> Optional[ConnectionModel]:
     return (
         session.query(ConnectionModel)
-        .filter(ConnectionModel.id == connection_id)
+        .filter(ConnectionModel.connection_id == connection_id)
         .first()
     )
 
