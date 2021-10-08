@@ -31,7 +31,7 @@ def reset_connection(connection_name: str) -> None:
     Returns:
         None
     """
-    connection: ConnectionModel = dbutils.get_connection(connection_name)
+    connection: ConnectionModel = dbutils.get_connection_by_name(connection_name)
     dbutils.delete_all_parameter_on_connection(connection.connection_id)
     physical_interface_name = dbutils.get_physical_interface_by_logical_interface_id(
         connection.first_logical_interface_id

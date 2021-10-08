@@ -65,7 +65,7 @@ class ShowController(Controller):
         if not common.connection_exists_in_db(self):
             self.app.close()
         else:
-            connection: ConnectionModel = utils.get_connection(
+            connection: ConnectionModel = utils.get_connection_by_name(
                 self.app.pargs.connection_name
             )
             render_data: List = []

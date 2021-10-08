@@ -53,7 +53,7 @@ def connection_exists_in_db(connection_name: str) -> bool:
     return dbutils.connection_exists(connection_name)
 
 
-def get_connection(connection_name: str) -> ConnectionModel:
+def get_connection_by_name(connection_name: str) -> ConnectionModel:
     """
     Returns a a connection object for a connection name.
 
@@ -63,7 +63,20 @@ def get_connection(connection_name: str) -> ConnectionModel:
     Returns:
         Returns a connection object.
     """
-    return dbutils.get_connection(connection_name)
+    return dbutils.get_connection_by_name(connection_name)
+
+
+def get_connection_by_id(connection_id: int) -> ConnectionModel:
+    """
+    Returns a a connection object by its unique id.
+
+    Args:
+        connection_id: Connection id.
+
+    Returns:
+        Returns a connection object.
+    """
+    return dbutils.get_connection_by_id(connection_id)
 
 
 def get_logical_interface_by_id(

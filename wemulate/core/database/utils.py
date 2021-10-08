@@ -148,7 +148,20 @@ def get_connection_list(session: Session) -> List[ConnectionModel]:
 
 
 @use_db_session
-def get_connection(session: Session, connection_name: str) -> Optional[ConnectionModel]:
+def get_connection_by_id(
+    session: Session, connection_id: int
+) -> Optional[ConnectionModel]:
+    return (
+        session.query(ConnectionModel)
+        .filter(ConnectionModel.id == connection_id)
+        .first()
+    )
+
+
+@use_db_session
+def get_connection_by_name(
+    session: Session, connection_name: str
+) -> Optional[ConnectionModel]:
     return (
         session.query(ConnectionModel)
         .filter(ConnectionModel.connection_name == connection_name)

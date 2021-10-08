@@ -22,7 +22,8 @@ Database and TC Interface
 .. autofunction:: wemulate.ext.utils.get_physical_interface_names
 .. autofunction:: wemulate.ext.utils.get_logical_interface_by_name
 .. autofunction:: wemulate.ext.utils.connection_exists_in_db
-.. autofunction:: wemulate.ext.utils.get_connection
+.. autofunction:: wemulate.ext.utils.get_connection_by_name
+.. autofunction:: wemulate.ext.utils.get_connection_by_id
 .. autofunction:: wemulate.ext.utils.get_logical_interface_by_physical_name
 .. autofunction:: wemulate.ext.utils.get_logical_interface_by_id
 .. autofunction:: wemulate.ext.utils.get_connection_list
