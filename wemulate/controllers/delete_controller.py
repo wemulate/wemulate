@@ -47,7 +47,7 @@ class DeleteController(Controller):
         ):
             self.app.close()
         else:
-            connection: ConnectionModel = utils.get_connection(
+            connection: ConnectionModel = utils.get_connection_by_name(
                 self.app.pargs.connection_name
             )
             parameters: Dict[str, int] = {

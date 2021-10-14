@@ -16,10 +16,10 @@ def get_physical_interface_names(
     Returns:
         Tuple of strings.
     """
-    physical_interface1_name: str = dbutils.get_physical_interface_for_logical_name(
+    physical_interface1_name: str = dbutils.get_physical_interface_by_logical_name(
         first_logical_interface
     ).physical_name
-    physical_interface2_name: str = dbutils.get_physical_interface_for_logical_name(
+    physical_interface2_name: str = dbutils.get_physical_interface_by_logical_name(
         second_logical_interface
     ).physical_name
     return physical_interface1_name, physical_interface2_name
@@ -53,7 +53,7 @@ def connection_exists_in_db(connection_name: str) -> bool:
     return dbutils.connection_exists(connection_name)
 
 
-def get_connection(connection_name: str) -> ConnectionModel:
+def get_connection_by_name(connection_name: str) -> ConnectionModel:
     """
     Returns a a connection object for a connection name.
 
@@ -63,10 +63,38 @@ def get_connection(connection_name: str) -> ConnectionModel:
     Returns:
         Returns a connection object.
     """
-    return dbutils.get_connection(connection_name)
+    return dbutils.get_connection_by_name(connection_name)
 
 
-def get_logical_interface_for_physical_name(
+def get_connection_by_id(connection_id: int) -> ConnectionModel:
+    """
+    Returns a a connection object by its unique id.
+
+    Args:
+        connection_id: Connection id.
+
+    Returns:
+        Returns a connection object.
+    """
+    return dbutils.get_connection_by_id(connection_id)
+
+
+def get_logical_interface_by_id(
+    logical_interface_id: int,
+) -> LogicalInterfaceModel:
+    """
+    Returns the logical interface object for the logical interface id.
+
+    Args:
+        logical_interface_id: The unique identifier for the specific logical interface.
+
+    Returns:
+        Returns a logical interface object.
+    """
+    return dbutils.get_logical_interface_by_id(logical_interface_id)
+
+
+def get_logical_interface_by_physical_name(
     physical_interface_name: str,
 ) -> LogicalInterfaceModel:
     """
@@ -78,7 +106,7 @@ def get_logical_interface_for_physical_name(
     Returns:
         Returns a logical interface object.
     """
-    return dbutils.get_logical_interface_for_physical_name(physical_interface_name)
+    return dbutils.get_logical_interface_by_physical_name(physical_interface_name)
 
 
 def get_connection_list() -> List[ConnectionModel]:

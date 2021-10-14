@@ -94,7 +94,7 @@ def set_parameters_with_tc(connection: ConnectionModel, parameters: Dict[str, in
     """
     tcutils.set_parameters(
         connection.connection_name,
-        dbutils.get_physical_interface_for_logical_id(
+        dbutils.get_physical_interface_by_logical_interface_id(
             connection.first_logical_interface_id
         ).physical_name,
         parameters,
