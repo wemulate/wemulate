@@ -15,7 +15,7 @@ def set_parameter(connection_name: str, parameters: Dict[str, int]) -> None:
     Returns:
         None
     """
-    connection: ConnectionModel = dbutils.get_connection(connection_name)
+    connection: ConnectionModel = dbutils.get_connection_by_name(connection_name)
     dbutils.delete_all_parameter_on_connection(connection.connection_id)
     common.set_parameters_with_tc(
         connection, common.create_or_update_parameters_in_db(connection, parameters)

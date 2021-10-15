@@ -2,7 +2,7 @@ import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
 import wemulate.ext.utils.common as common
 from wemulate.ext.utils import retrieve
-from typing import List, Dict
+from typing import Dict
 from wemulate.core.database.models import ConnectionModel
 
 
@@ -50,7 +50,7 @@ def add_parameter(connection_name: str, parameters: Dict[str, int]) -> None:
     Returns:
         None
     """
-    connection: ConnectionModel = dbutils.get_connection(connection_name)
+    connection: ConnectionModel = dbutils.get_connection_by_name(connection_name)
     current_parameters: Dict[str, int] = {
         parameter.parameter_name: parameter.value for parameter in connection.parameters
     }
