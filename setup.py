@@ -46,5 +46,5 @@ setup(
         wemulate = wemulate.main:main
     """,
     install_requires=requires,
-    dependency_lins=links,
+    dependency_links=links,
 )

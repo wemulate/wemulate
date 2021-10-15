@@ -1,5 +1,9 @@
 # WEmulate Change History
 
+## 1.0.2 (released 2021-10-15)
+
+Fix some install errors.
+
 ## 1.0.1 (released 2021-10-15)
 
 Prepare the CLI module for the new api module.
