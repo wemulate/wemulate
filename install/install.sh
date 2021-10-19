@@ -101,6 +101,7 @@ install_dependencies() {
   confirm "Install dependencies on system?"
   info "Install dependencies..."
   printf '\n'
+  $sudo apt-get update
   $sudo apt-get install --yes python3 
   $sudo apt-get install --yes python3-pip 
   printf '\n'
@@ -148,7 +149,7 @@ EOF
   $sudo bash -c "cat >> "${cron_config_file}"" << EOF
 @reboot root    bash $path >> $cron_config_file
 EOF
-  completed "Cron job configuration $cron_config_file is generated"
+  completed "Cron job configuration $cron_config_file was generated"
   }
 
 read_management_interface() {
@@ -186,6 +187,76 @@ read_management_interface() {
   create_startup_configuration $sudo
 }
 
+install_api () {
+  local sudo="$1"
+  # should install the API
+}
+
+install_frontend () {
+  local sudo="$1"
+  info "Install frontend..."
+  printf '\n'
+  install_reverse_proxy $sudo
+  $(curl -fsSL -o /var/www/html/release.zip https://github.com/wemulate/wemulate-frontend/releases/latest/download/release.zip)
+  $sudo apt -y install unzip
+  $sudo unzip -o -q /var/www/html/release.zip -d /var/www/html
+  $sudo rm -f /var/www/html/release.zip
+  printf '\n'
+  completed "Frontend installed and started successfully"
+}
+
+install_reverse_proxy () {
+  local sudo="$1"
+  $sudo apt update
+  $sudo apt -y install nginx
+  create_nginx_configuration $sudo
+  $sudo rm /etc/nginx/sites-enabled/default
+  $sudo rm /etc/nginx/sites-available/default
+  $sudo rm /var/www/html/index.nginx-debian.html
+}
+
+create_nginx_configuration() {
+  local sudo="$1"
+  local path="/etc/nginx/nginx.conf"
+  $sudo bash -c "cat > "${path}"" << EOF
+user www-data;
+worker_processes auto;
+pid /run/nginx.pid;
+include /etc/nginx/modules-enabled/*.conf;
+
+events {}
+
+http {
+        sendfile on;
+        tcp_nopush on;
+
+        include /etc/nginx/mime.types;
+
+        gzip on;
+
+        upstream wemulateapi {
+            server localhost:80;
+        }
+
+        server {
+            listen 8080;
+
+            location /api {
+                proxy_pass         http://wemulateapi;
+                proxy_redirect     off;
+            }
+
+            location / {
+                root   /var/www/html;
+                index  index.html;
+                try_files \$uri \$uri/; # escape variables because of EOF
+            }
+        }
+}
+EOF
+  completed "Default configuration $path for nginx was created"
+}
+
 install() {
   local msg
   local sudo
@@ -206,6 +277,14 @@ install() {
   completed "Install wemulate $RELEASE"
   printf '\n'
   $sudo pip3 install wemulate${RELEASE}
+
+  if [ $ENABLE_API = true ]; then
+    install_api $sudo
+  fi
+
+  if [ $ENABLE_FRONTEND = true ]; then
+    install_frontend $sudo
+  fi
 }
 
 if [ -z "${CONFIGURATION_DIR-}" ]; then
@@ -218,6 +297,14 @@ fi
 
 if [ -z "${INTERFACE-}" ]; then
   INTERFACE="ens2"
+fi
+
+if [ -z "${ENABLE_API-}"]; then
+  ENABLE_API=false
+fi
+
+if [ -z "${ENABLE_FRONTEND-}"]; then
+  ENABLE_FRONTEND=false
 fi
 
 # parse argv variables
@@ -245,6 +332,14 @@ while [ "$#" -gt 0 ]; do
     FORCE=1
     shift 1
     ;;
+  --api)
+    ENABLE_API=true
+    shift 1
+    ;;
+  --frontend)
+    ENABLE_FRONTEND=true
+    shift 1
+    ;;
 
   -c=* | --configuration-dir=*)
     CONFIGURATION_DIR="${1#*=}"
@@ -266,7 +361,6 @@ while [ "$#" -gt 0 ]; do
     FORCE="${1#*=}"
     shift 1
     ;;
-
   *)
     error "Unknown option: $1"
     exit 1
