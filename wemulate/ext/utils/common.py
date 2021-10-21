@@ -61,7 +61,7 @@ def _set_packet_loss(
 def create_or_update_parameters_in_db(
     connection: ConnectionModel,
     parameters: Dict[str, int],
-    current_parameters={},
+    current_parameters=None,
 ) -> Dict[str, int]:
     """
     Creates and updates parameters in the database.
@@ -74,6 +74,8 @@ def create_or_update_parameters_in_db(
     Returns:
         Returns the current_parameters which are set in the database.
     """
+    if not current_parameters:
+        current_parameters: Dict = {}
     _set_bandwidth(connection, parameters, current_parameters)
     _set_jitter(connection, parameters, current_parameters)
     _set_delay(connection, parameters, current_parameters)
