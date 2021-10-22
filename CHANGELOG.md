@@ -1,5 +1,9 @@
 # WEmulate Change History
 
+## 1.0.3 (released 2021-10-22)
+
+Fix bug which solves false parameter application. 
+
 ## 1.0.2 (released 2021-10-15)
 
 Fix some install errors.
