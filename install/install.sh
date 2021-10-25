@@ -274,7 +274,7 @@ http {
             location / {
                 root   /var/www/html;
                 index  index.html;
-                try_files \$uri \$uri/; # escape variables because of EOF
+                try_files \$uri \$uri/ /index.html; # escape variables because of EOF
             }
         }
 }
