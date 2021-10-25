@@ -19,6 +19,12 @@
 #   -i, --interface
 #     Defines a default management interface
 #
+#   --api
+#     Install api
+#
+#   --frontend
+#     Install frontend
+#
 #   Example:
 #     sh install.sh -i ens2 -y
 
@@ -189,7 +195,25 @@ read_management_interface() {
 
 install_api () {
   local sudo="$1"
-  # should install the API
+  info "Install API..."
+  $sudo pip3 install wemulate-api
+  local path="/etc/systemd/system/wemulateapi.service"
+  $sudo bash -c "cat > "${path}"" << EOF
+[Unit]
+Description=WEmulate API
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/wemulate-api
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  $sudo systemctl daemon-reload
+  $sudo systemctl enable wemulateapi.service
+  $sudo systemctl start wemulateapi.service
+  completed "API installed successfully as service"
 }
 
 install_frontend () {
@@ -213,6 +237,7 @@ install_reverse_proxy () {
   $sudo rm /etc/nginx/sites-enabled/default
   $sudo rm /etc/nginx/sites-available/default
   $sudo rm /var/www/html/index.nginx-debian.html
+  $sudo systemctl restart nginx.service
 }
 
 create_nginx_configuration() {
@@ -235,11 +260,11 @@ http {
         gzip on;
 
         upstream wemulateapi {
-            server localhost:80;
+            server localhost:8080;
         }
 
         server {
-            listen 8080;
+            listen 80;
 
             location /api {
                 proxy_pass         http://wemulateapi;
@@ -278,12 +303,12 @@ install() {
   printf '\n'
   $sudo pip3 install wemulate${RELEASE}
 
-  if [ $ENABLE_API = true ]; then
-    install_api $sudo
-  fi
-
   if [ $ENABLE_FRONTEND = true ]; then
     install_frontend $sudo
+  fi
+
+  if [ $ENABLE_API = true ]; then
+    install_api $sudo
   fi
 }
 
