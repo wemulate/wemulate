@@ -25,6 +25,17 @@ this part of the documentation is for you.
    dev/developer-interface
    dev/api
 
+
+The Hardware Guide
+********************
+Here are the different hardware solutions and installation procedure listed, which we have tested. 
+
+.. toctree::
+   :maxdepth: 2
+
+   hw/hw
+
+
 The Contributor Guide
 **********************
 
