@@ -75,7 +75,7 @@ Response
                 "jitter": 5
             },
             {
-                "connection": "Connection2",
+                "connection_name": "Connection2",
                 "connection_id": 2,
                 "first_logical_interface_id": 3,
                 "second_logical_interface_id": 4,
