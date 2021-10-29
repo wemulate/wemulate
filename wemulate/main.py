@@ -1,4 +1,7 @@
 import os
+from typing import List
+
+from wemulate.controllers.config_controller import ConfigController
 
 if os.geteuid() == 0:
     from wemulate.controllers.reset_controller import ResetController
@@ -42,6 +45,16 @@ class WEmulate(App):
         # template directory
         template_dir = "templates"
 
+        from wemulate.core.database.setup import pre_setup_database
+
+        # hook definitions
+        from wemulate.ext.settings import check_if_mgmt_interface_set
+
+        hooks = [
+            ("post_argument_parsing", check_if_mgmt_interface_set),
+            # ("post_argument_parsing", pre_setup_database),
+        ]
+
         # register handlers
         handlers = [
             Base,
@@ -50,7 +63,7 @@ class WEmulate(App):
             SetController,
             DeleteController,
             AddController,
-            # ConfigController,# Not implemented yet
+            ConfigController,
             # SaveController, # Not implemented yet
             # LoadController,# Not implemented yet
         ]
@@ -68,7 +81,6 @@ def main():
 
         try:
             app.run()
-
         except AssertionError as e:
             print("AssertionError > %s" % e.args[0])
             app.exit_code = 1

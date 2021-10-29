@@ -2,6 +2,7 @@ from typing import List, Optional
 from sqlalchemy.orm.session import Session
 from wemulate.core.database.decorators import use_db_session
 from wemulate.core.database.models import (
+    ManagementInterfaceModel,
     ProfileModel,
     ConnectionModel,
     InterfaceModel,
@@ -232,3 +233,14 @@ def delete_connection_by_name(session: Session, connection_name: str) -> None:
 def reset_all_connections() -> None:
     _delete_all_parameters()
     _delete_all_connections()
+
+
+@use_db_session
+def get_mgmt_interfaces(session: Session) -> List[ManagementInterfaceModel]:
+    return session.query(ManagementInterfaceModel).all()
+
+
+@use_db_session
+def create_mgmt_interface(session: Session, interface_name: str) -> None:
+    mgmt_interface: ManagementInterfaceModel = ManagementInterfaceModel(interface_name)
+    session.add(mgmt_interface)
