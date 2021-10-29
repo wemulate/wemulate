@@ -85,6 +85,23 @@ class DeviceModel(Base):
         }
 
 
+class ManagementInterfaceModel(Base):
+    __tablename__ = "management_interface"
+    management_interface_id = Column(Integer, primary_key=True, autoincrement=True)
+    interface_name = Column(String(20), nullable=False, unique=True)
+
+    def __init__(self, interface_name):
+        self.interface_name = interface_name
+
+    def __repr__(self):
+        return json.dumps(
+            {
+                "management_interface_id": self.management_interface_id,
+                "interface_name": self.interface_name,
+            }
+        )
+
+
 class LogicalInterfaceModel(Base):
     __tablename__ = "logical_interface"
     logical_interface_id = Column(Integer, primary_key=True, autoincrement=True)
