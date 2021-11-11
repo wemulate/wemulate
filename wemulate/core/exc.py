@@ -1,3 +1,6 @@
+from cement.core import interface
+
+
 class WEmulateError(Exception):
     """Generic errors."""
 
@@ -47,9 +50,10 @@ class WEmulateDatabaseError(WEmulateError):
 class WemulateMgmtInterfaceError(WEmulateError):
     """Management Interface not found error"""
 
-    def __init__(self, interface_name: str, message=""):
+    def __init__(self, interface_name: str = "", message=""):
         if not message:
-            self.message = (
-                f"The interface {interface_name} is not present on this device!"
-            )
+            if interface_name:
+                self.message = f"The interface {interface_name} is not present on this device. Please provide a valid interface name"
+            else:
+                self.message = "There is no management interface configured. Please configure at least one with the wemulate config command before using other commands"
         super().__init__(self.message)

@@ -1,4 +1,8 @@
 import socket, string
+from typing import List
+from wemulate.core.exc import (
+    WemulateMgmtInterfaceError,
+)
 import wemulate.ext.settings as settings
 from sqlalchemy.orm.session import Session
 from wemulate.core.database.models import (
@@ -24,6 +28,9 @@ def _pre_setup_device(session: Session) -> None:
     hostname: str = socket.gethostname()
     PROFILE_ID: int = 1
     if not session.query(DeviceModel).filter_by(device_name=hostname).first():
+        management_interfaces: List[str] = settings.get_mgmt_interfaces()
+        if not management_interfaces:
+            raise WemulateMgmtInterfaceError()
         session.add(
             DeviceModel(hostname, PROFILE_ID, settings.get_mgmt_interfaces()[0])
         )
@@ -41,7 +48,7 @@ def _pre_setup_logical_interfaces(session: Session, ascii_index: int) -> None:
 def _pre_setup_interfaces(session: Session) -> None:
     count: int = 0
     DEVICE_ID: int = 1
-    for physical_interface in settings.get_interfaces():
+    for physical_interface in settings.get_non_mgmt_interfaces():
         if (
             not session.query(InterfaceModel)
             .filter_by(physical_name=physical_interface)

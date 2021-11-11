@@ -8,15 +8,14 @@ def _interface_present_on_device(interface_name: str) -> bool:
     return interface_name in get_all_interfaces_on_device()
 
 
-def check_if_mgmt_interface_set(app) -> bool:
-    if app.pargs.__controller_namespace__ != "config":
-        if get_mgmt_interfaces():
-            return True
-        raise WEmulateExecutionError(
-            "There is no management interface set in the config!"
-        )
-        # @TODO: check ConfigController to add mgmt interfaces
-        # @TODO: check if execution works if any mgmt interface
+def check_if_mgmt_interface_set() -> bool:
+    if get_mgmt_interfaces():
+        return True
+    raise WEmulateExecutionError(
+        "There is no management interface set in the config/database!"
+    )
+    # @TODO: check ConfigController to add mgmt interfaces
+    # @TODO: check if execution works if any mgmt interface
 
 
 def get_interface_ip(interface: str) -> Optional[str]:
@@ -55,7 +54,10 @@ def get_mgmt_interfaces() -> List[str]:
     Returns:
         Returns the management interfaces as list of strings.
     """
-    return [mgmt_interface.name for mgmt_interface in dbutils.get_mgmt_interfaces()]
+    return [
+        mgmt_interface.interface_name
+        for mgmt_interface in dbutils.get_mgmt_interfaces()
+    ]
 
 
 def get_all_interfaces_on_device() -> List[str]:
@@ -63,6 +65,8 @@ def get_all_interfaces_on_device() -> List[str]:
 
 
 def add_mgmt_interface(interface_name: str) -> None:
+    if interface_name in get_mgmt_interfaces():
+        return
     if _interface_present_on_device(interface_name):
         dbutils.create_mgmt_interface(interface_name)
     else:
