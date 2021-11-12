@@ -5,7 +5,6 @@ import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
 from typing import List
 from wemulate.core.database.models import ConnectionModel
-from cement import Controller, ex
 from wemulate.utils.rendering import rendering
 
 CONNECTION_HEADERS: List[str] = [
@@ -57,10 +56,8 @@ def _construct_interface_data_to_render(
 app = typer.Typer(help="show specific information")
 
 
-@app.command(help="show specific connection information")
-def connection(
-    connection_name: str = typer.Argument(..., help="name of the connection")
-):
+@app.command(help="show specific connection information", no_args_is_help=True)
+def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     common.check_if_connection_exists_in_db(connection_name)
     connection: ConnectionModel = utils.get_connection_by_name(connection_name)
     render_data: List[str] = []
@@ -85,7 +82,7 @@ def connections():
         )
 
 
-@app.command(help="show specific interface information")
+@app.command(help="show specific interface information", no_args_is_help=True)
 def interface(interface_name: str = typer.Argument(..., help="name of the interface")):
     if not interface_name in settings.get_non_mgmt_interfaces():
         typer.echo("The given interface is not available")
@@ -121,21 +118,3 @@ def mgmt_interfaces():
     typer.echo(
         tabulate.tabulate(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")
     )
-
-
-#     @ex(
-#         help="show overview about all management interfaces",
-#     )
-#     def mgmt_interfaces(self):
-#         mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
-#         if not mgmt_interfaces:
-#             self.app.log.info(
-#                 "There are no mgmt interfaces defined in %s"
-#                 % settings.get_config_path()
-#             )
-#             self.app.close()
-#         else:
-#             render_data: List = []
-#             for interface in mgmt_interfaces:
-#                 self._construct_interface_data_to_render(render_data, interface, True)
-#             self.app.render(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")

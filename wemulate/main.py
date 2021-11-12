@@ -6,15 +6,19 @@ from core.database.setup import pre_setup_database
 from controllers.add_controller import app as add_app
 from controllers.config_controller import app as config_app
 from controllers.show_controller import app as show_app
+from controllers.delete_controller import app as delete_app
+from controllers.reset_controller import app as reset_app
 import os
 import typer
 
 app = typer.Typer(
     help="A modern WAN emulator",
 )
-app.add_typer(add_app, name="add")
-app.add_typer(config_app, name="config")
-app.add_typer(show_app, name="show")
+app.add_typer(add_app, name="add", no_args_is_help=True)
+app.add_typer(config_app, name="config", no_args_is_help=True)
+app.add_typer(show_app, name="show", no_args_is_help=True)
+app.add_typer(delete_app, name="delete", no_args_is_help=True)
+app.add_typer(reset_app, name="reset", no_args_is_help=True)
 
 
 def _get_version(value: bool) -> Optional[str]:
@@ -23,7 +27,7 @@ def _get_version(value: bool) -> Optional[str]:
         raise typer.Exit()
 
 
-@app.callback()
+@app.callback(no_args_is_help=True)
 def check_permissions(
     ctx: typer.Context,
     version: Optional[bool] = typer.Option(
@@ -39,6 +43,8 @@ def check_permissions(
         return
     if os.getuid() == 0:
         try:
+            if ctx.invoked_subcommand == "":
+                ctx.invoked_subcommand = "help"
             if ctx.invoked_subcommand != "config":
                 pre_setup_database()
                 check_if_mgmt_interface_set()

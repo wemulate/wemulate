@@ -6,7 +6,7 @@ from wemulate.core.exc import WemulateMgmtInterfaceError
 app = typer.Typer(help="configure the application settings")
 
 
-@app.command(help="set the management interface(s)")
+@app.command(help="set the management interface(s)", no_args_is_help=True)
 def set(
     management_interfaces: Optional[List[str]] = typer.Option(
         [], "--management-interface", "-m"

@@ -11,13 +11,6 @@ from wemulate.core.database.models import (
     ConnectionModel,
     LogicalInterfaceModel,
 )
-from wemulate.controllers.common import (
-    BANDWIDTH_PARAMTER,
-    CONNECTION_NAME_PARAMETER,
-    DELAY_PARAMETER,
-    JITTER_PARAMETER,
-    PACKET_LOSS_PARAMETER,
-)
 
 
 def _check_if_interface_names_provided(
@@ -92,9 +85,9 @@ def _validate_connection_arguments(
 app = typer.Typer(help="add a new connection or parameter")
 
 
-@app.command(help="add a new connection")
+@app.command(help="add a new connection", no_args_is_help=True)
 def connection(
-    connection_name: str = CONNECTION_NAME_PARAMETER,
+    connection_name: str = common.CONNECTION_NAME_PARAMETER,
     logical_interfaces: Tuple[str, str] = typer.Option(
         (None, None),
         "--interfaces",
@@ -127,13 +120,14 @@ def connection(
 
 @app.command(
     help="add parameter on a specific connection, previously added parameters will not be changed",
+    no_args_is_help=True,
 )
 def parameter(
-    connection_name: str = CONNECTION_NAME_PARAMETER,
-    delay: int = DELAY_PARAMETER,
-    jitter: int = JITTER_PARAMETER,
-    bandwidth: int = BANDWIDTH_PARAMTER,
-    packet_loss: int = PACKET_LOSS_PARAMETER,
+    connection_name: str = common.CONNECTION_NAME_PARAMETER,
+    delay: int = common.DELAY_PARAMETER,
+    jitter: int = common.JITTER_PARAMETER,
+    bandwidth: int = common.BANDWIDTH_PARAMTER,
+    packet_loss: int = common.PACKET_LOSS_PARAMETER,
 ):
     common.check_if_connection_exists_in_db(connection_name)
     common.validate_parameter_arguments(delay, jitter, bandwidth, packet_loss)

@@ -23,7 +23,7 @@ class SetController(Controller):
     def parameter(self):
         if (
             not common.connection_name_is_set(self)
-            or not common.connection_exists_in_db(self)
+            or not common.check_if_connection_exists_in_db(self)
             or not common.validate_parameter_arguments(self)
         ):
             self.app.close()
