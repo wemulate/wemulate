@@ -232,4 +232,4 @@ def remove_parameters(connection_name: str, interface_name: str) -> None:
     """
     _execute_in_shell(f"tcdel {interface_name} --all")
     _write_commands_to_tc_config_file(connection_name, [""])
-    # Here we have to delete the whole input in the tc.conf file -> we need the connection_name
+    # Here we have to delete the whole input in the tc.conf file, therefore, we need the connection_name

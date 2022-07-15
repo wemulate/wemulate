@@ -3,6 +3,9 @@ from typing import Dict
 from wemulate.core.exc import WEmulateConfigNotFoundError
 
 
+WEMULATE_CONFIG_PATH = "/etc/wemulate/wemulate.yml"
+
+
 def get_config_path() -> str:
     """
     Returns the current path of the config.
@@ -10,7 +13,7 @@ def get_config_path() -> str:
     Returns:
         Returns the path as string.
     """
-    return "/etc/wemulate/wemulate.yml"
+    return WEMULATE_CONFIG_PATH
 
 
 def get_config() -> Dict:

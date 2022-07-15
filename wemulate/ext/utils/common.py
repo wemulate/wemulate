@@ -108,7 +108,7 @@ def _delete_bandwidth(
     current_parameters: Dict[str, int],
     connection: ConnectionModel,
 ) -> None:
-    if BANDWIDTH in parameters:
+    if BANDWIDTH in parameters and BANDWIDTH in current_parameters:
         current_parameters.pop(BANDWIDTH)
         dbutils.delete_parameter_on_connection_id(
             connection.connection_id,
@@ -121,7 +121,7 @@ def _delete_jitter(
     current_parameters: Dict[str, int],
     connection: ConnectionModel,
 ) -> None:
-    if JITTER in parameters:
+    if JITTER in parameters and JITTER in current_parameters:
         current_parameters.pop(JITTER)
         dbutils.delete_parameter_on_connection_id(connection.connection_id, JITTER)
 
@@ -131,7 +131,7 @@ def _delete_delay(
     current_parameters: Dict[str, int],
     connection: ConnectionModel,
 ) -> None:
-    if DELAY in parameters:
+    if DELAY in parameters and DELAY in current_parameters:
         current_parameters.pop(DELAY)
         dbutils.delete_parameter_on_connection_id(connection.connection_id, DELAY)
 
@@ -141,7 +141,7 @@ def _delete_packet_loss(
     current_parameters: Dict[str, int],
     connection: ConnectionModel,
 ) -> None:
-    if PACKET_LOSS in parameters:
+    if PACKET_LOSS in parameters and PACKET_LOSS in current_parameters:
         current_parameters.pop(PACKET_LOSS)
         dbutils.delete_parameter_on_connection_id(
             connection.connection_id,

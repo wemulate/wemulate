@@ -46,8 +46,6 @@ You can also install WEmulate from source, please follow the instructions below:
 
     ---
     wemulate:
-        management_interfaces:
-            - eth0
         db_location: /etc/wemulate/wemulate.db
 
 * Clone the repository
@@ -62,3 +60,9 @@ You can also install WEmulate from source, please follow the instructions below:
 
     $ cd wemulate
     $ pip install -r requirements.txt
+
+* Configure the management interfaces
+
+.. code-block:: console
+
+    $ wemulate config set -m ens2

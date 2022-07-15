@@ -1,97 +1,62 @@
+from typing import Optional
+from wemulate.core.exc import WEmulateError
+from wemulate.ext.settings import check_if_mgmt_interface_set
+from core.version import get_version
+from core.database.setup import pre_setup_database
+from controllers.add_controller import app as add_app
+from controllers.set_controller import app as set_app
+from controllers.config_controller import app as config_app
+from controllers.show_controller import app as show_app
+from controllers.delete_controller import app as delete_app
+from controllers.reset_controller import app as reset_app
 import os
+import typer
 
-if os.geteuid() == 0:
-    from wemulate.controllers.reset_controller import ResetController
-    from wemulate.controllers.delete_controller import DeleteController
-    from wemulate.controllers.set_controller import SetController
-    from wemulate.controllers.add_controller import AddController
-    from wemulate.controllers.show_controller import ShowController
-    from cement import App, TestApp
-    from cement.core.exc import CaughtSignal
-    from wemulate.core.exc import WEmulateError
-    from wemulate.controllers.base_controller import Base
-else:
-    print("Please start as root user")
-    quit()
+app = typer.Typer(
+    help="A modern WAN emulator",
+)
+app.add_typer(add_app, name="add", no_args_is_help=True)
+app.add_typer(set_app, name="set", no_args_is_help=True)
+app.add_typer(config_app, name="config", no_args_is_help=True)
+app.add_typer(show_app, name="show", no_args_is_help=True)
+app.add_typer(delete_app, name="delete", no_args_is_help=True)
+app.add_typer(reset_app, name="reset", no_args_is_help=True)
 
 
-class WEmulate(App):
-    """WEmulate primary application."""
-
-    class Meta:
-        label = "wemulate"
-
-        # call sys.exit() on close
-        exit_on_close = True
-
-        # load additional framework extensions
-        extensions = ["yaml", "colorlog", "jinja2", "tabulate"]
-
-        # configuration handler
-        config_handler = "yaml"
-
-        # configuration file suffix
-        config_file_suffix = ".yml"
-
-        # set the log handler
-        log_handler = "colorlog"
-
-        # set the output handler
-        output_handler = "tabulate"
-
-        # template directory
-        template_dir = "templates"
-
-        # register handlers
-        handlers = [
-            Base,
-            ResetController,
-            ShowController,
-            SetController,
-            DeleteController,
-            AddController,
-            # ConfigController,# Not implemented yet
-            # SaveController, # Not implemented yet
-            # LoadController,# Not implemented yet
-        ]
+def _get_version(value: bool) -> Optional[str]:
+    if value:
+        typer.echo(f"The current wemulate version is: {get_version()}")
+        raise typer.Exit()
 
 
-class WEmulateTest(TestApp, WEmulate):
-    """A sub-class of WEmulate that is better suited for testing."""
-
-    class Meta:
-        label = "wemulate"
-
-
-def main():
-    with WEmulate() as app:
-
+@app.callback(no_args_is_help=True)
+def check_permissions(
+    ctx: typer.Context,
+    version: Optional[bool] = typer.Option(
+        None,
+        "--version",
+        "-v",
+        callback=_get_version,
+        is_eager=True,
+        help="Show program's version number and exit",
+    ),
+):
+    if ctx.resilient_parsing:  # is used that autocompletion works
+        return
+    if os.getuid() == 0:
         try:
-            app.run()
-
-        except AssertionError as e:
-            print("AssertionError > %s" % e.args[0])
-            app.exit_code = 1
-
-            if app.debug is True:
-                import traceback
-
-                traceback.print_exc()
-
+            if ctx.invoked_subcommand == "":
+                ctx.invoked_subcommand = "help"
+            if ctx.invoked_subcommand != "config":
+                pre_setup_database()
+                check_if_mgmt_interface_set()
         except WEmulateError as e:
-            print("WEmulateError > %s" % e.args[0])
-            app.exit_code = 1
-
-            if app.debug is True:
-                import traceback
-
-                traceback.print_exc()
-
-        except CaughtSignal as e:
-            # Default Cement signals are SIGINT and SIGTERM, exit 0 (non-error)
-            print("\n%s" % e)
-            app.exit_code = 0
+            typer.echo(e)
+            raise typer.Exit()
+    else:
+        typer.echo("Please start as root user")
+        raise typer.Exit()
 
 
 if __name__ == "__main__":
-    main()
+    app()
