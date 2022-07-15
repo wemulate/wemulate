@@ -139,7 +139,7 @@ EOF
 
 configure_mgmt_interface() {
   local sudo="$1"
-  $sudo wemulate config set -m $INTERFACE
+  $sudo wemulate config set -m $INTERFACE --force
   completed "Management interface $INTERFACE is configured"
 }
 

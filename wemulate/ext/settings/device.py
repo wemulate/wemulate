@@ -2,6 +2,7 @@ import netifaces
 from typing import List, Optional
 from wemulate.core.exc import WEmulateExecutionError, WemulateMgmtInterfaceError
 import wemulate.core.database.utils as dbutils
+from wemulate.ext.utils.reset import reset_device
 
 
 def _interface_present_on_device(interface_name: str) -> bool:
@@ -61,17 +62,42 @@ def get_mgmt_interfaces() -> List[str]:
 
 
 def get_all_interfaces_on_device() -> List[str]:
+    """
+    Returns all interfaces on the device.
+
+    Returns:
+        Returns a list of interfaces.
+    """
     return [name for name in netifaces.interfaces() if name.startswith(("eth", "en"))]
 
 
 def add_mgmt_interface(interface_name: str) -> None:
-    if interface_name in get_mgmt_interfaces():
-        return
+    """
+    Adds an interface as management interfaces.
+
+    Args:
+        interface_name: Name of the interface
+
+    Returns:
+        None
+    """
     if _interface_present_on_device(interface_name):
-        dbutils.delete_logical_interfaces()
         dbutils.create_mgmt_interface(interface_name)
     else:
         raise WemulateMgmtInterfaceError(interface_name)
+
+
+def reset_mgmt_interfaces() -> None:
+    """
+    Resets all management interfaces and all linked settings.
+
+    Returns:
+        None
+    """
+    reset_device()
+    dbutils.delete_logical_interfaces()
+    dbutils.delete_mgmt_interfaces()
+    dbutils.delete_interfaces()
 
 
 def get_non_mgmt_interfaces() -> List[str]:

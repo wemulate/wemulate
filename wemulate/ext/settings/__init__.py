@@ -6,5 +6,6 @@ from wemulate.ext.settings.device import (
     add_mgmt_interface,
     get_non_mgmt_interfaces,
     check_if_mgmt_interface_set,
+    reset_mgmt_interfaces,
 )
 from wemulate.ext.settings.config import get_config, get_config_path, get_db_location

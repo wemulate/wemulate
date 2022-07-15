@@ -250,3 +250,13 @@ def create_mgmt_interface(session: Session, interface_name: str) -> None:
 @use_db_session
 def delete_logical_interfaces(session: Session) -> None:
     session.query(LogicalInterfaceModel).delete()
+
+
+@use_db_session
+def delete_mgmt_interfaces(session: Session) -> None:
+    session.query(ManagementInterfaceModel).delete()
+
+
+@use_db_session
+def delete_interfaces(session: Session) -> None:
+    session.query(InterfaceModel).delete()

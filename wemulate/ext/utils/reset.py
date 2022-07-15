@@ -23,7 +23,7 @@ def reset_device() -> None:
 
 def reset_connection(connection_name: str) -> None:
     """
-    Creates a new connection in the database and adds a linux bridge on the host system.
+    Deletes all parameter on a specific connection
 
     Args:
         connection_name: Name of the connection which should be reset
