@@ -1,4 +1,5 @@
 from typing import List, Optional
+from sqlalchemy import MetaData
 from sqlalchemy.orm.session import Session
 from wemulate.core.database.decorators import use_db_session
 from wemulate.core.database.models import (
@@ -244,3 +245,8 @@ def get_mgmt_interfaces(session: Session) -> List[ManagementInterfaceModel]:
 def create_mgmt_interface(session: Session, interface_name: str) -> None:
     mgmt_interface: ManagementInterfaceModel = ManagementInterfaceModel(interface_name)
     session.add(mgmt_interface)
+
+
+@use_db_session
+def delete_logical_interfaces(session: Session) -> None:
+    session.query(LogicalInterfaceModel).delete()

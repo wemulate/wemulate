@@ -68,6 +68,7 @@ def add_mgmt_interface(interface_name: str) -> None:
     if interface_name in get_mgmt_interfaces():
         return
     if _interface_present_on_device(interface_name):
+        dbutils.delete_logical_interfaces()
         dbutils.create_mgmt_interface(interface_name)
     else:
         raise WemulateMgmtInterfaceError(interface_name)
