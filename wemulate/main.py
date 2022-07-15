@@ -1,14 +1,14 @@
 from typing import Optional
 from wemulate.core.exc import WEmulateError
 from wemulate.ext.settings import check_if_mgmt_interface_set
-from core.version import get_version
-from core.database.setup import pre_setup_database
-from controllers.add_controller import app as add_app
-from controllers.set_controller import app as set_app
-from controllers.config_controller import app as config_app
-from controllers.show_controller import app as show_app
-from controllers.delete_controller import app as delete_app
-from controllers.reset_controller import app as reset_app
+from wemulate.core.version import get_version
+from wemulate.core.database.setup import pre_setup_database
+from wemulate.controllers.add_controller import app as add_app
+from wemulate.controllers.set_controller import app as set_app
+from wemulate.controllers.config_controller import app as config_app
+from wemulate.controllers.show_controller import app as show_app
+from wemulate.controllers.delete_controller import app as delete_app
+from wemulate.controllers.reset_controller import app as reset_app
 import os
 import typer
 
