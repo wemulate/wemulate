@@ -13,28 +13,27 @@ Overview
 .. code-block:: console
 
     $ wemulate
-    usage: wemulate [-h] [-d] [-q] [-v] {load,save,config,reset,delete,set,list,add,show} ...
+    Usage: main.py [OPTIONS] COMMAND [ARGS]...
 
-    A modern WAN Emulator
+    A modern WAN emulator
 
-    optional arguments:
-    -h, --help            show this help message and exit
-    -d, --debug           full application debug mode
-    -q, --quiet           suppress all console output
-    -v, --version         show program's version number and exit
+    Options:
+    -v, --version                   Show program's version number and exit
+    --install-completion [bash|zsh|fish|powershell|pwsh]
+                                    Install completion for the specified shell.
+    --show-completion [bash|zsh|fish|powershell|pwsh]
+                                    Show completion for the specified shell, to
+                                    copy it or customize the installation.
 
-    sub-commands:
-    {load,save,config,reset,delete,set,list,add,show}
-        load                load a saved configuration
-        save                save the current configuration
-        config              configuration of the application
-        reset               reset connection or program
-        delete              delete parameter or connection
-        set                 set specific parameter on connections
-        list                list specific informations
-        add                 add a new connection or parameter
-        show                show specific informations
+    --help                          Show this message and exit.
 
+    Commands:
+    add     add a new connection or parameter
+    config  configure the application settings
+    delete  delete a connection or parameter
+    reset   reset connection or the whole application settings
+    set     set parameters on a connection
+    show    show specific information
 
 List all Management interfaces
 **********************************************
@@ -70,7 +69,7 @@ Adds a new connection on which traffic control can be applied.
 
 .. code-block:: console
 
-    $ wemulate add connection -n <connection name> -i <interface one>,<interface two>
+    $ wemulate add connection -n <connection name> -i <interface one> <interface two>
 
 Delete Connection
 ***********************
@@ -115,20 +114,18 @@ By adding parameters to a connection, the parameters which are already set on th
 .. code-block:: console
 
     $ wemulate add parameter -h
-    usage: wemulate add parameter [-h] [-n CONNECTION_NAME] [-b BANDWIDTH] [-j JITTER] [-d DELAY] [-l PACKET_LOSS]
+    Usage: main.py add parameter [OPTIONS]
 
-    optional arguments:
-    -h, --help            show this help message and exit
-    -n CONNECTION_NAME, --connection-name CONNECTION_NAME
-                            name of the connection on which the parameters should be applied
-    -b BANDWIDTH, --bandwidth BANDWIDTH
-                            bandwidth parameter in mbps
-    -j JITTER, --jitter JITTER
-                            jitter parameter
-    -d DELAY, --delay DELAY
-                            delay parameter in ms
-    -l PACKET_LOSS, --packet-loss PACKET_LOSS
-                            packet loss parameter in percentage
+    add parameter on a specific connection, previously added parameters will
+    not be changed
+
+    Options:
+    -n, --connection-name TEXT  [required]
+    -d, --delay INTEGER
+    -j, --jitter INTEGER
+    -b, --bandwidth INTEGER
+    -l, --packet-loss INTEGER
+    --help                      Show this message and exit.
 
 .. code-block:: console
 
@@ -141,20 +138,18 @@ When setting parameters on a connection, the parameters which are already set ar
 .. code-block:: console
 
     $ wemulate set parameter -h
-    usage: wemulate set parameter [-h] [-n CONNECTION_NAME] [-b BANDWIDTH] [-j JITTER] [-d DELAY] [-l PACKET_LOSS]
+    Usage: main.py set parameter [OPTIONS]
 
-    optional arguments:
-    -h, --help            show this help message and exit
-    -n CONNECTION_NAME, --connection-name CONNECTION_NAME
-                            name of the connection on which the parameters should be applied
-    -b BANDWIDTH, --bandwidth BANDWIDTH
-                            bandwidth parameter in mbps
-    -j JITTER, --jitter JITTER
-                            jitter parameter
-    -d DELAY, --delay DELAY
-                            delay parameter in ms
-    -l PACKET_LOSS, --packet-loss PACKET_LOSS
-                            packet loss parameter in percentage
+    set parameter on a specific connection, previously added parameters will
+    be overriden
+
+    Options:
+    -n, --connection-name TEXT  [required]
+    -d, --delay INTEGER
+    -j, --jitter INTEGER
+    -b, --bandwidth INTEGER
+    -l, --packet-loss INTEGER
+    --help                      Show this message and exit.
 
 .. code-block:: console
 
@@ -177,3 +172,21 @@ All parameters and connections will be resettet.
 
     $ wemulate reset device
 
+Configure Management interfaces
+***********************************
+
+.. code-block:: console
+
+    $ wemulate config set --help
+    Usage: main.py config set [OPTIONS]
+
+    set the management interface(s)
+
+    Options:
+    -m, --management-interface TEXT
+                                    [default: ]
+    --help                          Show this message and exit.
+
+.. code-block:: console
+    
+    $ wemulate config set -m <interface name>
