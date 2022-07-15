@@ -132,11 +132,15 @@ create_default_configuration() {
   $sudo bash -c "cat > "${path}"" << EOF
 ---
 wemulate:
-  management_interfaces:
-    - $INTERFACE
   db_location: /etc/wemulate/wemulate.db
 EOF
-  completed "Default configuration $path with management interface $INTERFACE is generated"
+  completed "Default configuration $path is generated"
+}
+
+configure_mgmt_interface() {
+  local sudo="$1"
+  $sudo wemulate config set -m $INTERFACE
+  completed "Management interface $INTERFACE is configured"
 }
 
 create_startup_configuration() {
@@ -302,6 +306,7 @@ install() {
   completed "Install wemulate $RELEASE"
   printf '\n'
   $sudo pip3 install wemulate${RELEASE}
+  configure_mgmt_interface $sudo
 
   if [ $ENABLE_FRONTEND = true ]; then
     install_frontend $sudo
@@ -427,8 +432,6 @@ info "Please follow the steps to use WEmulate on your machine:
 
       ---
       wemulate:
-        management_interfaces:
-            - $INTERFACE
         db_location: $CONFIGURATION_DIR/wemulate.db
 
   ${BOLD}${UNDERLINE}Documentation${NO_COLOR}
