@@ -4,6 +4,7 @@ from wemulate.ext.settings import check_if_mgmt_interface_set
 from core.version import get_version
 from core.database.setup import pre_setup_database
 from controllers.add_controller import app as add_app
+from controllers.set_controller import app as set_app
 from controllers.config_controller import app as config_app
 from controllers.show_controller import app as show_app
 from controllers.delete_controller import app as delete_app
@@ -15,6 +16,7 @@ app = typer.Typer(
     help="A modern WAN emulator",
 )
 app.add_typer(add_app, name="add", no_args_is_help=True)
+app.add_typer(set_app, name="set", no_args_is_help=True)
 app.add_typer(config_app, name="config", no_args_is_help=True)
 app.add_typer(show_app, name="show", no_args_is_help=True)
 app.add_typer(delete_app, name="delete", no_args_is_help=True)
