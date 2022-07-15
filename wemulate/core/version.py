@@ -1,5 +1,3 @@
-from cement.utils.version import get_version as cement_get_version
-
 VERSION = (1, 0, 3, "final", "0")
 
 

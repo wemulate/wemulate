@@ -1,9 +1,8 @@
 import os
 import shutil
+import subprocess
 from typing import Dict, List, Tuple
-from cement.core import interface
 from pyroute2 import IPRoute
-from cement import shell
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
 CONFIG_PATH: str = "/etc/wemulate/config"
@@ -14,10 +13,10 @@ ip: IPRoute = IPRoute()
 
 def _execute_in_shell(command: str) -> None:
     try:
-        stdout, stderr, exitcode = shell.cmd(command)
-        if stderr and exitcode != 0:
+        completed_process = subprocess.run(command.split())
+        if completed_process.stderr and completed_process.returncode != 0:
             raise WEmulateExecutionError(
-                f"stdout: {stdout} | stderr: {stderr} | exitcode: {exitcode}"
+                f"stdout: {completed_process.stdout} | stderr: {completed_process.stderr} | exitcode: {completed_process.returncode}"
             )
     except WEmulateExecutionError as e:
         raise e
