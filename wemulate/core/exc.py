@@ -1,4 +1,3 @@
-from cement.core import interface
 
 
 class WEmulateError(Exception):
