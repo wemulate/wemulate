@@ -2,7 +2,6 @@ import typer
 import wemulate.ext.utils as utils
 from typing import Dict, List
 from wemulate.core.database.models import ConnectionModel
-from cement import Controller, ex
 import wemulate.controllers.common as common
 
 
