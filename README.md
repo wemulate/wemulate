@@ -26,3 +26,13 @@ $ wemulate delete connection -n connectionname
 # Add parameters
 $ wemulate add parameter -n connectionname -j 20 -d 40
 ```
+
+## Development
+Configure poetry to create the environment inside the project path, in order that VSCode can recognize the virtual environment.
+```
+$ poetry config virtualenvs.in-project true
+```
+Install the virtualenv.
+```
+$ poetry install
+```
