@@ -13,7 +13,7 @@ ip: IPRoute = IPRoute()
 
 def _execute_in_shell(command: str) -> None:
     try:
-        completed_process = subprocess.run(command.split())
+        completed_process = subprocess.run(command.split(), capture_output=True)
         if completed_process.stderr and completed_process.returncode != 0:
             raise WEmulateExecutionError(
                 f"stdout: {completed_process.stdout} | stderr: {completed_process.stderr} | exitcode: {completed_process.returncode}"
