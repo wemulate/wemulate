@@ -209,7 +209,7 @@ install_frontend() {
 
 install_cli() {
   confirm "Do you want to install the CLI module"
-  sudo pup3 install wemulate==$RELEASE
+  sudo pip3 install wemulate==$RELEASE
   completed "CLI module installed"
 }
 
