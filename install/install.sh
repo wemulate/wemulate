@@ -220,10 +220,10 @@ install() {
   create_startup_configuration
   configure_mgmt_interfaces
   if [ -n "${API-}" ]; then
-    install_api $sudo
+    install_api
   fi
   if [ -n "${FRONTEND-}" ]; then
-    install_frontend $sudo 
+    install_frontend
   fi
 }
 
