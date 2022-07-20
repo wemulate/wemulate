@@ -18,14 +18,14 @@ NO_COLOR="$(tput sgr0 2>/dev/null || printf '')"
 help() {
    echo "Script to install WEmulate (a modern WAN Emulator)"
    echo
-   echo "Syntax: scriptTemplate [-h|f|r|i|v|a]"
+   echo "Syntax: install.sh [-h|f|r|i|v|a]"
    echo "options:"
-   echo "h     Print this Help."
-   echo "f     Force install."
-   echo "r     Release to install."
-   echo "i     Management interfaces to configure (e.g ens2,ens3)."
-   echo "v     Install frontend module."
-   echo "a     Install api module."
+   echo "-h               Print this Help."
+   echo "-f               Force install."
+   echo "-r <release>     Release to install."
+   echo "-i <int1,int2>   Management interfaces to configure."
+   echo "-v               Install frontend module."
+   echo "-a               Install api module."
    echo
 }
 
