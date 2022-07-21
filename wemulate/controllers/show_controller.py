@@ -9,7 +9,6 @@ from wemulate.utils.rendering import rendering
 
 CONNECTION_HEADERS: List[str] = [
     "NAME",
-    "BIDIRECTIONAL",
     "1. INTERFACE",
     "2. INTERFACE",
     "PARAMETERS",
@@ -24,7 +23,6 @@ def _construct_connection_data_to_render(
     render_data.append(
         [
             connection.connection_name,
-            connection.bidirectional,
             connection.first_logical_interface.logical_name,
             connection.second_logical_interface.logical_name,
             rendering(

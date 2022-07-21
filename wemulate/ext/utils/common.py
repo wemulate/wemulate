@@ -1,95 +1,79 @@
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
-from typing import Dict
+from typing import Dict, Optional
 from wemulate.core.database.models import (
     BANDWIDTH,
+    INCOMING,
     JITTER,
     DELAY,
+    OUTGOING,
     PACKET_LOSS,
+    PARAMETERS,
     ConnectionModel,
 )
 
 
-def _set_bandwidth(
+def _set_specific_parameter(
     connection: ConnectionModel,
+    parameter_name: str,
     parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
+    current_parameters: Dict[str, Dict[str, int]],
+    direction: str,
 ) -> None:
-    if BANDWIDTH in parameters:
-        current_parameters[BANDWIDTH] = parameters[BANDWIDTH]
-        dbutils.create_or_update_parameter(
-            connection.connection_id, BANDWIDTH, parameters[BANDWIDTH]
-        )
-
-
-def _set_jitter(
-    connection: ConnectionModel,
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-) -> None:
-    if JITTER in parameters:
-        current_parameters[JITTER] = parameters[JITTER]
-        dbutils.create_or_update_parameter(
-            connection.connection_id, JITTER, parameters[JITTER]
-        )
-
-
-def _set_delay(
-    connection: ConnectionModel,
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-) -> None:
-    if DELAY in parameters:
-        current_parameters[DELAY] = parameters[DELAY]
-        dbutils.create_or_update_parameter(
-            connection.connection_id, DELAY, parameters[DELAY]
-        )
-
-
-def _set_packet_loss(
-    connection: ConnectionModel,
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-) -> None:
-    if PACKET_LOSS in parameters:
-        current_parameters[PACKET_LOSS] = parameters[PACKET_LOSS]
-        dbutils.create_or_update_parameter(
-            connection.connection_id, PACKET_LOSS, parameters[PACKET_LOSS]
-        )
+    current_parameters[direction][parameter_name] = parameters[parameter_name]
+    dbutils.create_or_update_parameter(
+        connection.connection_id,
+        parameter_name,
+        parameters[parameter_name],
+        direction,
+    )
 
 
 def create_or_update_parameters_in_db(
     connection: ConnectionModel,
     parameters: Dict[str, int],
+    direction: Optional[str],
     current_parameters=None,
-) -> Dict[str, int]:
+) -> Dict[str, Dict[str, int]]:
     """
     Creates and updates parameters in the database.
 
     Args:
         connection: Connection object on which the updates should be made.
         parameters: Parameters which should be updated.
+        direction: Direction on which the parameter should be applied (bidirectional if None)
         current_parameters: Current parameters which should be updated.
 
     Returns:
         Returns the current_parameters which are set in the database.
     """
-    if not current_parameters:
-        current_parameters: Dict = {}
-    _set_bandwidth(connection, parameters, current_parameters)
-    _set_jitter(connection, parameters, current_parameters)
-    _set_delay(connection, parameters, current_parameters)
-    _set_packet_loss(connection, parameters, current_parameters)
+    current_parameters: Dict[str, Dict[str, int]] = current_parameters or {
+        OUTGOING: {},
+        INCOMING: {},
+    }
+    for direction in [INCOMING, OUTGOING] if direction is None else [direction]:
+        for parameter_name in PARAMETERS:
+            if parameter_name in parameters:
+                _set_specific_parameter(
+                    connection,
+                    parameter_name,
+                    parameters,
+                    current_parameters,
+                    direction,
+                )
     return current_parameters
 
 
-def set_parameters_with_tc(connection: ConnectionModel, parameters: Dict[str, int]):
+def set_parameters_with_tc(
+    connection: ConnectionModel, parameters: Dict[str, int], direction: Optional[str]
+):
     """
     Set parameters on the host system on the given connection.
 
     Args:
         connection: Connection object on which the updates should be made.
         parameters: Parameters which should be configured.
+        direction: Direction on which the parameter should be applied (bidirectional if None)
 
     Returns:
         None
@@ -100,6 +84,7 @@ def set_parameters_with_tc(connection: ConnectionModel, parameters: Dict[str, in
             connection.first_logical_interface_id
         ).physical_name,
         parameters,
+        direction,
     )
 
 
