@@ -29,11 +29,21 @@ def _set_specific_parameter(
     )
 
 
+def get_current_applied_parameters(connection_name: str):
+    connection: ConnectionModel = dbutils.get_connection_by_name(connection_name)
+    current_parameters: Dict[str, Dict[str, int]] = {OUTGOING: {}, INCOMING: {}}
+    for parameter in connection.parameters:
+        current_parameters[parameter.direction][
+            parameter.parameter_name
+        ] = parameter.value
+    return connection, current_parameters
+
+
 def create_or_update_parameters_in_db(
     connection: ConnectionModel,
     parameters: Dict[str, int],
     direction: Optional[str],
-    current_parameters=None,
+    current_parameters=Dict[str, Dict[str, int]],
 ) -> Dict[str, Dict[str, int]]:
     """
     Creates and updates parameters in the database.
@@ -47,10 +57,6 @@ def create_or_update_parameters_in_db(
     Returns:
         Returns the current_parameters which are set in the database.
     """
-    current_parameters: Dict[str, Dict[str, int]] = current_parameters or {
-        OUTGOING: {},
-        INCOMING: {},
-    }
     for direction in [INCOMING, OUTGOING] if direction is None else [direction]:
         for parameter_name in PARAMETERS:
             if parameter_name in parameters:
@@ -65,7 +71,9 @@ def create_or_update_parameters_in_db(
 
 
 def set_parameters_with_tc(
-    connection: ConnectionModel, parameters: Dict[str, int], direction: Optional[str]
+    connection: ConnectionModel,
+    parameters: Dict[str, Dict[str, int]],
+    direction: Optional[str],
 ):
     """
     Set parameters on the host system on the given connection.

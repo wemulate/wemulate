@@ -39,16 +39,6 @@ def add_connection(
     )
 
 
-def _get_current_applied_parameters(connection_name: str):
-    connection: ConnectionModel = dbutils.get_connection_by_name(connection_name)
-    current_parameters: Dict[str, Dict[str, int]] = {OUTGOING: {}, INCOMING: {}}
-    for parameter in connection.parameters:
-        current_parameters[parameter.direction][
-            parameter.parameter_name
-        ] = parameter.value
-    return connection, current_parameters
-
-
 def add_parameter(
     connection_name: str, parameters: Dict[str, int], direction: Optional[str]
 ) -> None:
@@ -64,7 +54,9 @@ def add_parameter(
     Returns:
         None
     """
-    connection, current_parameters = _get_current_applied_parameters(connection_name)
+    connection, current_parameters = common.get_current_applied_parameters(
+        connection_name
+    )
     common.set_parameters_with_tc(
         connection,
         common.create_or_update_parameters_in_db(

@@ -1,3 +1,4 @@
+from typing import Optional
 import typer
 import wemulate.ext.utils as utils
 import wemulate.controllers.common as common
@@ -16,13 +17,19 @@ def parameter(
     jitter: int = common.JITTER_PARAMETER,
     bandwidth: int = common.BANDWIDTH_PARAMTER,
     packet_loss: int = common.PACKET_LOSS_PARAMETER,
+    source: str = common.SOURCE,
+    destination: str = common.DESTINATION,
 ):
     common.check_if_connection_exists_in_db(connection_name)
     common.validate_parameter_arguments(delay, jitter, bandwidth, packet_loss)
+    direction: Optional[str] = common.identify_direction(
+        source, destination, connection_name
+    )
     try:
         utils.set_parameter(
             connection_name,
             common.generate_pargs(delay, jitter, bandwidth, packet_loss),
+            direction,
         )
         typer.echo(f"successfully set parameters to connection {connection_name}")
     except WEmulateDatabaseError as e:

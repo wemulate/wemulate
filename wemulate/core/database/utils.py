@@ -209,11 +209,16 @@ def create_connection(
 
 
 @use_db_session
-def delete_all_parameter_on_connection(session: Session, connection_id: int) -> None:
-    (
-        session.query(ParameterModel)
-        .filter(ParameterModel.belongs_to_connection_id == connection_id)
-        .delete()
+def delete_all_parameter_on_connection(
+    session: Session, connection_id: int, direction=None
+) -> None:
+    query = session.query(ParameterModel).filter(
+        ParameterModel.belongs_to_connection_id == connection_id
+    )
+    query = (
+        query.filter(ParameterModel.direction == direction).delete()
+        if direction is not None
+        else query.delete()
     )
 
 
