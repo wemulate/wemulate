@@ -4,7 +4,7 @@ import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
 from typing import List
-from wemulate.core.database.models import ConnectionModel
+from wemulate.core.database.models import ConnectionModel, ParameterModel
 from wemulate.utils.rendering import rendering
 
 CONNECTION_HEADERS: List[str] = [
@@ -17,16 +17,30 @@ SHOW_CONNECTION_TEMPLATE_FILE: str = "show_connection.jinja2"
 INTERFACE_HEADER = ["NAME", "PHYSICAL", "IP", "MAC"]
 
 
+def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[ParameterModel]:
+    parameters_to_render: List[ParameterModel] = parameters.copy()
+    for i, current_parameter in enumerate(parameters):
+        for parameter_to_check in parameters[i + 1 :]:
+            if (
+                parameter_to_check.parameter_name == current_parameter.parameter_name
+                and parameter_to_check.value == current_parameter.value
+            ):
+                parameters_to_render[i].direction = None
+                parameters_to_render.remove(parameter_to_check)
+    return parameters_to_render
+
+
 def _construct_connection_data_to_render(
     connection: ConnectionModel, render_data: List
 ) -> None:
+    parameters: List[ParameterModel] = _get_parameters_to_render(connection.parameters)
     render_data.append(
         [
             connection.connection_name,
             connection.first_logical_interface.logical_name,
             connection.second_logical_interface.logical_name,
             rendering(
-                {"parameters": connection.parameters},
+                {"parameters": parameters},
                 SHOW_CONNECTION_TEMPLATE_FILE,
             ),
         ]
