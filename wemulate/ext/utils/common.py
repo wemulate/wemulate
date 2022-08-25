@@ -2,12 +2,8 @@ import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
 from typing import Dict, Optional
 from wemulate.core.database.models import (
-    BANDWIDTH,
     INCOMING,
-    JITTER,
-    DELAY,
     OUTGOING,
-    PACKET_LOSS,
     PARAMETERS,
     ConnectionModel,
 )
@@ -96,70 +92,88 @@ def set_parameters_with_tc(
     )
 
 
-def _delete_bandwidth(
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
+def _delete_specific_parameter(
     connection: ConnectionModel,
+    parameter_name: str,
+    direction: str,
 ) -> None:
-    if BANDWIDTH in parameters and BANDWIDTH in current_parameters:
-        current_parameters.pop(BANDWIDTH)
-        dbutils.delete_parameter_on_connection_id(
-            connection.connection_id,
-            BANDWIDTH,
-        )
+
+    dbutils.delete_parameter_on_connection_id(
+        connection.connection_id, parameter_name, direction
+    )
 
 
-def _delete_jitter(
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-    connection: ConnectionModel,
-) -> None:
-    if JITTER in parameters and JITTER in current_parameters:
-        current_parameters.pop(JITTER)
-        dbutils.delete_parameter_on_connection_id(connection.connection_id, JITTER)
+# def _delete_bandwidth(
+#     parameters: Dict[str, int],
+#     current_parameters: Dict[str, int],
+#     connection: ConnectionModel,
+# ) -> None:
+#     if BANDWIDTH in parameters and BANDWIDTH in current_parameters:
+#         current_parameters.pop(BANDWIDTH)
+#         dbutils.delete_parameter_on_connection_id(
+#             connection.connection_id,
+#             BANDWIDTH,
+#         )
 
 
-def _delete_delay(
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-    connection: ConnectionModel,
-) -> None:
-    if DELAY in parameters and DELAY in current_parameters:
-        current_parameters.pop(DELAY)
-        dbutils.delete_parameter_on_connection_id(connection.connection_id, DELAY)
+# def _delete_jitter(
+#     parameters: Dict[str, int],
+#     current_parameters: Dict[str, int],
+#     connection: ConnectionModel,
+# ) -> None:
+#     if JITTER in parameters and JITTER in current_parameters:
+#         current_parameters.pop(JITTER)
+#         dbutils.delete_parameter_on_connection_id(connection.connection_id, JITTER)
 
 
-def _delete_packet_loss(
-    parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
-    connection: ConnectionModel,
-) -> None:
-    if PACKET_LOSS in parameters and PACKET_LOSS in current_parameters:
-        current_parameters.pop(PACKET_LOSS)
-        dbutils.delete_parameter_on_connection_id(
-            connection.connection_id,
-            PACKET_LOSS,
-        )
+# def _delete_delay(
+#     parameters: Dict[str, int],
+#     current_parameters: Dict[str, int],
+#     connection: ConnectionModel,
+# ) -> None:
+#     if DELAY in parameters and DELAY in current_parameters:
+#         current_parameters.pop(DELAY)
+#         dbutils.delete_parameter_on_connection_id(connection.connection_id, DELAY)
+
+
+# def _delete_packet_loss(
+#     parameters: Dict[str, int],
+#     current_parameters: Dict[str, int],
+#     connection: ConnectionModel,
+# ) -> None:
+#     if PACKET_LOSS in parameters and PACKET_LOSS in current_parameters:
+#         current_parameters.pop(PACKET_LOSS)
+#         dbutils.delete_parameter_on_connection_id(
+#             connection.connection_id,
+#             PACKET_LOSS,
+#         )
 
 
 def delete_parameters_in_db(
     parameters: Dict[str, int],
-    current_parameters: Dict[str, int],
+    current_parameters: Dict[str, Dict[str, int]],
     connection: ConnectionModel,
-) -> Dict[str, int]:
+    direction: Optional[str],
+) -> Dict[str, Dict[str, int]]:
     """
     Delete specific parameters in db.
 
     Args:
         parameters: Parameters which should be deleted.
-        current_parameters: The current parameters on the connection.
+        current_parameters: The current parameters of the connection.
         connection: Connection object on which the updates should be made.
+        direction: Direction on which the parameter should be applied (bidirectional if None)
 
     Returns:
         Returns the current parameters in the database.
     """
-    _delete_bandwidth(parameters, current_parameters, connection)
-    _delete_jitter(parameters, current_parameters, connection)
-    _delete_delay(parameters, current_parameters, connection)
-    _delete_packet_loss(parameters, current_parameters, connection)
+
+    for direction in [INCOMING, OUTGOING] if direction is None else [direction]:
+        for parameter_name in PARAMETERS:
+            if (
+                parameter_name in parameters
+                and parameter_name in current_parameters[direction]
+            ):
+                _delete_specific_parameter(connection, parameter_name, direction)
+                current_parameters[direction].pop(parameter_name)
     return current_parameters

@@ -44,12 +44,13 @@ def add_parameter(
 ) -> None:
     """
     Add parameters to the already configured parameters on the given connection.
-    If a direction is provided, the parameter will be applied on the given direction.
+    If a direction is provided, the parameter will be applied only on the given direction.
     If not, the parameter will be applied in both directions (bidirectional, in-/outgoing).
 
     Args:
         connection_name: Name of the connection on which the parameters should be configured.
         parameters: Parameters which should be configured.
+        direction: Direction on which the parameter should be applied (bidirectional if None)
 
     Returns:
         None

@@ -236,10 +236,10 @@ def create_or_update_parameter(
 
 @use_db_session
 def delete_parameter_on_connection_id(
-    session: Session, connection_id: int, parameter_name: str
+    session: Session, connection_id: int, parameter_name: str, direction: str
 ) -> None:
     parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
-        connection_id, parameter_name
+        connection_id, parameter_name, direction
     )
     if parameter:
         session.delete(parameter)
