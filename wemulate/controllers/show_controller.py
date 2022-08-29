@@ -25,8 +25,11 @@ def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[Paramete
                 parameter_to_check.parameter_name == current_parameter.parameter_name
                 and parameter_to_check.value == current_parameter.value
             ):
-                parameters_to_render[i].direction = None
+                parameters_to_render[
+                    parameters_to_render.index(current_parameter)
+                ].direction = None
                 parameters_to_render.remove(parameter_to_check)
+                break
     return parameters_to_render
 
 

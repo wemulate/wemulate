@@ -228,7 +228,7 @@ def create_or_update_parameter(
     parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
         connection_id, parameter_name, direction
     )
-    if parameter:
+    if parameter is not None:
         _update_parameter(parameter, value)
     else:
         _create_parameter(parameter_name, value, direction, connection_id)

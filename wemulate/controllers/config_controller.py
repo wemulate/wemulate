@@ -19,7 +19,7 @@ def set(
         typer.echo("Changing the management interfaces will reset the device.")
         if not forcing:
             confirmation = typer.prompt("Do you want to proceed (y / yes)?")
-            if confirmation != "y" or confirmation != "yes":
+            if confirmation != "y" and confirmation != "yes":
                 typer.echo("Please confirm with y / yes")
                 typer.Exit()
         settings.reset_mgmt_interfaces()
