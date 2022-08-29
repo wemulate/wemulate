@@ -301,6 +301,55 @@ If a direction is given, only the parameter in this direction are overwritten.
     | test   | LAN-A          | LAN-B          | <-> delay: 20 |
     +--------+----------------+----------------+---------------+
 
+Delete parameter on Connection
+*********************************
+Delete parameter(s) on a specific connection.
+If source and destination information is not given the parameter will removed completely.
+
+.. code-block:: console
+
+    $ wemulate show connections
+    +--------+----------------+----------------+---------------------+
+    | NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |
+    +========+================+================+=====================+
+    | test   | LAN-A          | LAN-B          | <-- delay: 100      |
+    |        |                |                | <-> jitter: 10      |
+    |        |                |                | <-- packet_loss: 80 |
+    +--------+----------------+----------------+---------------------+
+
+    $ wemulate delete parameter -n test -j -src LAN-A -dst LAN-B
+    Successfully deleted parameter on connection test
+
+    $ wemulate show connections
+    +--------+----------------+----------------+---------------------+
+    | NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |
+    +========+================+================+=====================+
+    | test   | LAN-A          | LAN-B          | <-- delay: 100      |
+    |        |                |                | <-- jitter: 10      |
+    |        |                |                | <-- packet_loss: 80 |
+    +--------+----------------+----------------+---------------------+
+
+    $ wemulate delete parameter -n test -j
+    Successfully deleted parameter on connection test
+
+    $ wemulate show connections
+    +--------+----------------+----------------+---------------------+
+    | NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |
+    +========+================+================+=====================+
+    | test   | LAN-A          | LAN-B          | <-- delay: 100      |
+    |        |                |                | <-- packet_loss: 80 |
+    +--------+----------------+----------------+---------------------+
+
+    $ wemulate delete parameter -n test -l -src LAN-B -dst LAN-A
+    Successfully deleted parameter on connection test
+
+    $ wemulate show connections
+    +--------+----------------+----------------+----------------+
+    | NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS     |
+    +========+================+================+================+
+    | test   | LAN-A          | LAN-B          | <-- delay: 100 |
+    +--------+----------------+----------------+----------------+
+
 Reset Connection
 *****************************
 All parameters on a specific connection will be resettet.
