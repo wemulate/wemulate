@@ -1,4 +1,4 @@
-#!/usr/bin/env sh
+/#!/usr/bin/env sh
 
 # shellcheck disable=SC2039
 
@@ -132,6 +132,8 @@ create_default_configuration() {
   $sudo bash -c "cat > "${path}"" << EOF
 ---
 wemulate:
+  management_interfaces:
+      - $INTERFACE
   db_location: /etc/wemulate/wemulate.db
 EOF
   completed "Default configuration $path is generated"
@@ -139,7 +141,7 @@ EOF
 
 configure_mgmt_interface() {
   local sudo="$1"
-  $sudo wemulate config set -m $INTERFACE --force
+  #$sudo wemulate config set -m $INTERFACE --force # This command result in error config not valid paramater
   completed "Management interface $INTERFACE is configured"
 }
 
@@ -225,7 +227,7 @@ install_frontend () {
   info "Install frontend..."
   printf '\n'
   install_reverse_proxy $sudo
-  $(curl -fsSL -o /var/www/html/release.zip https://github.com/wemulate/wemulate-frontend/releases/latest/download/release.zip)
+  $sudo wget -O /var/www/html/release.zip https://github.com/wemulate/wemulate-frontend/releases/latest/download/release.zip
   $sudo apt -y install unzip
   $sudo unzip -o -q /var/www/html/release.zip -d /var/www/html
   $sudo rm -f /var/www/html/release.zip
@@ -238,9 +240,9 @@ install_reverse_proxy () {
   $sudo apt update
   $sudo apt -y install nginx
   create_nginx_configuration $sudo
-  $sudo rm /etc/nginx/sites-enabled/default
-  $sudo rm /etc/nginx/sites-available/default
-  $sudo rm /var/www/html/index.nginx-debian.html
+  $sudo rm -f /etc/nginx/sites-enabled/default
+  $sudo rm -f /etc/nginx/sites-available/default
+  $sudo rm -f /var/www/html/index.nginx-debian.html
   $sudo systemctl restart nginx.service
 }
 
@@ -326,7 +328,7 @@ if [ -z "${RELEASE-}" ]; then
 fi
 
 if [ -z "${INTERFACE-}" ]; then
-  INTERFACE="ens2"
+  INTERFACE="$(ip a | sed -n 's/.*\(eth[0-9]\+\|ens[0-9]\+\|enp[0-9]s[0-9]\+\|eno[0-9]\+\).*/\1/p' | head -n 1)"
 fi
 
 if [ -z "${ENABLE_API-}"]; then
@@ -432,6 +434,8 @@ info "Please follow the steps to use WEmulate on your machine:
 
       ---
       wemulate:
+        management_interfaces:
+            - $INTERFACE
         db_location: $CONFIGURATION_DIR/wemulate.db
 
   ${BOLD}${UNDERLINE}Documentation${NO_COLOR}
