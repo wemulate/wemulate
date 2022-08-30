@@ -8,7 +8,7 @@ The following drawings should clarify the handling:
 
 .. code-block:: bash 
 
-                            +-------------------WEmulate-------------------+
+                            +-----------------Linux Bridge-----------------+
                             |                                              |
                             |    +-----------+           +-----------+     |
                             |    |           |           |           |     |
@@ -20,16 +20,16 @@ The following drawings should clarify the handling:
                      incoming       +-+  +-+ outgoing       |    |
                      will influence  |    | will influence  |    |
                      traffic here    |    | traffic here    |    |
-                                   |    |                 |    |
-                            request     |    |                 |    |
-       +----------------+----------------+    |                 |    |            +---------------+
-       |                |                     |                 |    |  request   |               |
-       |  Source        |    reply            |                 |    +------------>  Destination  |
-       |                <---------------------+                 |                 |               |
-       |                |                                       |      reply      |               |
-       |                |                                       +-----------------+               |
-       |                |                                                         |               |
-       |                |                                                         |               |
-       |                |                                                         |               |
-       |                |                                                         |               |
-       +----------------+                                                         +---------------+
+                                     |    |                 |    |
+                            request  |    |                 |    |
+       +----------------+------------+    |                 |    |            +---------------+
+       |                |                 |                 |    |  request   |               |
+       |  Source        |    reply        |                 |    +------------>  Destination  |
+       |                <-----------------+                 |                 |               |
+       |                |                                   |      reply      |               |
+       |                |                                   +-----------------+               |
+       |                |                                                     |               |
+       |                |                                                     |               |
+       |                |                                                     |               |
+       |                |                                                     |               |
+       +----------------+                                                     +---------------+
