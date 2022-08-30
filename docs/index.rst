@@ -46,4 +46,13 @@ you.
    :maxdepth: 3
 
    dev/authors
+
+Further Information
+*********************
+Here more information can be found.
+
+.. toctree::
+   :maxdepth: 2
+
+   dev/further-information
    

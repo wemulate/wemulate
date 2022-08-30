@@ -69,20 +69,36 @@ Response
                 "connection_id": 1,
                 "first_logical_interface_id": 1,
                 "second_logical_interface_id": 2,
-                "delay": 0,
-                "packet_loss": 5,
-                "bandwidth": 100,
-                "jitter": 5
+                "incoming":{
+                    "delay": 0,
+                    "packet_loss": 5,
+                    "bandwidth": 100,
+                    "jitter": 5
+                },
+                "outgoing":{
+                    "delay": 10,
+                    "packet_loss": 0,
+                    "bandwidth": 1000,
+                    "jitter": 5
+                }
             },
             {
                 "connection_name": "Connection2",
                 "connection_id": 2,
                 "first_logical_interface_id": 3,
                 "second_logical_interface_id": 4,
-                "delay": 0,
-                "packet_loss": 5,
-                "bandwidth": 100,
-                "jitter": 5
+                "incoming":{
+                    "delay": 10,
+                    "packet_loss": 0,
+                    "bandwidth": 1000,
+                    "jitter": 0
+                },
+                "outgoing":{
+                    "delay": 0,
+                    "packet_loss": 0,
+                    "bandwidth": 1000,
+                    "jitter": 0
+                }
             }
         ]    
     }
@@ -130,10 +146,18 @@ Response
         "connection_id": 2,
         "first_logical_interface_id": 2,
         "second_logical_interface_id": 3,
-        "delay": 1,
-        "packet_loss": 6,
-        "bandwidth": 101,
-        "jitter": 6
+        "incoming":{
+            "delay": 10,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        },
+        "outgoing":{
+            "delay": 0,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        }
     }
 
 PUT ``/api/v1/connections/<connection_id>/``
@@ -151,10 +175,18 @@ Request
         "connection_id": 2,
         "first_logical_interface_id": 2,
         "second_logical_interface_id": 3,
-        "delay": 1,
-        "packet_loss": 6,
-        "bandwidth": 101,
-        "jitter": 6
+        "incoming":{
+            "delay": 10,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        },
+        "outgoing":{
+            "delay": 0,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        }
     }
 
 
@@ -168,8 +200,16 @@ Response
         "connection_id": 2,
         "first_logical_interface_id": 2,
         "second_logical_interface_id": 3,
-        "delay": 1,
-        "packet_loss": 6,
-        "bandwidth": 101,
-        "jitter": 6
+        "incoming":{
+            "delay": 10,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        },
+        "outgoing":{
+            "delay": 0,
+            "packet_loss": 0,
+            "bandwidth": 1000,
+            "jitter": 0
+        }
     }
