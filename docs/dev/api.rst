@@ -78,7 +78,7 @@ Response
                 "outgoing":{
                     "delay": 10,
                     "packet_loss": 0,
-                    "bandwidth": 1000,
+                    "bandwidth": 0,
                     "jitter": 5
                 }
             },
@@ -90,13 +90,13 @@ Response
                 "incoming":{
                     "delay": 10,
                     "packet_loss": 0,
-                    "bandwidth": 1000,
+                    "bandwidth": 0,
                     "jitter": 0
                 },
                 "outgoing":{
                     "delay": 0,
                     "packet_loss": 0,
-                    "bandwidth": 1000,
+                    "bandwidth": 0,
                     "jitter": 0
                 }
             }
@@ -149,13 +149,13 @@ Response
         "incoming":{
             "delay": 10,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         },
         "outgoing":{
             "delay": 0,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         }
     }
@@ -178,13 +178,13 @@ Request
         "incoming":{
             "delay": 10,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         },
         "outgoing":{
             "delay": 0,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         }
     }
@@ -203,13 +203,13 @@ Response
         "incoming":{
             "delay": 10,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         },
         "outgoing":{
             "delay": 0,
             "packet_loss": 0,
-            "bandwidth": 1000,
+            "bandwidth": 0,
             "jitter": 0
         }
     }
