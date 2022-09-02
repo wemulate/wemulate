@@ -24,7 +24,7 @@ this part of the documentation is for you.
 
    dev/developer-interface
    dev/api
-
+   dev/incoming-outgoing-explanation
 
 The Hardware Guide
 ********************
@@ -47,12 +47,5 @@ you.
 
    dev/authors
 
-Further Information
-*********************
-Here more information can be found.
 
-.. toctree::
-   :maxdepth: 2
-
-   dev/further-information
    

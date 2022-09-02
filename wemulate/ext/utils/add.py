@@ -3,7 +3,6 @@ import wemulate.utils.tcconfig as tcutils
 import wemulate.ext.utils.common as common
 from wemulate.ext.utils import retrieve
 from typing import Dict, Optional
-from wemulate.core.database.models import INCOMING, OUTGOING, ConnectionModel
 
 
 def add_connection(
