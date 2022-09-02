@@ -1,0 +1,569 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Quickstart &mdash; WEmulate 0.0.1a3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Developer Interface" href="../dev/developer-interface.html" />
+    <link rel="prev" title="Installation of WEmulate" href="install.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WEmulate
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="install.html">Installation of WEmulate</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Quickstart</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#overview">Overview</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#configure-management-interface-s">Configure Management interface(s)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-all-management-interfaces">List all Management interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-all-interfaces">List all interfaces</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-connection">Add Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-connection">Delete Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-connections">List Connections</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#list-specific-connection">List specific Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#add-parameters-to-connection">Add Parameters to Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#set-parameters-on-connection">Set Parameters on Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-parameter-on-connection">Delete parameter on Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reset-connection">Reset Connection</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#reset-device">Reset Device</a></li>
+</ul>
+</li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/developer-interface.html">Developer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/api.html">API Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../dev/incoming-outgoing-explanation.html">Incoming - Outgoing Explanation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hw/hw.html">Hardware Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../dev/authors.html">Authors</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WEmulate</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Quickstart</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/user/quickstart.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="quickstart">
+<span id="id1"></span><h1>Quickstart<a class="headerlink" href="#quickstart" title="Permalink to this headline">¶</a></h1>
+<span class="target" id="module-requests.models"></span><p>Let’s get started with some simple examples.</p>
+<div class="section" id="overview">
+<h2>Overview<a class="headerlink" href="#overview" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate
+<span class="go">Usage: main.py [OPTIONS] COMMAND [ARGS]...</span>
+
+<span class="go">A modern WAN emulator</span>
+
+<span class="go">Options:</span>
+<span class="go">-v, --version                   Show program&#39;s version number and exit</span>
+<span class="go">--install-completion [bash|zsh|fish|powershell|pwsh]</span>
+<span class="go">                                Install completion for the specified shell.</span>
+<span class="go">--show-completion [bash|zsh|fish|powershell|pwsh]</span>
+<span class="go">                                Show completion for the specified shell, to</span>
+<span class="go">                                copy it or customize the installation.</span>
+
+<span class="go">--help                          Show this message and exit.</span>
+
+<span class="go">Commands:</span>
+<span class="go">add     add a new connection or parameter</span>
+<span class="go">config  configure the application settings</span>
+<span class="go">delete  delete a connection or parameter</span>
+<span class="go">reset   reset connection or the whole application settings</span>
+<span class="go">set     set parameters on a connection</span>
+<span class="go">show    show specific information</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="configure-management-interface-s">
+<h2>Configure Management interface(s)<a class="headerlink" href="#configure-management-interface-s" title="Permalink to this headline">¶</a></h2>
+<p>The first step is to configure at least one management interface.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate config <span class="nb">set</span> --help
+<span class="go">Usage: main.py config set [OPTIONS]</span>
+
+<span class="go">set the management interface(s)</span>
+
+<span class="go">Options:</span>
+<span class="go">-m, --management-interface TEXT</span>
+<span class="go">                                [default: ]</span>
+<span class="go">--help                          Show this message and exit.</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate config <span class="nb">set</span> -m &lt;interface name&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate config <span class="nb">set</span> -m ens2 -m eth0
+<span class="go">Changing the management interfaces will reset the device.</span>
+<span class="go">Do you want to proceed (y / yes)?: y</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-all-management-interfaces">
+<h2>List all Management interfaces<a class="headerlink" href="#list-all-management-interfaces" title="Permalink to this headline">¶</a></h2>
+<p>Lists all management interfaces</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show mgmt-interfaces
+<span class="go">+--------+-------------+-------------------+</span>
+<span class="go">| NAME   | IP          | MAC               |</span>
+<span class="go">+========+=============+===================+</span>
+<span class="go">| ens2   | 10.18.10.10 | 52:54:00:8c:9b:ff |</span>
+<span class="go">+--------+-------------+-------------------+</span>
+<span class="go">| eth0   |             | 52:54:00:ce:44:b2 |</span>
+<span class="go">+--------+-------------+-------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-all-interfaces">
+<h2>List all interfaces<a class="headerlink" href="#list-all-interfaces" title="Permalink to this headline">¶</a></h2>
+<p>Lists all interfaces which are available to configure traffic control.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show interfaces
+<span class="go">+--------+------------+------+-------------------+</span>
+<span class="go">| NAME   | PHYSICAL   | IP   | MAC               |</span>
+<span class="go">+========+============+======+===================+</span>
+<span class="go">| LAN-A  | ens3       | N/A  | 52:54:00:c5:84:df |</span>
+<span class="go">+--------+------------+------+-------------------+</span>
+<span class="go">| LAN-B  | ens4       | N/A  | 52:54:00:55:ae:7a |</span>
+<span class="go">+--------+------------+------+-------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-connection">
+<h2>Add Connection<a class="headerlink" href="#add-connection" title="Permalink to this headline">¶</a></h2>
+<p>Adds a new connection on which traffic control can be applied.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate add connection -n &lt;connection name&gt; -i &lt;interface name <span class="m">1</span>&gt; &lt;interface name <span class="m">2</span>&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate add connection -n <span class="nb">test</span> -i LAN-A LAN-B
+<span class="go">Successfully added a new connection</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-connection">
+<h2>Delete Connection<a class="headerlink" href="#delete-connection" title="Permalink to this headline">¶</a></h2>
+<p>Deletes an existing connection and its parameters.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate delete connection &lt;connection name&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate delete connection <span class="nb">test</span>
+<span class="go">connection test successfully deleted</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-connections">
+<h2>List Connections<a class="headerlink" href="#list-connections" title="Permalink to this headline">¶</a></h2>
+<p>Lists all available connections and information.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show connections
+<span class="go">+---------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME    | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+=========+================+================+=====================+</span>
+<span class="go">| test    | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|         |                |                | --&gt; delay: 250      |</span>
+<span class="go">|         |                |                | &lt;-&gt; jitter: 10      |</span>
+<span class="go">|         |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+---------+----------------+----------------+---------------------+</span>
+<span class="go">| test2   | LAN-C          | LAN-D          |                     |</span>
+<span class="go">+---------+-----------------+---------------+---------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="list-specific-connection">
+<h2>List specific Connection<a class="headerlink" href="#list-specific-connection" title="Permalink to this headline">¶</a></h2>
+<p>Lists only a specific connection and its related information.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">wemualte show connection &lt;connection name&gt;</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show connection <span class="nb">test</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|        |                |                | &lt;-&gt; jitter: 10      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="add-parameters-to-connection">
+<h2>Add Parameters to Connection<a class="headerlink" href="#add-parameters-to-connection" title="Permalink to this headline">¶</a></h2>
+<p>By adding parameters to a connection, the parameters which are already set on this connection will not be changed!
+If the parameter type is already existing, the value and direction will be updated.
+If the source and destination are omitted the parameter will be applied birectional.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate add parameter
+<span class="go">Usage: wemulate add parameter [OPTIONS]</span>
+
+<span class="go">  add parameter on a specific connection, previously added parameters will not</span>
+<span class="go">  be changed</span>
+
+<span class="go">Options:</span>
+<span class="go">  -n, --connection-name TEXT  [required]</span>
+<span class="go">  -d, --delay INTEGER</span>
+<span class="go">  -j, --jitter INTEGER</span>
+<span class="go">  -b, --bandwidth INTEGER</span>
+<span class="go">  -l, --packet-loss INTEGER</span>
+<span class="go">  -src, --source TEXT</span>
+<span class="go">  -dst, --destination TEXT</span>
+<span class="go">  --help                      Show this message and exit.</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate add parameter -n &lt;connection name&gt; -b &lt;bandwidth value&gt; -j &lt;jitter value&gt; -d &lt;delay value&gt; -l &lt;packet loss value&gt; -src &lt;interface name&gt; -dst &lt;interface name&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+--------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS   |</span>
+<span class="go">+========+================+================+==============+</span>
+<span class="go">| test   | LAN-A          | LAN-B          |              |</span>
+<span class="go">+--------+----------------+----------------+--------------+</span>
+
+<span class="gp">$</span> wemulate add parameter -n <span class="nb">test</span> -l <span class="m">80</span> -d <span class="m">100</span> -src LAN-B -dst LAN-A
+<span class="go">successfully added parameters to connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate add parameter -n <span class="nb">test</span> -d <span class="m">50</span>
+<span class="go">successfully added parameters to connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-&gt; delay: 50       |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate add parameter -n <span class="nb">test</span> -j <span class="m">10</span>
+<span class="go">successfully added parameters to connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-&gt; delay: 50       |</span>
+<span class="go">|        |                |                | --&gt; jitter: 10      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="set-parameters-on-connection">
+<h2>Set Parameters on Connection<a class="headerlink" href="#set-parameters-on-connection" title="Permalink to this headline">¶</a></h2>
+<p>When setting parameters on a connection, the parameters which are already set are overwritten by the new parameters!
+When no direction is given the parameter is applied bidirectional, which means all other parameters are overwritten.
+If a direction is given, only the parameter in this direction are overwritten.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate <span class="nb">set</span> parameter
+
+<span class="go">Usage: wemulate set parameter [OPTIONS]</span>
+
+<span class="go">  set parameter on a specific connection, previously added parameters will be</span>
+<span class="go">  overriden</span>
+
+<span class="go">Options:</span>
+<span class="go">  -n, --connection-name TEXT  [required]</span>
+<span class="go">  -d, --delay INTEGER</span>
+<span class="go">  -j, --jitter INTEGER</span>
+<span class="go">  -b, --bandwidth INTEGER</span>
+<span class="go">  -l, --packet-loss INTEGER</span>
+<span class="go">  -src, --source TEXT</span>
+<span class="go">  -dst, --destination TEXT</span>
+<span class="go">  --help                      Show this message and exit.</span>
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate <span class="nb">set</span> parameter -n &lt;connection name&gt; -b &lt;bandwidth value&gt; -j &lt;jitter value&gt; -d &lt;delay value&gt; -l &lt;packet loss value&gt; -src &lt;interface name&gt; -dst &lt;interface name&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- bandwidth: 10   |</span>
+<span class="go">|        |                |                | --&gt; packet_loss: 10 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate <span class="nb">set</span> parameter -n <span class="nb">test</span> -d <span class="m">20</span> -src LAN-A -dst LAN-B
+<span class="go">successfully added parameters to connection test</span>
+
+<span class="gp">$</span> wemulate show connection
+<span class="go">+--------+----------------+----------------+-------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS        |</span>
+<span class="go">+========+================+================+===================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- bandwidth: 10 |</span>
+<span class="go">|        |                |                | --&gt; delay: 20     |</span>
+<span class="go">+--------+----------------+----------------+-------------------+</span>
+
+<span class="gp">$</span> wemulate <span class="nb">set</span> parameter -n <span class="nb">test</span> -j <span class="m">100</span> -b <span class="m">100</span>
+<span class="go">successfully set parameters to connection test</span>
+
+
+<span class="gp">$</span> wemulate show connection
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-&gt; bandwidth: 100  |</span>
+<span class="go">|        |                |                | &lt;-&gt; jitter: 100     |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+
+<span class="gp">$</span> wemulate <span class="nb">set</span> parameter -n <span class="nb">test</span> -d <span class="m">20</span>
+<span class="go">successfully set parameters to connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS    |</span>
+<span class="go">+========+================+================+===============+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-&gt; delay: 20 |</span>
+<span class="go">+--------+----------------+----------------+---------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="delete-parameter-on-connection">
+<h2>Delete parameter on Connection<a class="headerlink" href="#delete-parameter-on-connection" title="Permalink to this headline">¶</a></h2>
+<p>Delete parameter(s) on a specific connection.
+If source and destination information is not given the parameter will removed completely.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|        |                |                | &lt;-&gt; jitter: 10      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate delete parameter -n <span class="nb">test</span> -j -src LAN-A -dst LAN-B
+<span class="go">Successfully deleted parameter on connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|        |                |                | &lt;-- jitter: 10      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate delete parameter -n <span class="nb">test</span> -j
+<span class="go">Successfully deleted parameter on connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |</span>
+<span class="go">+========+================+================+=====================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100      |</span>
+<span class="go">|        |                |                | &lt;-- packet_loss: 80 |</span>
+<span class="go">+--------+----------------+----------------+---------------------+</span>
+
+<span class="gp">$</span> wemulate delete parameter -n <span class="nb">test</span> -l -src LAN-B -dst LAN-A
+<span class="go">Successfully deleted parameter on connection test</span>
+
+<span class="gp">$</span> wemulate show connections
+<span class="go">+--------+----------------+----------------+----------------+</span>
+<span class="go">| NAME   | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS     |</span>
+<span class="go">+========+================+================+================+</span>
+<span class="go">| test   | LAN-A          | LAN-B          | &lt;-- delay: 100 |</span>
+<span class="go">+--------+----------------+----------------+----------------+</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reset-connection">
+<h2>Reset Connection<a class="headerlink" href="#reset-connection" title="Permalink to this headline">¶</a></h2>
+<p>All parameters on a specific connection will be resettet.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate reset connection &lt;connection name&gt;
+</pre></div>
+</div>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate reset connection <span class="nb">test</span>
+<span class="go">Successfully resetted connection test</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="reset-device">
+<h2>Reset Device<a class="headerlink" href="#reset-device" title="Permalink to this headline">¶</a></h2>
+<p>All parameters and connections will be resettet.</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> wemulate reset device
+<span class="go">Successfully resetted device</span>
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../dev/developer-interface.html" class="btn btn-neutral float-right" title="Developer Interface" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="install.html" class="btn btn-neutral float-left" title="Installation of WEmulate" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Institute for Networked Solutions
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,271 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Developer Interface &mdash; WEmulate 0.0.1a3 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="API Specification" href="api.html" />
+    <link rel="prev" title="Quickstart" href="../user/quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> WEmulate
+          
+
+          
+          </a>
+
+          
+            
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../user/install.html">Installation of WEmulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../user/quickstart.html">Quickstart</a></li>
+</ul>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Interface</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#database-and-tc-interface">Database and TC Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#setting-and-configuration-interface">Setting and Configuration Interface</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#exceptions">Exceptions</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="api.html">API Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="incoming-outgoing-explanation.html">Incoming - Outgoing Explanation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../hw/hw.html">Hardware Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="authors.html">Authors</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">WEmulate</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>Developer Interface</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/dev/developer-interface.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-wemulate">
+<span id="id1"></span><span id="developer-interface"></span><h1>Developer Interface<a class="headerlink" href="#module-wemulate" title="Permalink to this headline">¶</a></h1>
+<p>This part of the documentation covers all the interfaces of WEmulate.</p>
+<div class="section" id="database-and-tc-interface">
+<h2>Database and TC Interface<a class="headerlink" href="#database-and-tc-interface" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="setting-and-configuration-interface">
+<h2>Setting and Configuration Interface<a class="headerlink" href="#setting-and-configuration-interface" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="exceptions">
+<h2>Exceptions<a class="headerlink" href="#exceptions" title="Permalink to this headline">¶</a></h2>
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateError</code><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Generic errors.</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateValidationError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateValidationError</code><span class="sig-paren">(</span><em>message='A validation error occured'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateValidationError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateValidationError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Validation errors</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateExecutionError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateExecutionError</code><span class="sig-paren">(</span><em>message='An unknown execution error occured'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateExecutionError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateExecutionError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Execution errors</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateConfigNotFoundError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateConfigNotFoundError</code><span class="sig-paren">(</span><em>message='No configuration file was found'</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateConfigNotFoundError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateConfigNotFoundError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Config file not found error</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateFileError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateFileError</code><span class="sig-paren">(</span><em>message: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error during writing/reading files</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WEmulateDatabaseError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WEmulateDatabaseError</code><span class="sig-paren">(</span><em>message: str</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WEmulateDatabaseError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WEmulateDatabaseError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Error during database operation</p>
+</dd></dl>
+
+<dl class="exception">
+<dt id="wemulate.core.exc.WemulateMgmtInterfaceError">
+<em class="property">exception </em><code class="descclassname">wemulate.core.exc.</code><code class="descname">WemulateMgmtInterfaceError</code><span class="sig-paren">(</span><em>interface_name: str = ''</em>, <em>message=''</em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/wemulate/core/exc.html#WemulateMgmtInterfaceError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#wemulate.core.exc.WemulateMgmtInterfaceError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Management Interface not found error</p>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="api.html" class="btn btn-neutral float-right" title="API Specification" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="../user/quickstart.html" class="btn btn-neutral float-left" title="Quickstart" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2022, Institute for Networked Solutions
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
