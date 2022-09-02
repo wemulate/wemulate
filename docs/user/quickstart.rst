@@ -130,6 +130,7 @@ Lists all available connections and information.
     | NAME    | 1. INTERFACE   | 2. INTERFACE   | PARAMETERS          |
     +=========+================+================+=====================+
     | test    | LAN-A          | LAN-B          | <-- delay: 100      |
+    |         |                |                | --> delay: 250      | 
     |         |                |                | <-> jitter: 10      |
     |         |                |                | <-- packet_loss: 80 |
     +---------+----------------+----------------+---------------------+
