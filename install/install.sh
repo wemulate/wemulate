@@ -104,7 +104,7 @@ elevate_priv() {
 
 install_dependencies() {
   local sudo="$1"
-  confirm "Install dependencies on system?
+  confirm "Install dependencies on system?"
   info "Install dependencies..."
   printf '\n'
   $sudo apt-get update
