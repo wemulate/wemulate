@@ -15,6 +15,7 @@ Database and TC Interface
 .. autofunction:: wemulate.ext.utils.create_or_update_parameters_in_db
 .. autofunction:: wemulate.ext.utils.set_parameters_with_tc
 .. autofunction:: wemulate.ext.utils.delete_parameters_in_db
+.. autofunction:: wemulate.ext.utils.get_current_applied_parameters
 .. autofunction:: wemulate.ext.utils.delete_connection
 .. autofunction:: wemulate.ext.utils.delete_parameter
 .. autofunction:: wemulate.ext.utils.reset_connection

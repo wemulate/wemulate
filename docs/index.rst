@@ -24,7 +24,7 @@ this part of the documentation is for you.
 
    dev/developer-interface
    dev/api
-
+   dev/incoming-outgoing-explanation
 
 The Hardware Guide
 ********************
@@ -46,4 +46,6 @@ you.
    :maxdepth: 3
 
    dev/authors
+
+
    

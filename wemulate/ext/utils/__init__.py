@@ -15,5 +15,6 @@ from wemulate.ext.utils.common import (
     create_or_update_parameters_in_db,
     set_parameters_with_tc,
     delete_parameters_in_db,
+    get_current_applied_parameters,
 )
 from wemulate.ext.utils.delete import delete_connection, delete_parameter

@@ -22,21 +22,28 @@ def _get_interface_by_name(
 
 @use_db_session
 def _get_specific_parameter_by_connection_id(
-    session: Session, connection_id: int, parameter_name: str
+    session: Session, connection_id: int, parameter_name: str, direction: str
 ) -> Optional[ParameterModel]:
     return (
         session.query(ParameterModel)
         .filter(ParameterModel.belongs_to_connection_id == connection_id)
         .filter(ParameterModel.parameter_name == parameter_name)
+        .filter(ParameterModel.direction == direction)
         .first()
     )
 
 
 @use_db_session
 def _create_parameter(
-    session: Session, parameter_name: str, value: int, connection_id: int
+    session: Session,
+    parameter_name: str,
+    value: int,
+    direction: str,
+    connection_id: int,
 ) -> None:
-    parameter: ParameterModel = ParameterModel(parameter_name, value, connection_id)
+    parameter: ParameterModel = ParameterModel(
+        parameter_name, value, direction, connection_id
+    )
     session.add(parameter)
 
 
@@ -69,8 +76,8 @@ def connection_exists(session: Session, connection_name: str) -> bool:
 
 
 @use_db_session
-def get_device(session: Session, device_id: int) -> Optional[DeviceModel]:
-    return session.query(DeviceModel).filter_by(device_id=device_id).first()
+def get_device(session: Session) -> Optional[DeviceModel]:
+    return session.query(DeviceModel).first()
 
 
 @use_db_session
@@ -98,6 +105,19 @@ def get_logical_interface_by_name(
         .filter_by(logical_name=logical_interface_name)
         .first()
     )
+
+
+@use_db_session
+def get_logical_interface_id_by_logical_name(
+    session: Session, logical_interface_name: str
+) -> Optional[int]:
+    logical_interface: Optional[LogicalInterfaceModel] = (
+        session.query(LogicalInterfaceModel)
+        .filter_by(logical_name=logical_interface_name)
+        .first()
+    )
+    if not logical_interface is None:
+        return logical_interface.logical_interface_id
 
 
 @use_db_session
@@ -175,46 +195,51 @@ def get_connection_by_name(
 def create_connection(
     session: Session,
     connection_name: str,
-    logical_interface1: LogicalInterfaceModel,
-    logical_interface2: LogicalInterfaceModel,
-    active_device_profile: DeviceModel,
+    logical_interface_id1: LogicalInterfaceModel,
+    logical_interface_id2: LogicalInterfaceModel,
+    active_device_profile_id: DeviceModel,
 ) -> None:
     connection: ConnectionModel = ConnectionModel(
         connection_name,
-        logical_interface1.logical_interface_id,
-        logical_interface2.logical_interface_id,
-        active_device_profile.profile_id,
+        logical_interface_id1.logical_interface_id,
+        logical_interface_id2.logical_interface_id,
+        active_device_profile_id.profile_id,
     )
     session.add(connection)
 
 
 @use_db_session
-def delete_all_parameter_on_connection(session: Session, connection_id: int) -> None:
-    (
-        session.query(ParameterModel)
-        .filter(ParameterModel.belongs_to_connection_id == connection_id)
-        .delete()
+def delete_all_parameter_on_connection(
+    session: Session, connection_id: int, direction=None
+) -> None:
+    query = session.query(ParameterModel).filter(
+        ParameterModel.belongs_to_connection_id == connection_id
+    )
+    query = (
+        query.filter(ParameterModel.direction == direction).delete()
+        if direction is not None
+        else query.delete()
     )
 
 
 def create_or_update_parameter(
-    connection_id: int, parameter_name: str, value: int
+    connection_id: int, parameter_name: str, value: int, direction: str
 ) -> None:
     parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
-        connection_id, parameter_name
+        connection_id, parameter_name, direction
     )
-    if parameter:
+    if parameter is not None:
         _update_parameter(parameter, value)
     else:
-        _create_parameter(parameter_name, value, connection_id)
+        _create_parameter(parameter_name, value, direction, connection_id)
 
 
 @use_db_session
 def delete_parameter_on_connection_id(
-    session: Session, connection_id: int, parameter_name: str
+    session: Session, connection_id: int, parameter_name: str, direction: str
 ) -> None:
     parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
-        connection_id, parameter_name
+        connection_id, parameter_name, direction
     )
     if parameter:
         session.delete(parameter)

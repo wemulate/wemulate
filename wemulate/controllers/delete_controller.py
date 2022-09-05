@@ -1,6 +1,7 @@
 import typer
+from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
 import wemulate.ext.utils as utils
-from typing import Dict, List
+from typing import Dict, List, Optional
 from wemulate.core.database.models import ConnectionModel
 import wemulate.controllers.common as common
 
@@ -31,11 +32,24 @@ def parameter(
     jitter: bool = common.JITTER_PARAMETER,
     bandwidth: bool = common.BANDWIDTH_PARAMTER,
     packet_loss: bool = common.PACKET_LOSS_PARAMETER,
+    source: str = common.SOURCE,
+    destination: str = common.DESTINATION,
 ):
     common.check_if_connection_exists_in_db(connection_name)
     common.validate_parameter_arguments(delay, jitter, bandwidth, packet_loss)
-    _check_connection_parameters(utils.get_connection_by_name(connection_name))
-    utils.delete_parameter(
-        connection_name, common.generate_pargs(delay, jitter, bandwidth, packet_loss)
+    direction: Optional[str] = common.identify_direction(
+        source, destination, connection_name
     )
-    typer.echo(f"Successfully deleted parameter on connection {connection_name}")
+    _check_connection_parameters(utils.get_connection_by_name(connection_name))
+    try:
+
+        utils.delete_parameter(
+            connection_name,
+            common.generate_pargs(delay, jitter, bandwidth, packet_loss),
+            direction,
+        )
+        typer.echo(f"Successfully deleted parameter on connection {connection_name}")
+    except WEmulateDatabaseError as e:
+        typer.echo(e.message)
+    except WEmulateExecutionError as e:
+        typer.echo(e.message)

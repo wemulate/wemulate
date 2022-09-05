@@ -13,9 +13,11 @@ from wemulate.core.database.models import (
 )
 from wemulate.core.database.decorators import use_db_session
 
+DEFAULT_PROFILE_NAME: str = "default"
+PROFILE_ID: int = 1
+
 
 def _pre_setup_profile(session: Session) -> None:
-    DEFAULT_PROFILE_NAME: str = "default"
     if (
         not session.query(ProfileModel)
         .filter_by(profile_name=DEFAULT_PROFILE_NAME)
@@ -26,14 +28,11 @@ def _pre_setup_profile(session: Session) -> None:
 
 def _pre_setup_device(session: Session) -> None:
     hostname: str = socket.gethostname()
-    PROFILE_ID: int = 1
     if not session.query(DeviceModel).filter_by(device_name=hostname).first():
         management_interfaces: List[str] = settings.get_mgmt_interfaces()
         if not management_interfaces:
             raise WemulateMgmtInterfaceError()
-        session.add(
-            DeviceModel(hostname, PROFILE_ID, settings.get_mgmt_interfaces()[0])
-        )
+        session.add(DeviceModel(hostname, PROFILE_ID))
 
 
 def _pre_setup_logical_interfaces(session: Session, ascii_index: int) -> None:

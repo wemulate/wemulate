@@ -1,4 +1,4 @@
-/#!/usr/bin/env sh
+#!/usr/bin/env sh
 
 # shellcheck disable=SC2039
 
@@ -132,8 +132,6 @@ create_default_configuration() {
   $sudo bash -c "cat > "${path}"" << EOF
 ---
 wemulate:
-  management_interfaces:
-      - $INTERFACE
   db_location: /etc/wemulate/wemulate.db
 EOF
   completed "Default configuration $path is generated"
@@ -141,7 +139,7 @@ EOF
 
 configure_mgmt_interface() {
   local sudo="$1"
-  #$sudo wemulate config set -m $INTERFACE --force # This command result in error config not valid paramater
+  $sudo wemulate config set -m $INTERFACE --force 
   completed "Management interface $INTERFACE is configured"
 }
 
