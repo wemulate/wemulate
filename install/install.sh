@@ -272,7 +272,6 @@ http {
 
             location /api {
                 proxy_pass         http://wemulateapi;
-                proxy_redirect     off;
             }
 
             location / {
