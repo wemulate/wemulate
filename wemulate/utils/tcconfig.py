@@ -53,7 +53,7 @@ def _add_jitter_command(
     parameters: Dict[str, Dict[str, int]], mean_delay: int, direction: str
 ) -> str:
     return (
-        f" --delay {mean_delay}ms --delay-distro {2 * parameters[direction][JITTER]}ms"
+        f" --delay {mean_delay}ms --delay-distro {parameters[direction][JITTER]}ms"
         if JITTER in parameters[direction]
         else ""
     )
