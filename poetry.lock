@@ -500,17 +500,6 @@ test = ["pytest", "pytablewriter (>=0.46)"]
 logging = ["loguru (>=0.4.1,<1)"]
 
 [[package]]
-name = "tabulate"
-version = "0.8.10"
-description = "Pretty-print tabular data"
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
-
-[package.extras]
-widechars = ["wcwidth"]
-
-[[package]]
 name = "tcconfig"
 version = "0.27.1"
 description = "tcconfig is a tc command wrapper. Make it easy to set up traffic control of network bandwidth/latency/packet-loss/packet-corruption/etc. to a network-interface/Docker-container(veth)."
@@ -645,7 +634,7 @@ dev = ["pytest (>=4.6.2)", "black (>=19.3b0)"]
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "7ed82df2698ecea8bf98a75cf3dfd6d36d42b95fa8e65e4d215036e876283c0a"
+content-hash = "b4f90a08b8ed239471ce6413601897b5f89d99243d4514910a8bd22ef58fb330"
 
 [metadata.files]
 black = []
@@ -805,7 +794,6 @@ sqlalchemy = []
 sqliteschema = []
 subprocrunner = []
 tabledata = []
-tabulate = []
 tcconfig = []
 tomli = [
     {file = "tomli-2.0.1-py3-none-any.whl", hash = "sha256:939de3e7a6161af0c887ef91b7d41a53e7c5a1ca976325f429cb46ea9bc30ecc"},

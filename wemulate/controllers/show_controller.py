@@ -1,6 +1,5 @@
 from typing import List
 
-import tabulate
 import typer
 from rich.console import Console
 from rich.table import Table
@@ -54,8 +53,8 @@ def _populate_connection_table(connection: ConnectionModel, table: Table) -> Non
     )
 
 
-def _construct_interface_data_to_render(
-    render_data: List, interface: str, is_mgmt_interface: bool = False
+def _populate_interface_table(
+    table: Table, interface: str, is_mgmt_interface: bool = False
 ) -> None:
     data_to_append: List = []
     if not is_mgmt_interface:
@@ -69,7 +68,7 @@ def _construct_interface_data_to_render(
             settings.get_interface_mac_address(interface),
         ]
     )
-    render_data.append(data_to_append)
+    table.add_row(*data_to_append)
 
 
 app = typer.Typer(help="show specific information")
@@ -82,8 +81,7 @@ def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     table = Table(title="Connection Information")
     for header in CONNECTION_HEADERS:
         table.add_column(header)
-    render_data: List[str] = []
-    _populate_connection_table(connection, render_data)
+    _populate_connection_table(connection, table)
     console.print(table)
 
 
@@ -94,12 +92,12 @@ def connections():
         err_console.print("There are no connections")
         raise typer.Exit(1)
     else:
-        render_data: List = []
+        table = Table(title="Connection Information")
+        for header in CONNECTION_HEADERS:
+            table.add_column(header)
         for connection in connections:
-            _construct_connection_data_to_render(connection, render_data)
-        console.print(
-            tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
-        )
+            _populate_connection_table(connection, table)
+        console.print(table)
     raise typer.Exit()
 
 
@@ -109,37 +107,33 @@ def interface(interface_name: str = typer.Argument(..., help="name of the interf
         err_console.print("The given interface is not available")
         raise typer.Exit(1)
     else:
-        render_data: List = []
-        _construct_interface_data_to_render(
-            render_data,
-            interface_name,
-        )
-        console.print(
-            tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
-        )
+        table = Table(title=f"Interface [i]{interface_name}[/]")
+        for header in INTERFACE_HEADER:
+            table.add_column(header)
+        _populate_interface_table(table, interface_name)
+        console.print(table)
     raise typer.Exit()
 
 
 @app.command(help="show overview about all interfaces")
 def interfaces():
-    render_data: List = []
+    table = Table(title="Interfaces")
+    for header in INTERFACE_HEADER:
+        table.add_column(header)
+
     for interface in settings.get_non_mgmt_interfaces():
-        _construct_interface_data_to_render(render_data, interface)
-    console.print(
-        tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
-    )
+        _populate_interface_table(table, interface)
+    console.print(table)
     raise typer.Exit()
 
 
 @app.command(help="show overview about all management interfaces")
 def mgmt_interfaces():
     mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
-    render_data: List = []
+    table = Table(title="Management Interfaces")
+    for header in INTERFACE_HEADER:
+        table.add_column(header)
     for interface in mgmt_interfaces:
-        _construct_interface_data_to_render(
-            render_data, interface, is_mgmt_interface=True
-        )
-    console.print(
-        tabulate.tabulate(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")
-    )
+        _populate_interface_table(table, interface, is_mgmt_interface=True)
+    console.print(table)
     raise typer.Exit()
