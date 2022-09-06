@@ -1,11 +1,18 @@
+from typing import List
+
 import tabulate
 import typer
+from rich.console import Console
+
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
-from typing import List
 from wemulate.core.database.models import ConnectionModel, ParameterModel
 from wemulate.utils.rendering import rendering
+
+console = Console()
+err_console = Console(stderr=True)
+
 
 CONNECTION_HEADERS: List[str] = [
     "NAME",
@@ -77,7 +84,7 @@ def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     connection: ConnectionModel = utils.get_connection_by_name(connection_name)
     render_data: List[str] = []
     _construct_connection_data_to_render(connection, render_data)
-    typer.echo(
+    console.print(
         tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
     )
 
@@ -86,30 +93,33 @@ def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
 def connections():
     connections: List[ConnectionModel] = utils.get_connection_list()
     if not connections:
-        typer.echo("There are no connections")
-        raise typer.Exit()
+        err_console.print("There are no connections")
+        raise typer.Exit(1)
     else:
         render_data: List = []
         for connection in connections:
             _construct_connection_data_to_render(connection, render_data)
-        typer.echo(
+        console.print(
             tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
         )
+    raise typer.Exit()
 
 
 @app.command(help="show specific interface information", no_args_is_help=True)
 def interface(interface_name: str = typer.Argument(..., help="name of the interface")):
     if not interface_name in settings.get_non_mgmt_interfaces():
-        typer.echo("The given interface is not available")
+        err_console.print("The given interface is not available")
+        raise typer.Exit(1)
     else:
         render_data: List = []
         _construct_interface_data_to_render(
             render_data,
             interface_name,
         )
-        typer.echo(
+        console.print(
             tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
         )
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all interfaces")
@@ -117,9 +127,10 @@ def interfaces():
     render_data: List = []
     for interface in settings.get_non_mgmt_interfaces():
         _construct_interface_data_to_render(render_data, interface)
-    typer.echo(
+    console.print(
         tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
     )
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all management interfaces")
@@ -130,6 +141,7 @@ def mgmt_interfaces():
         _construct_interface_data_to_render(
             render_data, interface, is_mgmt_interface=True
         )
-    typer.echo(
+    console.print(
         tabulate.tabulate(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")
     )
+    raise typer.Exit()

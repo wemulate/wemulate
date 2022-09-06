@@ -1,4 +1,9 @@
 from typing import Optional
+
+import os
+import typer
+from rich.console import Console
+
 from wemulate.core.exc import WEmulateError
 from wemulate.ext.settings import check_if_mgmt_interface_set
 from wemulate.core.version import get_version
@@ -9,8 +14,9 @@ from wemulate.controllers.config_controller import app as config_app
 from wemulate.controllers.show_controller import app as show_app
 from wemulate.controllers.delete_controller import app as delete_app
 from wemulate.controllers.reset_controller import app as reset_app
-import os
-import typer
+
+console = Console()
+err_console = Console(stderr=True)
 
 app = typer.Typer(
     help="A modern WAN emulator",
@@ -25,7 +31,7 @@ app.add_typer(reset_app, name="reset", no_args_is_help=True)
 
 def _get_version(value: bool) -> Optional[str]:
     if value:
-        typer.echo(f"The current wemulate version is: {get_version()}")
+        console.print(f"The current wemulate version is: {get_version()}")
         raise typer.Exit()
 
 
@@ -51,11 +57,11 @@ def check_permissions(
                 pre_setup_database()
                 check_if_mgmt_interface_set()
         except WEmulateError as e:
-            typer.echo(e)
-            raise typer.Exit()
+            err_console.print(e)
+            raise typer.Exit(1)
     else:
-        typer.echo("Please start as root user")
-        raise typer.Exit()
+        err_console.print("Please start as root user")
+        raise typer.Exit(1)
 
 
 if __name__ == "__main__":
