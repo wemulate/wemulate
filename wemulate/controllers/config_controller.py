@@ -31,6 +31,7 @@ def set(
         try:
             for interface_name in management_interfaces:
                 settings.add_mgmt_interface(interface_name)
+            raise typer.Exit()
         except WemulateMgmtInterfaceError as e:
             err_console.print(e.message)
             raise typer.Exit(1)

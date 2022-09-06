@@ -83,6 +83,7 @@ def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
         table.add_column(header)
     _populate_connection_table(connection, table)
     console.print(table)
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all connections")
