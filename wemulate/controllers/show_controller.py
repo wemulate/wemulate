@@ -3,6 +3,7 @@ from typing import List
 import tabulate
 import typer
 from rich.console import Console
+from rich.table import Table
 
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
@@ -40,20 +41,16 @@ def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[Paramete
     return parameters_to_render
 
 
-def _construct_connection_data_to_render(
-    connection: ConnectionModel, render_data: List
-) -> None:
+def _populate_connection_table(connection: ConnectionModel, table: Table) -> None:
     parameters: List[ParameterModel] = _get_parameters_to_render(connection.parameters)
-    render_data.append(
-        [
-            connection.connection_name,
-            connection.first_logical_interface.logical_name,
-            connection.second_logical_interface.logical_name,
-            rendering(
-                {"parameters": parameters},
-                SHOW_CONNECTION_TEMPLATE_FILE,
-            ),
-        ]
+    table.add_row(
+        connection.connection_name,
+        connection.first_logical_interface.logical_name,
+        connection.second_logical_interface.logical_name,
+        rendering(
+            {"parameters": parameters},
+            SHOW_CONNECTION_TEMPLATE_FILE,
+        ),
     )
 
 
@@ -82,11 +79,12 @@ app = typer.Typer(help="show specific information")
 def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     common.check_if_connection_exists_in_db(connection_name)
     connection: ConnectionModel = utils.get_connection_by_name(connection_name)
+    table = Table(title="Connection Information")
+    for header in CONNECTION_HEADERS:
+        table.add_column(header)
     render_data: List[str] = []
-    _construct_connection_data_to_render(connection, render_data)
-    console.print(
-        tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
-    )
+    _populate_connection_table(connection, render_data)
+    console.print(table)
 
 
 @app.command(help="show overview about all connections")
