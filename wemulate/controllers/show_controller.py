@@ -107,7 +107,7 @@ def interface(interface_name: str = typer.Argument(..., help="name of the interf
         err_console.print("The given interface is not available")
         raise typer.Exit(1)
     else:
-        table = Table(title=f"Interface [i]{interface_name}[/]")
+        table = Table(title=f"Interface [b]{interface_name}[/]")
         for header in INTERFACE_HEADER:
             table.add_column(header)
         _populate_interface_table(table, interface_name)
@@ -131,7 +131,7 @@ def interfaces():
 def mgmt_interfaces():
     mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
     table = Table(title="Management Interfaces")
-    for header in INTERFACE_HEADER:
+    for header in ["NAME", "IP", "MAC"]:
         table.add_column(header)
     for interface in mgmt_interfaces:
         _populate_interface_table(table, interface, is_mgmt_interface=True)
