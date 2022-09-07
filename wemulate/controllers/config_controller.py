@@ -1,17 +1,15 @@
 from typing import List, Optional
 
 import typer
-from rich.console import Console
 from rich.prompt import Confirm
 
 import wemulate.ext.settings as settings
 from wemulate.core.exc import WemulateMgmtInterfaceError
 from wemulate.ext import utils
 from wemulate.ext import settings
+from wemulate.utils.output import err_console, console
 
 
-console = Console()
-err_console = Console(stderr=True)
 app = typer.Typer(help="configure the application settings")
 
 

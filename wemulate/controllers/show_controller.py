@@ -1,7 +1,6 @@
 from typing import List
 
 import typer
-from rich.console import Console
 from rich.table import Table
 
 import wemulate.controllers.common as common
@@ -9,9 +8,7 @@ import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
 from wemulate.core.database.models import ConnectionModel, ParameterModel
 from wemulate.utils.rendering import rendering
-
-console = Console()
-err_console = Console(stderr=True)
+from wemulate.utils.output import err_console, console
 
 
 CONNECTION_HEADERS: List[str] = [

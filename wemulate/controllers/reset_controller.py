@@ -1,10 +1,9 @@
 import typer
-from rich.console import Console
 
 import wemulate.controllers.common as common
 from wemulate.ext import utils
+from wemulate.utils.output import console
 
-console = Console()
 
 app = typer.Typer(help="reset connection or the whole application settings")
 

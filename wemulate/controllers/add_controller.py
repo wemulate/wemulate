@@ -1,7 +1,6 @@
 from typing import List, Optional, Tuple
 
 import typer
-from rich.console import Console
 
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
@@ -14,10 +13,7 @@ from wemulate.core.database.models import (
     ConnectionModel,
     LogicalInterfaceModel,
 )
-
-
-console = Console()
-err_console = Console(stderr=True)
+from wemulate.utils.output import err_console, console
 
 
 def _check_if_interface_names_provided(

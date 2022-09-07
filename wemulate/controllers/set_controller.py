@@ -1,15 +1,12 @@
 from typing import Optional
 
 import typer
-from rich.console import Console
 
 import wemulate.ext.utils as utils
 import wemulate.controllers.common as common
 from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
+from wemulate.utils.output import err_console, console
 
-
-console = Console()
-err_console = Console(stderr=True)
 
 app = typer.Typer(help="set parameters on a connection")
 

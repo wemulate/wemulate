@@ -1,7 +1,6 @@
 from typing import Dict, Optional, Tuple
 
 import typer
-from rich.console import Console
 
 from wemulate.ext import utils
 from wemulate.core.database.models import (
@@ -13,9 +12,8 @@ from wemulate.core.database.models import (
     PACKET_LOSS,
     ConnectionModel,
 )
+from wemulate.utils.output import err_console
 
-console = Console()
-err_console = Console(stderr=True)
 
 CONNECTION_NAME_PARAMETER = typer.Option(..., "--connection-name", "-n")
 CONNECTION_NAME_ARGUMENT = typer.Argument(..., help="name of the connection")

@@ -2,7 +2,6 @@ from typing import Optional
 
 import os
 import typer
-from rich.console import Console
 
 from wemulate.core.exc import WEmulateError
 from wemulate.ext.settings import check_if_mgmt_interface_set
@@ -14,9 +13,8 @@ from wemulate.controllers.config_controller import app as config_app
 from wemulate.controllers.show_controller import app as show_app
 from wemulate.controllers.delete_controller import app as delete_app
 from wemulate.controllers.reset_controller import app as reset_app
+from wemulate.utils.output import err_console, console
 
-console = Console()
-err_console = Console(stderr=True)
 
 app = typer.Typer(
     help="A modern WAN emulator",

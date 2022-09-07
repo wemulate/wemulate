@@ -1,16 +1,12 @@
 from typing import Dict, List, Optional
 
 import typer
-from rich.console import Console
 
 import wemulate.ext.utils as utils
 import wemulate.controllers.common as common
 from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
 from wemulate.core.database.models import ConnectionModel
-
-
-console = Console()
-err_console = Console(stderr=True)
+from wemulate.utils.output import err_console, console
 
 
 def _check_connection_parameters(connection: ConnectionModel) -> None:
