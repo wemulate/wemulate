@@ -1,7 +1,9 @@
 from typing import Callable
-from wemulate.core.exc import WEmulateDatabaseError, WEmulateValidationError
-from sqlalchemy.exc import IntegrityError, SQLAlchemyError
 from functools import wraps
+
+from sqlalchemy.exc import IntegrityError, SQLAlchemyError
+
+from wemulate.core.exc import WEmulateDatabaseError, WEmulateValidationError
 from wemulate.core.database.session import db_session
 
 

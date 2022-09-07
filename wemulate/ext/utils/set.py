@@ -1,7 +1,8 @@
+from typing import Dict, Optional
+
 import wemulate.core.database.utils as dbutils
 import wemulate.ext.utils.common as common
 from wemulate.core.database.models import ConnectionModel
-from typing import Dict, Optional
 
 
 def set_parameter(

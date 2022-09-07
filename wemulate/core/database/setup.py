@@ -1,10 +1,12 @@
 import socket, string
 from typing import List
+
+from sqlalchemy.orm.session import Session
+
 from wemulate.core.exc import (
     WemulateMgmtInterfaceError,
 )
 import wemulate.ext.settings as settings
-from sqlalchemy.orm.session import Session
 from wemulate.core.database.models import (
     ProfileModel,
     DeviceModel,

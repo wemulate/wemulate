@@ -1,11 +1,15 @@
-import tabulate
+from typing import List
+
 import typer
+from rich.table import Table
+
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
-from typing import List
 from wemulate.core.database.models import ConnectionModel, ParameterModel
 from wemulate.utils.rendering import rendering
+from wemulate.utils.output import err_console, console, create_table
+
 
 CONNECTION_HEADERS: List[str] = [
     "NAME",
@@ -15,6 +19,7 @@ CONNECTION_HEADERS: List[str] = [
 ]
 SHOW_CONNECTION_TEMPLATE_FILE: str = "show_connection.jinja2"
 INTERFACE_HEADER = ["NAME", "PHYSICAL", "IP", "MAC"]
+MGMT_INTERFACE_HEADER = ["NAME", "IP", "MAC"]
 
 
 def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[ParameterModel]:
@@ -33,25 +38,21 @@ def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[Paramete
     return parameters_to_render
 
 
-def _construct_connection_data_to_render(
-    connection: ConnectionModel, render_data: List
-) -> None:
+def _populate_connection_table(connection: ConnectionModel, table: Table) -> None:
     parameters: List[ParameterModel] = _get_parameters_to_render(connection.parameters)
-    render_data.append(
-        [
-            connection.connection_name,
-            connection.first_logical_interface.logical_name,
-            connection.second_logical_interface.logical_name,
-            rendering(
-                {"parameters": parameters},
-                SHOW_CONNECTION_TEMPLATE_FILE,
-            ),
-        ]
+    table.add_row(
+        connection.connection_name,
+        connection.first_logical_interface.logical_name,
+        connection.second_logical_interface.logical_name,
+        rendering(
+            {"parameters": parameters},
+            SHOW_CONNECTION_TEMPLATE_FILE,
+        ),
     )
 
 
-def _construct_interface_data_to_render(
-    render_data: List, interface: str, is_mgmt_interface: bool = False
+def _populate_interface_table(
+    table: Table, interface: str, is_mgmt_interface: bool = False
 ) -> None:
     data_to_append: List = []
     if not is_mgmt_interface:
@@ -65,7 +66,7 @@ def _construct_interface_data_to_render(
             settings.get_interface_mac_address(interface),
         ]
     )
-    render_data.append(data_to_append)
+    table.add_row(*data_to_append)
 
 
 app = typer.Typer(help="show specific information")
@@ -75,61 +76,56 @@ app = typer.Typer(help="show specific information")
 def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     common.check_if_connection_exists_in_db(connection_name)
     connection: ConnectionModel = utils.get_connection_by_name(connection_name)
-    render_data: List[str] = []
-    _construct_connection_data_to_render(connection, render_data)
-    typer.echo(
-        tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
-    )
+    table = create_table(title="Connection Information", headers=CONNECTION_HEADERS)
+    _populate_connection_table(connection, table)
+    console.print(table)
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all connections")
 def connections():
     connections: List[ConnectionModel] = utils.get_connection_list()
     if not connections:
-        typer.echo("There are no connections")
-        raise typer.Exit()
+        err_console.print("There are no connections")
+        raise typer.Exit(1)
     else:
-        render_data: List = []
+        table = create_table(title="Connection Information", headers=CONNECTION_HEADERS)
         for connection in connections:
-            _construct_connection_data_to_render(connection, render_data)
-        typer.echo(
-            tabulate.tabulate(render_data, headers=CONNECTION_HEADERS, tablefmt="grid")
-        )
+            _populate_connection_table(connection, table)
+        console.print(table)
+    raise typer.Exit()
 
 
 @app.command(help="show specific interface information", no_args_is_help=True)
 def interface(interface_name: str = typer.Argument(..., help="name of the interface")):
     if not interface_name in settings.get_non_mgmt_interfaces():
-        typer.echo("The given interface is not available")
+        err_console.print("The given interface is not available")
+        raise typer.Exit(1)
     else:
-        render_data: List = []
-        _construct_interface_data_to_render(
-            render_data,
-            interface_name,
+        table = create_table(
+            title=f"Interface [b]{interface_name}[/]", headers=INTERFACE_HEADER
         )
-        typer.echo(
-            tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
-        )
+        _populate_interface_table(table, interface_name)
+        console.print(table)
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all interfaces")
 def interfaces():
-    render_data: List = []
+    table = create_table(title="Interfaces", headers=INTERFACE_HEADER)
+
     for interface in settings.get_non_mgmt_interfaces():
-        _construct_interface_data_to_render(render_data, interface)
-    typer.echo(
-        tabulate.tabulate(render_data, headers=INTERFACE_HEADER, tablefmt="grid")
-    )
+        _populate_interface_table(table, interface)
+    console.print(table)
+    raise typer.Exit()
 
 
 @app.command(help="show overview about all management interfaces")
 def mgmt_interfaces():
     mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
-    render_data: List = []
+    table = Table(title="Management Interfaces")
+    table = create_table(title="Management Interfaces", headers=MGMT_INTERFACE_HEADER)
     for interface in mgmt_interfaces:
-        _construct_interface_data_to_render(
-            render_data, interface, is_mgmt_interface=True
-        )
-    typer.echo(
-        tabulate.tabulate(render_data, headers=["NAME", "IP", "MAC"], tablefmt="grid")
-    )
+        _populate_interface_table(table, interface, is_mgmt_interface=True)
+    console.print(table)
+    raise typer.Exit()

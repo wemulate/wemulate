@@ -1,8 +1,9 @@
+from typing import Dict, Optional
+
 import wemulate.utils.tcconfig as tcutils
 import wemulate.core.database.utils as dbutils
 import wemulate.ext.utils.common as common
 from wemulate.core.database.models import ConnectionModel
-from typing import Dict, Optional
 
 
 def delete_connection(connection_name: str) -> None:

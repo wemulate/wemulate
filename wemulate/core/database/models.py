@@ -1,9 +1,12 @@
 import json
 from typing import Dict, List
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+
 from wemulate.core.database.session import database_engine
+
 
 BANDWIDTH: str = "bandwidth"
 DELAY: str = "delay"

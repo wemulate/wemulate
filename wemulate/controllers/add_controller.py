@@ -1,7 +1,9 @@
+from typing import List, Optional, Tuple
+
 import typer
+
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
-from typing import List, Optional, Tuple
 from wemulate.core.exc import (
     WEmulateDatabaseError,
     WEmulateExecutionError,
@@ -11,14 +13,15 @@ from wemulate.core.database.models import (
     ConnectionModel,
     LogicalInterfaceModel,
 )
+from wemulate.utils.output import err_console, console
 
 
 def _check_if_interface_names_provided(
     first_logical_interface: str, second_logical_interface: str
 ) -> None:
     if not first_logical_interface or not second_logical_interface:
-        typer.echo("Please define the logical interfaces | -i LAN-A LAN-B")
-        raise typer.Exit()
+        err_console.print("Please define the logical interfaces | -i LAN-A LAN-B")
+        raise typer.Exit(1)
 
 
 def _get_logical_interface_id(logical_interface_name: str) -> int:
@@ -28,8 +31,8 @@ def _get_logical_interface_id(logical_interface_name: str) -> int:
     if logical_interface is not None:
         return logical_interface.logical_interface_id
     else:
-        typer.echo(f"{logical_interface_name} was not found in the database!")
-        raise typer.Exit()
+        err_console.print(f"{logical_interface_name} was not found in the database!")
+        raise typer.Exit(1)
 
 
 def _check_if_logical_interfaces_already_used(
@@ -52,8 +55,8 @@ def _check_if_logical_interfaces_already_used(
             or conn.second_logical_interface_id == first_logical_interface_id
             or conn.second_logical_interface_id == second_logical_interface_id
         ):
-            typer.echo("Please use an unused logical interface name")
-            raise typer.Exit()
+            err_console.print("Please use an unused logical interface name")
+            raise typer.Exit(1)
 
 
 def _check_if_logical_interfaces_exist(
@@ -62,10 +65,10 @@ def _check_if_logical_interfaces_exist(
     first = utils.get_logical_interface_by_name(first_logical_interface) is None
     second = utils.get_logical_interface_by_name(second_logical_interface) is None
     if first or second:
-        typer.echo(
+        err_console.print(
             "The provided logical interface names are unknown!\nPlease define existing logical interface names"
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
 
 def _validate_connection_arguments(
@@ -109,13 +112,17 @@ def connection(
             first_logical_interface_name,
             second_logical_interface_name,
         )
-        typer.echo("Successfully added a new connection")
+        console.print("Successfully added a new connection")
+        raise typer.Exit()
     except WEmulateValidationError as e:
-        typer.echo(f"The {e} already exists in a connection")
+        err_console.print(f"The {e} already exists in a connection")
+        raise typer.Exit(1)
     except WEmulateDatabaseError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)
     except WEmulateExecutionError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)
 
 
 @app.command(
@@ -142,8 +149,11 @@ def parameter(
             common.generate_pargs(delay, jitter, bandwidth, packet_loss),
             direction,
         )
-        typer.echo(f"successfully added parameters to connection {connection_name}")
+        console.print(f"successfully added parameters to connection {connection_name}")
+        raise typer.Exit()
     except WEmulateDatabaseError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)
     except WEmulateExecutionError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)

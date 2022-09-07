@@ -1,8 +1,12 @@
 from typing import Optional
+
 import typer
+
 import wemulate.ext.utils as utils
 import wemulate.controllers.common as common
 from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
+from wemulate.utils.output import err_console, console
+
 
 app = typer.Typer(help="set parameters on a connection")
 
@@ -31,8 +35,11 @@ def parameter(
             common.generate_pargs(delay, jitter, bandwidth, packet_loss),
             direction,
         )
-        typer.echo(f"successfully set parameters to connection {connection_name}")
+        console.print(f"successfully set parameters to connection {connection_name}")
+        raise typer.Exit()
     except WEmulateDatabaseError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)
     except WEmulateExecutionError as e:
-        typer.echo(e.message)
+        err_console.print(e.message)
+        raise typer.Exit(1)

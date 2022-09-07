@@ -1,5 +1,3 @@
-
-
 class WEmulateError(Exception):
     """Generic errors."""
 

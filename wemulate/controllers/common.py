@@ -1,4 +1,7 @@
+from typing import Dict, Optional, Tuple
+
 import typer
+
 from wemulate.ext import utils
 from wemulate.core.database.models import (
     BANDWIDTH,
@@ -9,7 +12,7 @@ from wemulate.core.database.models import (
     PACKET_LOSS,
     ConnectionModel,
 )
-from typing import Dict, Optional, Tuple
+from wemulate.utils.output import err_console
 
 
 CONNECTION_NAME_PARAMETER = typer.Option(..., "--connection-name", "-n")
@@ -24,24 +27,24 @@ DESTINATION = typer.Option(None, "--destination", "-dst")
 
 def validate_parameter_arguments(*args):
     if not any(args):
-        typer.echo(
+        err_console.print(
             "Please specifiy at least one parameter which should be applied on the connection | -b, --bandwidth [ms] | -j, --jitter [ms] | -d, --delay [ms], -l, --packet-loss [%]"
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
 
 def check_if_connection_exists_in_db(connection_name: str) -> None:
     if not utils.connection_exists_in_db(connection_name):
-        typer.echo(
+        err_console.print(
             f"There is no connection {connection_name} please create a connection first"
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
 
 def _check_source_destination_identical(source: str, destination: str) -> None:
     if source == destination:
-        typer.echo(f"The source and destination can not be the same!")
-        raise typer.Exit()
+        err_console.print(f"The source and destination can not be the same!")
+        raise typer.Exit(1)
 
 
 def _get_logical_interface_names(connection_name: str) -> Tuple[str, str]:
@@ -56,15 +59,15 @@ def _check_if_source_destination_valid(
     source: str, destination: str, first_logical_name: str, second_logical_name: str
 ) -> None:
     if source not in (first_logical_name, second_logical_name):
-        typer.echo(
+        err_console.print(
             f"Please specify correct source information | -src, --source ({first_logical_name} | {second_logical_name})"
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
     if destination not in (first_logical_name, second_logical_name):
-        typer.echo(
+        err_console.print(
             f"Please specify correct destination information | -dst, --destination ({first_logical_name} | {second_logical_name})"
         )
-        raise typer.Exit()
+        raise typer.Exit(1)
 
 
 def _validate_source_destination(

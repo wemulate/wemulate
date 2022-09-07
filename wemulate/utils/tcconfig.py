@@ -2,7 +2,9 @@ import os
 import shutil
 import subprocess
 from typing import Dict, List, Optional
+
 from pyroute2 import IPRoute
+
 from wemulate.core.database.models import (
     CORRUPTION,
     DUPLICATION,
@@ -14,6 +16,7 @@ from wemulate.core.database.models import (
     JITTER,
 )
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
+
 
 CONFIG_PATH: str = "/etc/wemulate/config"
 BRIDGE_CONFIG_FILE: str = "bridge.conf"
