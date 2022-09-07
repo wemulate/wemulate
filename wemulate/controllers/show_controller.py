@@ -8,7 +8,7 @@ import wemulate.ext.utils as utils
 import wemulate.ext.settings as settings
 from wemulate.core.database.models import ConnectionModel, ParameterModel
 from wemulate.utils.rendering import rendering
-from wemulate.utils.output import err_console, console
+from wemulate.utils.output import err_console, console, create_table
 
 
 CONNECTION_HEADERS: List[str] = [
@@ -19,6 +19,7 @@ CONNECTION_HEADERS: List[str] = [
 ]
 SHOW_CONNECTION_TEMPLATE_FILE: str = "show_connection.jinja2"
 INTERFACE_HEADER = ["NAME", "PHYSICAL", "IP", "MAC"]
+MGMT_INTERFACE_HEADER = ["NAME", "IP", "MAC"]
 
 
 def _get_parameters_to_render(parameters: List[ParameterModel]) -> List[ParameterModel]:
@@ -75,9 +76,7 @@ app = typer.Typer(help="show specific information")
 def connection(connection_name: str = common.CONNECTION_NAME_ARGUMENT):
     common.check_if_connection_exists_in_db(connection_name)
     connection: ConnectionModel = utils.get_connection_by_name(connection_name)
-    table = Table(title="Connection Information")
-    for header in CONNECTION_HEADERS:
-        table.add_column(header)
+    table = create_table(title="Connection Information", headers=CONNECTION_HEADERS)
     _populate_connection_table(connection, table)
     console.print(table)
     raise typer.Exit()
@@ -90,9 +89,7 @@ def connections():
         err_console.print("There are no connections")
         raise typer.Exit(1)
     else:
-        table = Table(title="Connection Information")
-        for header in CONNECTION_HEADERS:
-            table.add_column(header)
+        table = create_table(title="Connection Information", headers=CONNECTION_HEADERS)
         for connection in connections:
             _populate_connection_table(connection, table)
         console.print(table)
@@ -105,9 +102,9 @@ def interface(interface_name: str = typer.Argument(..., help="name of the interf
         err_console.print("The given interface is not available")
         raise typer.Exit(1)
     else:
-        table = Table(title=f"Interface [b]{interface_name}[/]")
-        for header in INTERFACE_HEADER:
-            table.add_column(header)
+        table = create_table(
+            title=f"Interface [b]{interface_name}[/]", headers=INTERFACE_HEADER
+        )
         _populate_interface_table(table, interface_name)
         console.print(table)
     raise typer.Exit()
@@ -115,9 +112,7 @@ def interface(interface_name: str = typer.Argument(..., help="name of the interf
 
 @app.command(help="show overview about all interfaces")
 def interfaces():
-    table = Table(title="Interfaces")
-    for header in INTERFACE_HEADER:
-        table.add_column(header)
+    table = create_table(title="Interfaces", headers=INTERFACE_HEADER)
 
     for interface in settings.get_non_mgmt_interfaces():
         _populate_interface_table(table, interface)
@@ -129,8 +124,7 @@ def interfaces():
 def mgmt_interfaces():
     mgmt_interfaces: List[str] = settings.get_mgmt_interfaces()
     table = Table(title="Management Interfaces")
-    for header in ["NAME", "IP", "MAC"]:
-        table.add_column(header)
+    table = create_table(title="Management Interfaces", headers=MGMT_INTERFACE_HEADER)
     for interface in mgmt_interfaces:
         _populate_interface_table(table, interface, is_mgmt_interface=True)
     console.print(table)
