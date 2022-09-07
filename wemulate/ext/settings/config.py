@@ -1,6 +1,7 @@
 import yaml
 from typing import Dict
-from wemulate.core.exc import WEmulateConfigNotFoundError
+
+from wemulate.core.exc import WEmulateConfigNotFoundError, WEmulateDatabaseError
 
 
 WEMULATE_CONFIG_PATH = "/etc/wemulate/wemulate.yml"
@@ -37,4 +38,7 @@ def get_db_location() -> str:
     Returns:
         Returns the path to the database as string.
     """
-    return get_config()["wemulate"]["db_location"]
+    try:
+        return get_config().get("wemulate", {})["db_location"]
+    except KeyError:
+        raise WEmulateDatabaseError

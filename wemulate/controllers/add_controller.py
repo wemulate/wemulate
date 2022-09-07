@@ -1,9 +1,10 @@
+from typing import List, Optional, Tuple
+
 import typer
 from rich.console import Console
 
 import wemulate.controllers.common as common
 import wemulate.ext.utils as utils
-from typing import List, Optional, Tuple
 from wemulate.core.exc import (
     WEmulateDatabaseError,
     WEmulateExecutionError,

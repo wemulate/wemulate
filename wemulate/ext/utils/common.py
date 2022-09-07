@@ -1,6 +1,7 @@
+from typing import Dict, Optional
+
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
-from typing import Dict, Optional
 from wemulate.core.database.models import (
     INCOMING,
     OUTGOING,

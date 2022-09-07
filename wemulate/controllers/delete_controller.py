@@ -3,10 +3,10 @@ from typing import Dict, List, Optional
 import typer
 from rich.console import Console
 
-from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
 import wemulate.ext.utils as utils
-from wemulate.core.database.models import ConnectionModel
 import wemulate.controllers.common as common
+from wemulate.core.exc import WEmulateDatabaseError, WEmulateExecutionError
+from wemulate.core.database.models import ConnectionModel
 
 
 console = Console()

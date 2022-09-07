@@ -1,6 +1,8 @@
 from typing import List, Optional
+
 from sqlalchemy import MetaData
 from sqlalchemy.orm.session import Session
+
 from wemulate.core.database.decorators import use_db_session
 from wemulate.core.database.models import (
     ManagementInterfaceModel,

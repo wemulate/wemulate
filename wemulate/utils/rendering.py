@@ -1,7 +1,8 @@
+import os
 from typing import Dict, List, Text
+
 from jinja2 import Environment, FileSystemLoader
 from jinja2.environment import Template
-import os
 
 from wemulate.core.database.models import ParameterModel
 

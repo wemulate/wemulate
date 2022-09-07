@@ -1,8 +1,9 @@
+from typing import Dict, Optional
+
 import wemulate.core.database.utils as dbutils
 import wemulate.utils.tcconfig as tcutils
 import wemulate.ext.utils.common as common
 from wemulate.ext.utils import retrieve
-from typing import Dict, Optional
 
 
 def add_connection(

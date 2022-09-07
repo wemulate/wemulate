@@ -1,6 +1,7 @@
-
 from pytest import raises
+
 from wemulate.main import WEmulateTest
+
 
 def test_wemulate():
     # test wemulate without any subcommands or arguments
