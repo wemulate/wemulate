@@ -12,7 +12,7 @@ def test_wemulate():
 
 def test_wemulate_debug():
     # test that debug mode is functional
-    argv = ['--debug']
+    argv = ["--debug"]
     with WEmulateTest(argv=argv) as app:
         app.run()
         assert app.debug is True
@@ -20,18 +20,17 @@ def test_wemulate_debug():
 
 def test_command1():
     # test command1 without arguments
-    argv = ['command1']
+    argv = ["command1"]
     with WEmulateTest(argv=argv) as app:
         app.run()
-        data,output = app.last_rendered
-        assert data['foo'] == 'bar'
-        assert output.find('Foo => bar')
-
+        data, output = app.last_rendered
+        assert data["foo"] == "bar"
+        assert output.find("Foo => bar")
 
     # test command1 with arguments
-    argv = ['command1', '--foo', 'not-bar']
+    argv = ["command1", "--foo", "not-bar"]
     with WEmulateTest(argv=argv) as app:
         app.run()
-        data,output = app.last_rendered
-        assert data['foo'] == 'not-bar'
-        assert output.find('Foo => not-bar')
+        data, output = app.last_rendered
+        assert data["foo"] == "not-bar"
+        assert output.find("Foo => not-bar")
