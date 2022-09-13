@@ -1,6 +1,7 @@
+from typing import List, Optional, Tuple
+
 import wemulate.core.database.utils as dbutils
 from wemulate.core.database.models import ConnectionModel, LogicalInterfaceModel
-from typing import List, Optional, Tuple
 
 
 def get_physical_interface_names(

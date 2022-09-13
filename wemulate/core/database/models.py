@@ -1,16 +1,23 @@
 import json
 from typing import Dict, List
+
 from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
+
 from wemulate.core.database.session import database_engine
+
 
 BANDWIDTH: str = "bandwidth"
 DELAY: str = "delay"
 PACKET_LOSS: str = "packet_loss"
 JITTER: str = "jitter"
+DUPLICATION: str = "duplication"
+CORRUPTION: str = "corruption"
+INCOMING: str = "incoming"
+OUTGOING: str = "outgoing"
 
-PARAMETERS: List[str] = [BANDWIDTH, DELAY, PACKET_LOSS, JITTER]
+PARAMETERS: List[str] = [BANDWIDTH, DELAY, PACKET_LOSS, JITTER, DUPLICATION, CORRUPTION]
 
 DEFAULT_PARAMETERS: Dict[str, int] = {
     BANDWIDTH: 0,
@@ -47,7 +54,6 @@ class DeviceModel(Base):
     __tablename__ = "device"
     device_id = Column(Integer, primary_key=True, autoincrement=True)
     device_name = Column(String(50), nullable=False)
-    management_ip = Column(String(16), nullable=False)
     active_profile_id = Column(
         Integer, ForeignKey("profile.profile_id"), nullable=False
     )
@@ -61,9 +67,8 @@ class DeviceModel(Base):
         order_by="asc(InterfaceModel.interface_id)",
     )
 
-    def __init__(self, device_name, profile_id, management_ip="127.0.0.1"):
+    def __init__(self, device_name, profile_id):
         self.device_name = device_name
-        self.management_ip = management_ip
         self.active_profile_id = profile_id
 
     def __repr__(self):
@@ -71,7 +76,6 @@ class DeviceModel(Base):
             {
                 "device_id": self.device_id,
                 "device_name": self.device_name,
-                "management_ip": self.management_ip,
                 "active_profile_id": self.active_profile_id,
             }
         )
@@ -80,9 +84,25 @@ class DeviceModel(Base):
         return {
             "device_id": self.device_id,
             "device_name": self.device_name,
-            "management_ip": self.management_ip,
             "active_profile_name": self.active_profile.profile_name,
         }
+
+
+class ManagementInterfaceModel(Base):
+    __tablename__ = "management_interface"
+    management_interface_id = Column(Integer, primary_key=True, autoincrement=True)
+    interface_name = Column(String(20), nullable=False, unique=True)
+
+    def __init__(self, interface_name):
+        self.interface_name = interface_name
+
+    def __repr__(self):
+        return json.dumps(
+            {
+                "management_interface_id": self.management_interface_id,
+                "interface_name": self.interface_name,
+            }
+        )
 
 
 class LogicalInterfaceModel(Base):
@@ -169,7 +189,6 @@ class ConnectionModel(Base):
     __tablename__ = "connection"
     connection_id = Column(Integer, primary_key=True, autoincrement=True)
     connection_name = Column(String(50), nullable=False, unique=True)
-    bidirectional = Column(Boolean, default=True)
     first_logical_interface_id = Column(
         Integer,
         ForeignKey("logical_interface.logical_interface_id"),
@@ -211,20 +230,17 @@ class ConnectionModel(Base):
         first_logical_interface_id,
         second_logical_interface_id,
         profile_id,
-        bidirectional=True,
     ):
         self.connection_name = connection_name
         self.first_logical_interface_id = first_logical_interface_id
         self.second_logical_interface_id = second_logical_interface_id
         self.belongs_to_profile_id = profile_id
-        self.bidirectional = bidirectional
 
     def __repr__(self):
         return json.dumps(
             {
                 "connection_id": self.connection_id,
                 "connection_name": self.connection_name,
-                "bidirectional": self.bidirectional,
                 "first_logical_interface_id": self.first_logical_interface_id,
                 "first_logical_interface_name": self.first_logical_interface.logical_name,
                 "second_logical_interface_id": self.second_logical_interface_id,
@@ -277,13 +293,22 @@ class ParameterModel(Base):
         nullable=False,
     )
     value = Column(Integer, nullable=False)
+    direction = Column(
+        Enum(
+            INCOMING,
+            OUTGOING,
+            name="direction_enum",
+        ),
+        nullable=False,
+    )
     belongs_to_connection_id = Column(
         Integer, ForeignKey("connection.connection_id"), nullable=False
     )
 
-    def __init__(self, parameter_name, value, connection_id):
+    def __init__(self, parameter_name, value, direction, connection_id):
         self.parameter_name = parameter_name
         self.value = value
+        self.direction = direction
         self.belongs_to_connection_id = connection_id
 
     def __repr__(self):
@@ -292,6 +317,7 @@ class ParameterModel(Base):
                 "parameter_id": self.parameter_id,
                 "parameter_name": self.parameter_name,
                 "value": self.value,
+                "direction": self.direction,
                 "connection_id": self.belongs_to_connection_id,
             }
         )

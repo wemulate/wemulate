@@ -1,10 +1,13 @@
-from typing import Dict, Text
+import os
+from typing import Dict, List, Text
+
 from jinja2 import Environment, FileSystemLoader
 from jinja2.environment import Template
-import os
+
+from wemulate.core.database.models import ParameterModel
 
 
-def rendering(data: Dict[str, int], template_file_name: str) -> Text:
+def rendering(data: Dict[str, List[ParameterModel]], template_file_name: str) -> Text:
     env: Environment = Environment(
         loader=FileSystemLoader(
             os.path.join(os.path.dirname(__file__), "../templates")

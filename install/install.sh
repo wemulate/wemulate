@@ -79,12 +79,54 @@ elevate_priv() {
   fi
 }
 
+<<<<<<< HEAD
 find_latest_release() {
   local url="https://api.github.com/repos/wemulate/wemulate/releases/latest"
   local response=$(curl -s $url)
   local tag=$(echo $response | jq -r '.tag_name')
   local tag_version=$(echo $tag | sed 's/^v//')
   RELEASE=$tag_version
+=======
+install_dependencies() {
+  local sudo="$1"
+  confirm "Install dependencies on system?"
+  info "Install dependencies..."
+  printf '\n'
+  $sudo apt-get update
+  $sudo apt-get install --yes python3 
+  $sudo apt-get install --yes python3-pip 
+  printf '\n'
+  completed "Dependencies successful installed"
+}
+
+check_configuration_dir() {
+  local configuration_dir="$1"
+  local sudo="$2"
+
+  if [ ! -d "$CONFIGURATION_DIR" ]; then
+    warn "Configuration location $CONFIGURATION_DIR does not appear to be a directory"
+    confirm "Do you want to create the directory"
+    $sudo bash -c "mkdir "${CONFIGURATION_DIR}""
+    completed "Directory $CONFIGURATION_DIR created"
+  fi
+}
+
+create_default_configuration() {
+  local sudo="$1"
+  local path="$CONFIGURATION_DIR/wemulate.yml"
+  $sudo bash -c "cat > "${path}"" << EOF
+---
+wemulate:
+  db_location: /etc/wemulate/wemulate.db
+EOF
+  completed "Default configuration $path is generated"
+}
+
+configure_mgmt_interface() {
+  local sudo="$1"
+  $sudo wemulate config set -m $INTERFACE --force 
+  completed "Management interface $INTERFACE is configured"
+>>>>>>> main
 }
 
 create_startup_configuration() {
@@ -93,7 +135,97 @@ create_startup_configuration() {
   sudo bash -c "cat >> "${cron_config_file}"" << EOF
 @reboot root    wemulate restore device >> $cron_config_file
 EOF
+<<<<<<< HEAD
   completed "Startup configuration created"
+=======
+  completed "Startup configuration $path is generated"
+  $sudo bash -c "cat >> "${cron_config_file}"" << EOF
+@reboot root    bash $path >> $cron_config_file
+EOF
+  completed "Cron job configuration $cron_config_file was generated"
+  }
+
+read_management_interface() {
+  local sudo="$1"
+  if [ -z "${FORCE-}" ]; then
+    printf "%s " "${MAGENTA}?${NO_COLOR} "Do you want to define a management interface" ${BOLD}[y/N]${NO_COLOR}"
+    set +e
+    read -r yn </dev/tty
+    rc=$?
+    set -e
+    if [ $rc -ne 0 ]; then
+      error "Error reading from prompt (please re-run with the 'yes or no' option)"
+      exit 1
+    fi
+    if [ "$yn" != "y" ] && [ "$yn" != "yes" ]; then
+      info "The default interface $INTERFACE has been added to the configuration"
+    else
+      printf "%s " "${MAGENTA}?${NO_COLOR} "Enter the desired name of the management interface" ${BOLD}[interface_name]${NO_COLOR}" 
+      set +e
+      read -r intname </dev/tty
+      rc=$?
+      set -e
+      if [ $rc -ne 0 ]; then
+        error "Error reading from prompt (please re-run with an interface name option)"
+        exit 1
+      fi
+      if ! echo "$(ip a)" | grep -q $intname; then
+        error "Interface is not available"
+        exit 1
+      fi
+      INTERFACE="$intname"
+    fi
+  fi
+  create_default_configuration $sudo
+  create_startup_configuration $sudo
+}
+
+install_api () {
+  local sudo="$1"
+  info "Install API..."
+  $sudo pip3 install wemulate-api
+  local path="/etc/systemd/system/wemulateapi.service"
+  $sudo bash -c "cat > "${path}"" << EOF
+[Unit]
+Description=WEmulate API
+
+[Service]
+User=root
+ExecStart=/usr/local/bin/wemulate-api
+Restart=always
+
+[Install]
+WantedBy=multi-user.target
+EOF
+  $sudo systemctl daemon-reload
+  $sudo systemctl enable wemulateapi.service
+  $sudo systemctl start wemulateapi.service
+  completed "API installed successfully as service"
+}
+
+install_frontend () {
+  local sudo="$1"
+  info "Install frontend..."
+  printf '\n'
+  install_reverse_proxy $sudo
+  $sudo wget -O /var/www/html/release.zip https://github.com/wemulate/wemulate-frontend/releases/latest/download/release.zip
+  $sudo apt -y install unzip
+  $sudo unzip -o -q /var/www/html/release.zip -d /var/www/html
+  $sudo rm -f /var/www/html/release.zip
+  printf '\n'
+  completed "Frontend installed and started successfully"
+}
+
+install_reverse_proxy () {
+  local sudo="$1"
+  $sudo apt update
+  $sudo apt -y install nginx
+  create_nginx_configuration $sudo
+  $sudo rm -f /etc/nginx/sites-enabled/default
+  $sudo rm -f /etc/nginx/sites-available/default
+  $sudo rm -f /var/www/html/index.nginx-debian.html
+  $sudo systemctl restart nginx.service
+>>>>>>> main
 }
 
 create_nginx_configuration() {
@@ -124,7 +256,6 @@ http {
 
             location /api {
                 proxy_pass         http://wemulateapi;
-                proxy_redirect     off;
             }
 
             location / {
@@ -222,8 +353,26 @@ install() {
   if [ -n "${API-}" ]; then
     install_api
   fi
+<<<<<<< HEAD
   if [ -n "${FRONTEND-}" ]; then
     install_frontend
+=======
+  info "$msg"
+  check_configuration_dir "${CONFIGURATION_DIR}" $sudo
+  install_dependencies $sudo
+  read_management_interface $sudo
+  completed "Install wemulate $RELEASE"
+  printf '\n'
+  $sudo pip3 install wemulate${RELEASE}
+  configure_mgmt_interface $sudo
+
+  if [ $ENABLE_FRONTEND = true ]; then
+    install_frontend $sudo
+  fi
+
+  if [ $ENABLE_API = true ]; then
+    install_api $sudo
+>>>>>>> main
   fi
 }
 
@@ -236,8 +385,14 @@ finish_message() {
   info "${YELLOW}Mgmt Interfaces:${NO_COLOR} ${INTERFACES[@]}"
   info "Please follow the steps to use WEmulate on your machine:
 
+<<<<<<< HEAD
     ${BOLD}${UNDERLINE}Change user${NO_COLOR}
     Execute the application with ${BOLD}sudo${NO_COLOR} e.g:
+=======
+if [ -z "${INTERFACE-}" ]; then
+  INTERFACE="$(ip a | sed -n 's/.*\(eth[0-9]\+\|ens[0-9]\+\|enp[0-9]s[0-9]\+\|eno[0-9]\+\).*/\1/p' | head -n 1)"
+fi
+>>>>>>> main
 
         sudo wemulate --help
 

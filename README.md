@@ -23,6 +23,20 @@ $ wemulate add connection -n connectionname -i LAN-A,LAN-B
 # Delete a connection
 $ wemulate delete connection -n connectionname
 
-# Add parameters
+# Add parameters bidirectional
 $ wemulate add parameter -n connectionname -j 20 -d 40
+
+# Add parameters in specific direction
+$ wemulate add parameter -n connectionname -j 20 -d 40 -src LAN-A -dst LAN-B
+
+```
+
+## Development
+Configure poetry to create the environment inside the project path, in order that VSCode can recognize the virtual environment.
+```
+$ poetry config virtualenvs.in-project true
+```
+Install the virtualenv.
+```
+$ poetry install
 ```
