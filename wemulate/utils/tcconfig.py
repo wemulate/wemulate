@@ -18,7 +18,7 @@ from wemulate.core.database.models import (
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
 
-CONFIG_PATH: str = "/etc/wemulate/config"
+CONFIG_PATH: str = "/var/lib/wemulate/config"
 BRIDGE_CONFIG_FILE: str = "bridge.conf"
 TC_CONFIG_FILE: str = "tc.conf"
 ip: IPRoute = IPRoute()

@@ -1,8 +1,7 @@
-from typing import List, Optional
-
 import netifaces
-
 import wemulate.core.database.utils as dbutils
+
+from typing import List, Optional
 from wemulate.core.exc import WEmulateExecutionError, WemulateMgmtInterfaceError
 from wemulate.ext.utils.reset import reset_device
 
