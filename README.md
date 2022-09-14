@@ -11,8 +11,22 @@ Have a look at the [documentation](https://wemulate.github.io/wemulate) for deta
 
 ### Getting Started
 Install wemulate cli application  
-```bash
-$ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
+```
+You have different options available over the install script:
+```
+Syntax: install.sh [-h|f|i|v|a]
+options:
+-h               Print this Help.
+-f               Force install.
+-i <int1,int2>   Management interfaces to configure.
+-v               Install frontend module.
+-a               Install api module.
+```
+You can for example install the cli, api and frontend module together with two management interfaces with the following command:
+```
+sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)" -a -v -i ens2,ens3 -f
 ```
 
 ## Usage 
