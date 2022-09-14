@@ -1,44 +1,25 @@
-import yaml
 from typing import Dict
+from pathlib import Path
 
-from wemulate.core.exc import WEmulateConfigNotFoundError, WEmulateDatabaseError
-
-
-WEMULATE_CONFIG_PATH = "/etc/wemulate/wemulate.yml"
-
-
-def get_config_path() -> str:
-    """
-    Returns the current path of the config.
-
-    Returns:
-        Returns the path as string.
-    """
-    return WEMULATE_CONFIG_PATH
-
-
-def get_config() -> Dict:
-    """
-    Returns the current configuration as dict.
-
-    Returns:
-        Returns the whole configuration as dict.
-    """
-    try:
-        with open(get_config_path()) as file:
-            return yaml.full_load(file)
-    except FileNotFoundError:
-        raise WEmulateConfigNotFoundError
+WEMULATE_FOLDER_PATH = "/var/lib/wemulate"
+WEMULATE_DATABASE_PATH = "/var/lib/wemulate/wemulate.db"
 
 
 def get_db_location() -> str:
     """
-    Returns the current database path from the configuration file.
+    Returns the database path.
 
     Returns:
         Returns the path to the database as string.
     """
-    try:
-        return get_config().get("wemulate", {})["db_location"]
-    except KeyError:
-        raise WEmulateDatabaseError
+    return WEMULATE_DATABASE_PATH
+
+
+def get_folder_location() -> str:
+    """
+    Returns the wemulate folder path.
+
+    Returns:
+        Returns the path to the wemulate folder as string.
+    """
+    return WEMULATE_FOLDER_PATH
