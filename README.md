@@ -16,6 +16,8 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/i
 ```
 
 ## Usage 
+![WEmulate CLI Commands](/docs/img/animation-wemulate-cli.gif)
+
 ```bash
 # Add a new connection
 $ wemulate add connection -n connectionname -i LAN-A,LAN-B
