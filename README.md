@@ -20,7 +20,7 @@ $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/i
 
 ```bash
 # Add a new connection
-$ wemulate add connection -n connectionname -i LAN-A,LAN-B
+$ wemulate add connection -n connectionname -i LAN-A LAN-B
 
 # Delete a connection
 $ wemulate delete connection -n connectionname
