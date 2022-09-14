@@ -175,11 +175,11 @@ install_api() {
   if [ -z $(pip3 freeze | grep wemulate-api) ]; then
     confirm "Do you want to install the API module?"
     info "Installing API module"
-    sudo pip3 install wemulate-api==${RELEASEAPI}
+    sudo pip3 install wemulate-api
   else
     confirm "Do you want to update the API module?"
     info "Updating API module"
-    sudo pip3 install wemulate-api==${RELEASEAPI} --upgrade
+    sudo pip3 install wemulate-api --upgrade
   fi
   local path="/etc/systemd/system/wemulateapi.service"
   sudo bash -c "cat > "${path}"" << EOF
@@ -210,12 +210,7 @@ install_frontend() {
   info "Installing Frontend module"
   install_reverse_proxy 
   sudo apt -y install unzip
-  $(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/wemulate/wemulate-frontend/releases \
-  | grep "browser_download_url" \
-  | grep ${RELEASEFRONTEND} \
-  | cut -d : -f 2,3 \
-  | tr -d \" \
-  | sudo wget -O /var/www/html/release.zip -qi -)
+  sudo wget -O /var/www/html/release.zip https://github.com/wemulate/wemulate-frontend/releases/latest/download/release.zip
   sudo unzip -o -q /var/www/html/release.zip -d /var/www/html/
   sudo rm -f /var/www/html/release.zip
   completed "Frontend module installed"
@@ -224,11 +219,11 @@ install_frontend() {
 install_cli() {
   if [ -z $(pip3 freeze | grep wemulate) ]; then
     confirm "Do you want to install the CLI module?"
-    sudo pip3 install wemulate==${RELEASECLI}
+    sudo pip3 install wemulate
     completed "CLI module installed"
   else
     confirm "Do you want to update the CLI module?"
-    sudo pip3 install wemulate==${RELEASECLI} --upgrade
+    sudo pip3 install wemulate --upgrade
     completed "CLI module updated"
   fi
 }
@@ -250,15 +245,6 @@ install() {
 start_message() {
   printf '\n'
   info "Welcome to the WEmulate installer"
-  printf '\n'
-  info "The following releases will be installed:"
-  info "${YELLOW}CLI Release:${NO_COLOR} ${RELEASECLI}"
-  if [ -n "${API-}" ]; then
-    info "${YELLOW}API Release:${NO_COLOR} ${RELEASEAPI}"
-  fi
-  if [ -n "${FRONTEND-}" ]; then
-    info "${YELLOW}Frontend Release:${NO_COLOR} ${RELEASEFRONTEND}"
-  fi
   printf '\n'
   info "The following mgmt interfaces will be configured:"
   info "${YELLOW}Mgmt Interfaces:${NO_COLOR} ${INTERFACES[@]}"
@@ -285,9 +271,6 @@ finish_message() {
 }
 
 # Set default argument variables
-RELEASECLI=$(curl -s https://api.github.com/repos/wemulate/wemulate/releases/latest | jq -r '.tag_name' | sed 's/^v//')
-RELEASEAPI=$(curl -s https://api.github.com/repos/wemulate/wemulate-api/releases/latest | jq -r '.tag_name' | sed 's/^v//')
-RELEASEFRONTEND=$(curl -s https://api.github.com/repos/wemulate/wemulate-frontend/releases/latest | jq -r '.tag_name' | sed 's/^v//')
 INTERFACES=("$(ip a | sed -n 's/.*\(eth[0-9]\+\|ens[0-9]\+\|enp[0-9]s[0-9]\+\|eno[0-9]\+\).*/\1/p' | head -n 1)")
 
 # Parse arguments
