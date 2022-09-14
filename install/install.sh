@@ -80,9 +80,19 @@ elevate_priv() {
 
 create_startup_configuration() {
   info "Creating startup configuration"
+  local configuration_dir="/var/lib/wemulate"
+  local path="$configuration_dir/startup.sh"
+  local conf_folder=$configuration_dir/config
   local cron_config_file=/etc/crontab
+  $sudo bash -c "cat > "${path}"" << EOF
+#!/bin/bash
+for directory in $conf_folder/*; do
+    bash \$directory/bridge.conf
+    bash \$directory/tc.conf
+done
+EOF
   sudo bash -c "cat >> "${cron_config_file}"" << EOF
-@reboot root    wemulate restore device >> $cron_config_file
+@reboot root    bash $path >> $cron_config_file
 EOF
   completed "Startup configuration created"
 }
