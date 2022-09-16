@@ -77,3 +77,11 @@ master_doc = "index"
 
 # add sourcecode to path
 sys.path.insert(0, os.path.abspath("../wemulate"))
+
+# exclude breaking imports
+autodoc_mock_imports = [
+    "sqlalchemy",
+    "pyroute2",
+    "netifaces",
+    "wemulate.ext.settings.folder",
+]
