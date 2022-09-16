@@ -26,7 +26,7 @@ options:
 ```
 You can for example install the cli, api and frontend module together with two management interfaces with the following command:
 ```
-bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)" -a -v -i ens2,ens3 -f
+curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
 ```
 
 ## Usage 
