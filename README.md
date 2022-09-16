@@ -12,7 +12,7 @@ Have a look at the [documentation](https://wemulate.github.io/wemulate) for deta
 ### Getting Started
 Install wemulate cli application  
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 ```
 You have different options available over the install script:
 ```
@@ -26,7 +26,7 @@ options:
 ```
 You can for example install the cli, api and frontend module together with two management interfaces with the following command:
 ```
-sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)" -a -v -i ens2,ens3 -f
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)" -a -v -i ens2,ens3 -f
 ```
 
 ## Usage 
