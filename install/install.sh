@@ -242,6 +242,15 @@ install() {
   fi
 }
 
+print_banner() {
+  printf '%s\n' \
+  ' __        _______                 _       _       ' \
+  ' \ \      / / ____|_ __ ___  _   _| | __ _| |_ ___ ' \
+  '  \ \ /\ / /|  _| |  _ ` _ \| | | | |/ _` | __/ _ \' \
+  '   \ V  V / | |___| | | | | | |_| | | (_| | ||  __/' \
+  '    \_/\_/  |_____|_| |_| |_|\__,_|_|\__,_|\__\___|'
+}
+
 start_message() {
   printf '\n'
   info "Welcome to the WEmulate installer"
@@ -296,6 +305,7 @@ while getopts "hfavi:" option; do
   esac
 done
 
+print_banner
 start_message
 install
 finish_message
