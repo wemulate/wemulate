@@ -217,7 +217,7 @@ install_frontend() {
 }
 
 install_cli() {
-  if [ -z $(pip3 freeze | grep wemulate) ]; then
+  if [[ -z $(pip3 freeze | grep wemulate) ]]; then
     confirm "Do you want to install the CLI module?"
     sudo pip3 install wemulate
     completed "CLI module installed"
