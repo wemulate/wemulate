@@ -84,6 +84,7 @@ create_startup_configuration() {
   local path="$configuration_dir/startup.sh"
   local conf_folder=$configuration_dir/config
   local cron_config_file=/etc/crontab
+  sudo mkdir $configuration_dir
   sudo bash -c "cat > "${path}"" << EOF
 #!/bin/bash
 for directory in $conf_folder/*; do
