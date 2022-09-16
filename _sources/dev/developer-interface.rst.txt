@@ -32,15 +32,13 @@ Database and TC Interface
 
 Setting and Configuration Interface
 ***********************************
-.. autoconfig:: wemulate.ext.settings.get_interface_ip
+.. autofunction:: wemulate.ext.settings.get_interface_ip
 .. autofunction:: wemulate.ext.settings.get_interface_mac_address
 .. autofunction:: wemulate.ext.settings.get_mgmt_interfaces
-.. autoconfig:: wemulate.ext.settings.get_all_interfaces_on_device
-.. autoconfig:: wemulate.ext.settings.add_mgmt_interface
-.. autoconfig:: wemulate.ext.settings.get_non_mgmt_interfaces
-.. autoconfig:: wemulate.ext.settings.check_if_mgmt_interface_set
-.. autofunction:: wemulate.ext.settings.get_config
-.. autofunction:: wemulate.ext.settings.get_config_path
+.. autofunction:: wemulate.ext.settings.get_all_interfaces_on_device
+.. autofunction:: wemulate.ext.settings.add_mgmt_interface
+.. autofunction:: wemulate.ext.settings.get_non_mgmt_interfaces
+.. autofunction:: wemulate.ext.settings.check_if_mgmt_interface_set
 .. autofunction:: wemulate.ext.settings.get_db_location
 
 

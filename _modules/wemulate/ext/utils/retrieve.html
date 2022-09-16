@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>wemulate.ext.utils.retrieve &mdash; WEmulate 0.0.1a3 documentation</title>
+      <link rel="stylesheet" href="../../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../../_static/css/theme.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../../" id="documentation_options" src="../../../../_static/documentation_options.js"></script>
+        <script src="../../../../_static/jquery.js"></script>
+        <script src="../../../../_static/underscore.js"></script>
+        <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../../_static/doctools.js"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../../index.html" class="icon icon-home"> WEmulate
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/install.html">Installation of WEmulate</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../user/quickstart.html">Quickstart</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/developer-interface.html">Developer Interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/api.html">API Specification</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/incoming-outgoing-explanation.html">Incoming - Outgoing Explanation</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../hw/hw.html">Hardware Guide</a></li>
+</ul>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../dev/authors.html">Authors</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">WEmulate</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../../index.html">Module code</a> &raquo;</li>
+      <li>wemulate.ext.utils.retrieve</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for wemulate.ext.utils.retrieve</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="k">import</span> <span class="n">List</span><span class="p">,</span> <span class="n">Optional</span><span class="p">,</span> <span class="n">Tuple</span>
+
+<span class="kn">import</span> <span class="nn">wemulate.core.database.utils</span> <span class="k">as</span> <span class="nn">dbutils</span>
+<span class="kn">from</span> <span class="nn">wemulate.core.database.models</span> <span class="k">import</span> <span class="n">ConnectionModel</span><span class="p">,</span> <span class="n">LogicalInterfaceModel</span>
+
+
+<div class="viewcode-block" id="get_physical_interface_names"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_physical_interface_names">[docs]</a><span class="k">def</span> <span class="nf">get_physical_interface_names</span><span class="p">(</span>
+    <span class="n">first_logical_interface</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">second_logical_interface</span><span class="p">:</span> <span class="nb">str</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Tuple</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="nb">str</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Get the physical interface names for the logical interface names.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        first_logical_interface: First logical interface name.</span>
+<span class="sd">        second_logical_interface: Second logical interface name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Tuple of strings.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">physical_interface1_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_physical_interface_by_logical_name</span><span class="p">(</span>
+        <span class="n">first_logical_interface</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">physical_name</span>
+    <span class="n">physical_interface2_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_physical_interface_by_logical_name</span><span class="p">(</span>
+        <span class="n">second_logical_interface</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">physical_name</span>
+    <span class="k">return</span> <span class="n">physical_interface1_name</span><span class="p">,</span> <span class="n">physical_interface2_name</span></div>
+
+
+<div class="viewcode-block" id="get_logical_interface_by_name"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_logical_interface_by_name">[docs]</a><span class="k">def</span> <span class="nf">get_logical_interface_by_name</span><span class="p">(</span>
+    <span class="n">logical_interface_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Optional</span><span class="p">[</span><span class="n">LogicalInterfaceModel</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return the logical interface object for a given name</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        logical_interface_name: Logical interface name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a logical interface object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_logical_interface_by_name</span><span class="p">(</span><span class="n">logical_interface_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="connection_exists_in_db"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.connection_exists_in_db">[docs]</a><span class="k">def</span> <span class="nf">connection_exists_in_db</span><span class="p">(</span><span class="n">connection_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a true if a connection exists in the database</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        connection_name: Connection name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a boolean.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">connection_exists</span><span class="p">(</span><span class="n">connection_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_connection_by_name"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_connection_by_name">[docs]</a><span class="k">def</span> <span class="nf">get_connection_by_name</span><span class="p">(</span><span class="n">connection_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectionModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a a connection object for a connection name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        connection_name: Connection name.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a connection object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_connection_by_name</span><span class="p">(</span><span class="n">connection_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_connection_by_id"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_connection_by_id">[docs]</a><span class="k">def</span> <span class="nf">get_connection_by_id</span><span class="p">(</span><span class="n">connection_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ConnectionModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns a a connection object by its unique id.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        connection_id: Connection id.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a connection object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_connection_by_id</span><span class="p">(</span><span class="n">connection_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_logical_interface_by_id"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_logical_interface_by_id">[docs]</a><span class="k">def</span> <span class="nf">get_logical_interface_by_id</span><span class="p">(</span>
+    <span class="n">logical_interface_id</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LogicalInterfaceModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the logical interface object for the logical interface id.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        logical_interface_id: The unique identifier for the specific logical interface.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a logical interface object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_logical_interface_by_id</span><span class="p">(</span><span class="n">logical_interface_id</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_logical_interface_by_physical_name"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_logical_interface_by_physical_name">[docs]</a><span class="k">def</span> <span class="nf">get_logical_interface_by_physical_name</span><span class="p">(</span>
+    <span class="n">physical_interface_name</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">LogicalInterfaceModel</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns the logical interface object for a physical interface name.</span>
+
+<span class="sd">    Args:</span>
+<span class="sd">        physical_interface_name: Name of the physical interface.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a logical interface object.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_logical_interface_by_physical_name</span><span class="p">(</span><span class="n">physical_interface_name</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_connection_list"><a class="viewcode-back" href="../../../../dev/developer-interface.html#wemulate.ext.utils.get_connection_list">[docs]</a><span class="k">def</span> <span class="nf">get_connection_list</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n">List</span><span class="p">[</span><span class="n">ConnectionModel</span><span class="p">]:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Returns all existing connection objects as a list.</span>
+
+<span class="sd">    Returns:</span>
+<span class="sd">        Returns a list of connection objects.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">dbutils</span><span class="o">.</span><span class="n">get_connection_list</span><span class="p">()</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2021, Institute for Networked Solutions.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
