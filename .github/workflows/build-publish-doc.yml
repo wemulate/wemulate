@@ -1,0 +1,32 @@
+name: Build and publish documentation
+on:
+  push:
+    branches:
+      - main
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-python@v4
+      - name: Install sphinx dependencies
+        run: pip3 install sphinx sphinx_rtd_theme
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          virtualenvs-create: true
+          virtualenvs-in-project: true
+          installer-parallel: true
+      - uses: actions/checkout@master
+        with:
+          fetch-depth: 0 # otherwise, you will failed to push refs to dest repo
+      - name: Install project dependencies
+        run: poetry install
+      - name: Build and Commit
+        uses: sphinx-notes/pages@v2
+        with:
+          documentation_path: ./docs
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: gh-pages
