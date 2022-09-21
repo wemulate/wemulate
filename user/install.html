@@ -4,7 +4,7 @@
   <meta charset="utf-8" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Installation of WEmulate &mdash; WEmulate 0.0.1a3 documentation</title>
+  <title>Installation of WEmulate &mdash; WEmulate 2.0.3 documentation</title>
       <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
       <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
   <!--[if lt IE 9]>
@@ -90,42 +90,37 @@
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
 <p>In order to use WEmulate to influence traffic at least the following requirements should be fullfilled:</p>
 <ul class="simple">
-<li><p>At least 2 network interfaces for <code class="docutils literal notranslate"><span class="pre">LAN-A</span></code> and <code class="docutils literal notranslate"><span class="pre">LAN-B</span></code></p></li>
+<li><p>At least 3 network interfaces for <code class="docutils literal notranslate"><span class="pre">LAN-A</span></code>, <code class="docutils literal notranslate"><span class="pre">LAN-B</span></code> and the management interface.</p></li>
 <li><p>Ubuntu installed</p></li>
 </ul>
 </section>
 <section id="install-with-bash">
 <h2>Install with bash<a class="headerlink" href="#install-with-bash" title="Permalink to this heading"></a></h2>
 <p>To install WEmulate with bash, simply run this simple command in your terminal of choice:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ sh -c &quot;$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)&quot;
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)&quot;
 </pre></div>
 </div>
 <p>There are different arguments available in order to enhance the installation experience:</p>
 <ul class="simple">
-<li><p><code class="docutils literal notranslate"><span class="pre">--verbose</span></code> Enable verbose output for the installer</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--force</span></code> or <code class="docutils literal notranslate"><span class="pre">--yes</span></code> Skip the confirmation prompt during installation</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--configuration-dir</span></code> Override the configuration directory</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--release</span></code> Override the release which should be installed</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--interface</span></code> Defines a default management interface</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--api</span></code> Installs the api module</p></li>
-<li><p><code class="docutils literal notranslate"><span class="pre">--frontend</span></code> Installs the frontend module</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-h</span></code> Prints the help message</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-f</span></code> Skip the confirmation prompt during installation</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-i</span> <span class="pre">&lt;int1,int2&gt;</span></code> List of interfaces which should be used as management interfaces</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-a</span></code> Installs the api module</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> Installs the frontend module</p></li>
 </ul>
+<p>If you want to use some arguments directly with the script, you can do so by adding them to the command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
+</pre></div>
+</div>
 </section>
 <section id="install-from-source">
 <h2>Install from source<a class="headerlink" href="#install-from-source" title="Permalink to this heading"></a></h2>
 <p>You can also install WEmulate from source, please follow the instructions below:</p>
 <ul class="simple">
+<li><p>Install poetry (see <a class="reference external" href="https://python-poetry.org/docs/#installation">here</a> for more information)</p></li>
 <li><p>Install all dependencies:</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> sudo apt install --yes python3 python3-pip
-</pre></div>
-</div>
-<ul class="simple">
-<li><p>Create a new configuration file: <code class="docutils literal notranslate"><span class="pre">/etc/wemulate/wemulate.yml</span></code></p></li>
-</ul>
-<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">---</span>
-<span class="go">wemulate:</span>
-<span class="go">    db_location: /etc/wemulate/wemulate.db</span>
 </pre></div>
 </div>
 <ul class="simple">
@@ -138,7 +133,7 @@
 <li><p>Install WEmulate</p></li>
 </ul>
 <div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$</span> <span class="nb">cd</span> wemulate
-<span class="gp">$</span> pip install -r requirements.txt
+<span class="gp">$</span> poetry install
 </pre></div>
 </div>
 <ul class="simple">
@@ -161,7 +156,7 @@
   <hr/>
 
   <div role="contentinfo">
-    <p>&#169; Copyright 2021, Institute for Networked Solutions.</p>
+    <p>&#169; Copyright 2022, Institute for Networked Solutions.</p>
   </div>
 
   Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
