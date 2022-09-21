@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "wemulate"
-version = "2.0.2"
+version = "2.0.3"
 description = "A modern WAN Emulator"
 authors = ["Julian Klaiber <julian.klaiber@ost.ch>", "Severin Dellsperger <severin.dellsperger@ost.ch>"]
 license = "GNU General Public License v3.0"
