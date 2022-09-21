@@ -3,11 +3,10 @@ from typing import List, Optional
 import typer
 from rich.prompt import Confirm
 
-import wemulate.ext.settings as settings
 from wemulate.core.exc import WemulateMgmtInterfaceError
-from wemulate.ext import utils
 from wemulate.ext import settings
 from wemulate.utils.output import err_console, console
+from wemulate.core.database.setup import pre_setup_database
 
 
 app = typer.Typer(help="configure the application settings")
@@ -31,6 +30,7 @@ def set(
         try:
             for interface_name in management_interfaces:
                 settings.add_mgmt_interface(interface_name)
+            pre_setup_database()
             raise typer.Exit()
         except WemulateMgmtInterfaceError as e:
             err_console.print(e.message)
