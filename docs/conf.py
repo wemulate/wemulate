@@ -23,11 +23,11 @@ sys.path.insert(0, os.path.abspath("../wemulate/ext/settings"))
 # -- Project information -----------------------------------------------------
 
 project = "WEmulate"
-copyright = "2021, Institute for Networked Solutions"
+copyright = "2022, Institute for Networked Solutions"
 author = "Julian Klaiber & Severin Dellsperger"
 
 # The full version, including alpha/beta/rc tags
-release = "0.0.1a3"
+release = "2.0.3"
 
 
 # -- General configuration ---------------------------------------------------
