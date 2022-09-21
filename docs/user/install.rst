@@ -10,7 +10,7 @@ Requirements
 *************
 In order to use WEmulate to influence traffic at least the following requirements should be fullfilled:
 
-* At least 2 network interfaces for ``LAN-A`` and ``LAN-B``
+* At least 3 network interfaces for ``LAN-A``, ``LAN-B`` and the management interface.
 * Ubuntu installed
 
 
@@ -18,35 +18,32 @@ Install with bash
 **************************
 To install WEmulate with bash, simply run this simple command in your terminal of choice::
 
-    $ sh -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
+    $ bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 
 There are different arguments available in order to enhance the installation experience:
 
-* ``--verbose`` Enable verbose output for the installer
-* ``--force`` or ``--yes`` Skip the confirmation prompt during installation
-* ``--configuration-dir`` Override the configuration directory
-* ``--release`` Override the release which should be installed
-* ``--interface`` Defines a default management interface
-* ``--api`` Installs the api module
-* ``--frontend`` Installs the frontend module
+* ``-h`` Prints the help message
+* ``-f`` Skip the confirmation prompt during installation
+* ``-i <int1,int2>`` List of interfaces which should be used as management interfaces
+* ``-a`` Installs the api module
+* ``-v`` Installs the frontend module
+
+If you want to use some arguments directly with the script, you can do so by adding them to the command::
+
+    $ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
+
 
 Install from source
 **************************
 You can also install WEmulate from source, please follow the instructions below:
+
+* Install poetry (see `here <https://python-poetry.org/docs/#installation>`_ for more information)
 
 * Install all dependencies:
 
 .. code-block:: console
 
     $ sudo apt install --yes python3 python3-pip 
-
-* Create a new configuration file: ``/etc/wemulate/wemulate.yml``
-
-.. code-block:: console
-
-    ---
-    wemulate:
-        db_location: /etc/wemulate/wemulate.db
 
 * Clone the repository
 
@@ -59,7 +56,7 @@ You can also install WEmulate from source, please follow the instructions below:
 .. code-block:: console
 
     $ cd wemulate
-    $ pip install -r requirements.txt
+    $ poetry install
 
 * Configure the management interfaces
 
