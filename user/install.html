@@ -88,15 +88,17 @@
 <p>This part of the documentation covers the installation of WEmulate.</p>
 <section id="requirements">
 <h2>Requirements<a class="headerlink" href="#requirements" title="Permalink to this heading"></a></h2>
-<p>In order to use WEmulate to influence traffic at least the following requirements should be fullfilled:</p>
+<p>In order to use WEmulate to influence traffic at least the following requirements should be fulfilled:</p>
 <ul class="simple">
-<li><p>At least 3 network interfaces for <code class="docutils literal notranslate"><span class="pre">LAN-A</span></code>, <code class="docutils literal notranslate"><span class="pre">LAN-B</span></code> and the management interface.</p></li>
+<li><p>At least two network interfaces for <code class="docutils literal notranslate"><span class="pre">LAN-A</span></code> and <code class="docutils literal notranslate"><span class="pre">LAN-B</span></code></p></li>
+<li><p>A third management interface if you would like to use the api and frontend module</p></li>
 <li><p>Ubuntu installed</p></li>
+<li><p>Root permissions</p></li>
 </ul>
 </section>
 <section id="install-with-bash">
 <h2>Install with bash<a class="headerlink" href="#install-with-bash" title="Permalink to this heading"></a></h2>
-<p>To install WEmulate with bash, simply run this simple command in your terminal of choice:</p>
+<p>To install only the WEmulate cli with bash, simply run this command in your terminal of choice:</p>
 <div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ bash -c &quot;$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)&quot;
 </pre></div>
 </div>
@@ -108,8 +110,8 @@
 <li><p><code class="docutils literal notranslate"><span class="pre">-a</span></code> Installs the api module</p></li>
 <li><p><code class="docutils literal notranslate"><span class="pre">-v</span></code> Installs the frontend module</p></li>
 </ul>
-<p>If you want to use some arguments directly with the script, you can do so by adding them to the command:</p>
-<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
+<p>You can for example install the cli, api and frontend module together with one management interface with the following command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2 -f
 </pre></div>
 </div>
 </section>

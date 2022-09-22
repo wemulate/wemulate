@@ -8,15 +8,17 @@ This part of the documentation covers the installation of WEmulate.
 
 Requirements
 *************
-In order to use WEmulate to influence traffic at least the following requirements should be fullfilled:
+In order to use WEmulate to influence traffic at least the following requirements should be fulfilled:
 
-* At least 3 network interfaces for ``LAN-A``, ``LAN-B`` and the management interface.
+* At least two network interfaces for ``LAN-A`` and ``LAN-B``
+* A third management interface if you would like to use the api and frontend module
 * Ubuntu installed
+* Root permissions
 
 
 Install with bash
 **************************
-To install WEmulate with bash, simply run this simple command in your terminal of choice::
+To install only the WEmulate cli with bash, simply run this command in your terminal of choice::
 
     $ bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 
@@ -28,9 +30,9 @@ There are different arguments available in order to enhance the installation exp
 * ``-a`` Installs the api module
 * ``-v`` Installs the frontend module
 
-If you want to use some arguments directly with the script, you can do so by adding them to the command::
+You can for example install the cli, api and frontend module together with one management interface with the following command::
 
-    $ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
+    $ curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2 -f
 
 
 Install from source
