@@ -5,28 +5,28 @@ Have a look at the [documentation](https://wemulate.github.io/wemulate) for deta
 
 ## Installation
 
-### Prerequisites
-* Virtual machine or physical device with at least two interfaces
-* Root permissions 
+### Requirements
+* At least two network interfaces for ``LAN-A`` and ``LAN-B``
+* A third management interface if you would like to use the api and frontend module
+* Ubuntu installed
+* Root permissions
 
 ### Getting Started
-Install wemulate cli application  
+To install only the WEmulate cli with bash, simply run this command in your terminal of choice:  
 ```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 ```
-You have different options available over the install script:
+There are different arguments available in order to enhance the installation experience:
 ```
-Syntax: install.sh [-h|f|i|v|a]
-options:
--h               Print this Help.
--f               Force install.
--i <int1,int2>   Management interfaces to configure.
--v               Install frontend module.
--a               Install api module.
+-h               Prints the help message
+-f               Skip the confirmation prompt during installation
+-i <int1,int2>   List of interfaces which should be used as management interfaces
+-a               Install the api module
+-v               Install the frontend module
 ```
-You can for example install the cli, api and frontend module together with two management interfaces with the following command:
+You can for example install the cli, api and frontend module together with one management interface with the following command:
 ```
-curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2,ens3 -f
+curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2 -f
 ```
 
 ## Usage 
