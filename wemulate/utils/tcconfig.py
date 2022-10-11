@@ -246,7 +246,7 @@ def set_parameters(
     Raises:
         WEmulateExecutionError: if the parameters could not be applied to the interface
     """
-    remove_parameters(connection_name, interface_name)
+    config_commands : List[str] = []
     for direction in [INCOMING, OUTGOING]:
         if parameters[direction]:
             mean_delay = (
@@ -254,11 +254,14 @@ def set_parameters(
                 if DELAY in parameters[direction]
                 else SMALLEST_POSSIBLE_DELAY
             )
-            config_command: str = _create_config_command(
+            ipv4_config_command: str = _create_config_command(
                 parameters, interface_name, direction, mean_delay
             )
-            _execute_in_shell(config_command)
-            _write_commands_to_tc_config_file(connection_name, [config_command])
+            ipv6_config_command = ipv4_config_command + " --ipv6"
+            config_commands.extend([ipv4_config_command, ipv6_config_command])
+    remove_parameters(connection_name, interface_name)
+    _execute_commands(config_commands)
+    _write_commands_to_tc_config_file(connection_name, config_commands)
 
 
 def remove_parameters(connection_name: str, interface_name: str) -> None:
@@ -274,5 +277,7 @@ def remove_parameters(connection_name: str, interface_name: str) -> None:
     Raises:
         WEmulateExecutionError: if the parameters could not be removed from the interface
     """
-    _execute_in_shell(f"tcdel {interface_name} --all")
+    ipv4_delete_command = f"tcdel {interface_name} --all"
+    ipv6_delete_command = ipv4_delete_command + " --ipv6" 
+    _execute_commands([ipv4_delete_command, ipv6_delete_command])
     _write_commands_to_tc_config_file(connection_name, [""])
