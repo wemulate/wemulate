@@ -15,6 +15,7 @@
         <script src="../../../_static/underscore.js"></script>
         <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
         <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/sphinx_highlight.js"></script>
     <script src="../../../_static/js/theme.js"></script>
     <link rel="index" title="Index" href="../../../genindex.html" />
     <link rel="search" title="Search" href="../../../search.html" /> 
@@ -85,7 +86,7 @@
 <div class="viewcode-block" id="WEmulateValidationError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WEmulateValidationError">[docs]</a><span class="k">class</span> <span class="nc">WEmulateValidationError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Validation errors&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;A validation error occured&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;A validation error occured&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -93,7 +94,7 @@
 <div class="viewcode-block" id="WEmulateExecutionError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WEmulateExecutionError">[docs]</a><span class="k">class</span> <span class="nc">WEmulateExecutionError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Execution errors&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;An unknown execution error occured&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;An unknown execution error occured&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -101,7 +102,7 @@
 <div class="viewcode-block" id="WEmulateConfigNotFoundError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WEmulateConfigNotFoundError">[docs]</a><span class="k">class</span> <span class="nc">WEmulateConfigNotFoundError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Config file not found error&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;No configuration file was found&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;No configuration file was found&quot;</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -109,7 +110,7 @@
 <div class="viewcode-block" id="WEmulateFileError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WEmulateFileError">[docs]</a><span class="k">class</span> <span class="nc">WEmulateFileError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error during writing/reading files&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -117,7 +118,7 @@
 <div class="viewcode-block" id="WEmulateDatabaseError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WEmulateDatabaseError">[docs]</a><span class="k">class</span> <span class="nc">WEmulateDatabaseError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Error during database operation&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">:</span> <span class="nb">str</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">message</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
 
@@ -125,10 +126,10 @@
 <div class="viewcode-block" id="WemulateMgmtInterfaceError"><a class="viewcode-back" href="../../../dev/developer-interface.html#wemulate.core.exc.WemulateMgmtInterfaceError">[docs]</a><span class="k">class</span> <span class="nc">WemulateMgmtInterfaceError</span><span class="p">(</span><span class="n">WEmulateError</span><span class="p">):</span>
     <span class="sd">&quot;&quot;&quot;Management Interface not found error&quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">interface_name</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="n">message</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
         <span class="k">if</span> <span class="ow">not</span> <span class="n">message</span><span class="p">:</span>
             <span class="k">if</span> <span class="n">interface_name</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="n">f</span><span class="s2">&quot;The interface </span><span class="si">{interface_name}</span><span class="s2"> is not present on this device. Please provide a valid interface name&quot;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;The interface </span><span class="si">{</span><span class="n">interface_name</span><span class="si">}</span><span class="s2"> is not present on this device. Please provide a valid interface name&quot;</span>
             <span class="k">else</span><span class="p">:</span>
                 <span class="bp">self</span><span class="o">.</span><span class="n">message</span> <span class="o">=</span> <span class="s2">&quot;There is no management interface configured. Please configure at least one with the wemulate config command before using other commands&quot;</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">message</span><span class="p">)</span></div>
