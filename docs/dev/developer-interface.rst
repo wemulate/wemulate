@@ -42,6 +42,7 @@ Setting and Configuration Interface
 .. autofunction:: wemulate.ext.settings.get_non_mgmt_interfaces
 .. autofunction:: wemulate.ext.settings.check_if_mgmt_interface_set
 .. autofunction:: wemulate.ext.settings.get_db_location
+.. autofunction:: wemulate.ext.settings.check_if_interfaces_present_on_device
 
 
 Exceptions
