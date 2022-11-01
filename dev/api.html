@@ -50,22 +50,30 @@
 <li class="toctree-l3"><a class="reference internal" href="#response">Response</a></li>
 </ul>
 </li>
-<li class="toctree-l2"><a class="reference internal" href="#get-api-v1-connections">GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/</span></code></a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#delete-api-v1-device-reset">DELETE <code class="docutils literal notranslate"><span class="pre">/api/v1/device/reset/</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id1">Response</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#get-api-v1-connections">GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id2">Response</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#post-api-v1-connections">POST <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#request">Request</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id2">Response</a></li>
-</ul>
-</li>
-<li class="toctree-l2"><a class="reference internal" href="#get-api-v1-connections-connection-id">GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code></a><ul>
 <li class="toctree-l3"><a class="reference internal" href="#id3">Response</a></li>
 </ul>
 </li>
+<li class="toctree-l2"><a class="reference internal" href="#get-api-v1-connections-connection-id">GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id4">Response</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="#put-api-v1-connections-connection-id">PUT <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code></a><ul>
-<li class="toctree-l3"><a class="reference internal" href="#id4">Request</a></li>
-<li class="toctree-l3"><a class="reference internal" href="#id5">Response</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id5">Request</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id6">Response</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#delete-api-v1-connections-connection-id">DELETE <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#id7">Response</a></li>
 </ul>
 </li>
 </ul>
@@ -150,11 +158,24 @@ The API package has to be installed on the system to use the appropriate routes.
 </div>
 </section>
 </section>
+<section id="delete-api-v1-device-reset">
+<h2>DELETE <code class="docutils literal notranslate"><span class="pre">/api/v1/device/reset/</span></code><a class="headerlink" href="#delete-api-v1-device-reset" title="Permalink to this heading"></a></h2>
+<p>Reset all connections on the device.</p>
+<section id="id1">
+<h3>Response<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;Device successfully resetted&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mi">200</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
 <section id="get-api-v1-connections">
 <h2>GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/</span></code><a class="headerlink" href="#get-api-v1-connections" title="Permalink to this heading"></a></h2>
 <p>Get all connection information.</p>
-<section id="id1">
-<h3>Response<a class="headerlink" href="#id1" title="Permalink to this heading"></a></h3>
+<section id="id2">
+<h3>Response<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connections&quot;</span><span class="p">:</span><span class="w"> </span><span class="p">[</span><span class="w"></span>
 <span class="w">        </span><span class="p">{</span><span class="w"></span>
@@ -212,8 +233,8 @@ The API package has to be installed on the system to use the appropriate routes.
 </pre></div>
 </div>
 </section>
-<section id="id2">
-<h3>Response<a class="headerlink" href="#id2" title="Permalink to this heading"></a></h3>
+<section id="id3">
+<h3>Response<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;new_name&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
@@ -227,8 +248,8 @@ The API package has to be installed on the system to use the appropriate routes.
 <section id="get-api-v1-connections-connection-id">
 <h2>GET <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code><a class="headerlink" href="#get-api-v1-connections-connection-id" title="Permalink to this heading"></a></h2>
 <p>Get specific connection information.</p>
-<section id="id3">
-<h3>Response<a class="headerlink" href="#id3" title="Permalink to this heading"></a></h3>
+<section id="id4">
+<h3>Response<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;Connection2&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
@@ -254,8 +275,8 @@ The API package has to be installed on the system to use the appropriate routes.
 <section id="put-api-v1-connections-connection-id">
 <h2>PUT <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code><a class="headerlink" href="#put-api-v1-connections-connection-id" title="Permalink to this heading"></a></h2>
 <p>Update specific connection information.</p>
-<section id="id4">
-<h3>Request<a class="headerlink" href="#id4" title="Permalink to this heading"></a></h3>
+<section id="id5">
+<h3>Request<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;new-name&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
@@ -277,8 +298,8 @@ The API package has to be installed on the system to use the appropriate routes.
 </pre></div>
 </div>
 </section>
-<section id="id5">
-<h3>Response<a class="headerlink" href="#id5" title="Permalink to this heading"></a></h3>
+<section id="id6">
+<h3>Response<a class="headerlink" href="#id6" title="Permalink to this heading"></a></h3>
 <div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_name&quot;</span><span class="p">:</span><span class="w"> </span><span class="s2">&quot;new-name&quot;</span><span class="p">,</span><span class="w"></span>
 <span class="w">    </span><span class="nt">&quot;connection_id&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w"></span>
@@ -297,6 +318,19 @@ The API package has to be installed on the system to use the appropriate routes.
 <span class="w">        </span><span class="nt">&quot;jitter&quot;</span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="w"></span>
 <span class="w">    </span><span class="p">}</span><span class="w"></span>
 <span class="p">}</span><span class="w"></span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="delete-api-v1-connections-connection-id">
+<h2>DELETE <code class="docutils literal notranslate"><span class="pre">/api/v1/connections/&lt;connection_id&gt;/</span></code><a class="headerlink" href="#delete-api-v1-connections-connection-id" title="Permalink to this heading"></a></h2>
+<p>Deletes a specific connection.</p>
+<section id="id7">
+<h3>Response<a class="headerlink" href="#id7" title="Permalink to this heading"></a></h3>
+<div class="highlight-json notranslate"><div class="highlight"><pre><span></span><span class="p">[</span><span class="w"></span>
+<span class="w">    </span><span class="s2">&quot;Connection deleted successfully&quot;</span><span class="p">,</span><span class="w"></span>
+<span class="w">    </span><span class="mi">200</span><span class="w"></span>
+<span class="p">]</span><span class="w"></span>
 </pre></div>
 </div>
 </section>
