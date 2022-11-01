@@ -52,6 +52,22 @@ Response
     }
 
 
+DELETE ``/api/v1/device/reset/``
+***********************
+
+Reset all connections on the device.
+
+Response
+======================
+
+.. code-block:: json 
+
+    [
+        "Device successfully resetted",
+        200
+    ]
+
+
 GET ``/api/v1/connections/``
 ******************************
 
@@ -213,3 +229,19 @@ Response
             "jitter": 0
         }
     }
+
+
+DELETE ``/api/v1/connections/<connection_id>/``
+***********************
+
+Deletes a specific connection.
+
+Response
+======================
+
+.. code-block:: json 
+
+    [
+        "Connection deleted successfully",
+        200
+    ]
