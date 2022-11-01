@@ -156,7 +156,7 @@ def _add_interfaces_to_bridge(
 
 
 def _delete_linux_bridge(connection_name: str) -> None:
-    _execute_in_shell(f"ip link del {connection_name}")
+    _execute_in_shell(f"ip link del dev {connection_name}")
 
 
 def add_connection(
