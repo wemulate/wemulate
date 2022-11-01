@@ -13,6 +13,7 @@ from wemulate.controllers.config_controller import app as config_app
 from wemulate.controllers.show_controller import app as show_app
 from wemulate.controllers.delete_controller import app as delete_app
 from wemulate.controllers.reset_controller import app as reset_app
+from wemulate.controllers.restore_controller import app as restore_app
 from wemulate.utils.output import err_console, console
 
 
@@ -25,6 +26,7 @@ app.add_typer(config_app, name="config", no_args_is_help=True)
 app.add_typer(show_app, name="show", no_args_is_help=True)
 app.add_typer(delete_app, name="delete", no_args_is_help=True)
 app.add_typer(reset_app, name="reset", no_args_is_help=True)
+app.add_typer(restore_app, name="restore", no_args_is_help=True)
 
 
 def _get_version(value: bool) -> Optional[str]:
