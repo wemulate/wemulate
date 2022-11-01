@@ -9,6 +9,15 @@ from wemulate.utils.output import err_console, console
 from wemulate.core.database.setup import pre_setup_database
 
 
+def _check_if_physical_interfaces_exists(management_interfaces: List[str]):
+    for interface in management_interfaces:
+        if not settings.check_if_interface_present_on_device(interface):
+            err_console.print(
+                f"The interface {interface} is not physically present on the device!"
+            )
+            raise typer.Exit(1)
+
+
 app = typer.Typer(help="configure the application settings")
 
 
@@ -20,6 +29,7 @@ def set(
     forcing: bool = typer.Option(False, "--force", "-f"),
 ):
     if management_interfaces:
+        _check_if_physical_interfaces_exists(management_interfaces)
         console.print("Changing the management interfaces will reset the device.")
         if not forcing:
             confirmation = Confirm.ask("Do you want to proceed")

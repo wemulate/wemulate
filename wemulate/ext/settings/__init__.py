@@ -9,4 +9,5 @@ from wemulate.ext.settings.device import (
     get_non_mgmt_interfaces,
     check_if_mgmt_interface_set,
     reset_mgmt_interfaces,
+    check_if_interface_present_on_device,
 )

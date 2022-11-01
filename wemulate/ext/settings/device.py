@@ -7,7 +7,7 @@ from wemulate.core.exc import WEmulateExecutionError, WemulateMgmtInterfaceError
 from wemulate.ext.utils.reset import reset_device
 
 
-def _interface_present_on_device(interface_name: str) -> bool:
+def check_if_interface_present_on_device(interface_name: str) -> bool:
     return interface_name in get_all_interfaces_on_device()
 
 
@@ -83,7 +83,7 @@ def add_mgmt_interface(interface_name: str) -> None:
     Returns:
         None
     """
-    if _interface_present_on_device(interface_name):
+    if check_if_interface_present_on_device(interface_name):
         dbutils.create_mgmt_interface(interface_name)
     else:
         raise WemulateMgmtInterfaceError(interface_name)
