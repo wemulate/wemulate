@@ -18,3 +18,4 @@ from wemulate.ext.utils.common import (
     get_current_applied_parameters,
 )
 from wemulate.ext.utils.delete import delete_connection, delete_parameter
+from wemulate.ext.utils.restore import restore_device, restore_connection

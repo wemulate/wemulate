@@ -18,9 +18,6 @@ from wemulate.core.database.models import (
 from wemulate.core.exc import WEmulateExecutionError, WEmulateFileError
 
 
-CONFIG_PATH: str = "/var/lib/wemulate/config"
-BRIDGE_CONFIG_FILE: str = "bridge.conf"
-TC_CONFIG_FILE: str = "tc.conf"
 ip: IPRoute = IPRoute()
 SMALLEST_POSSIBLE_DELAY: int = 1
 
@@ -102,46 +99,12 @@ def _add_corruption_command(
     )
 
 
-def _add_config_files_if_not_exist(connection_name: str) -> None:
-    connection_config_path: str = f"{CONFIG_PATH}/{connection_name}/"
-    if not os.path.exists(connection_config_path):
-        os.makedirs(connection_config_path)
-
-
-def _delete_config_files(connection_name: str) -> None:
-    connection_config_path: str = f"{CONFIG_PATH}/{connection_name}/"
-    if os.path.exists(connection_config_path):
-        shutil.rmtree(connection_config_path, ignore_errors=True)
-
-
-def _write_commands_into_config_file(
-    connection_name: str, config_file_name: str, write_mode: str, commands: List[str]
-) -> None:
-    config_file_path: str = f"{CONFIG_PATH}/{connection_name}/{config_file_name}"
-    with open(config_file_path, write_mode) as config_file:
-        for command in commands:
-            config_file.write(f"{command}\n")
-
-
-def _write_commands_to_bridge_config_file(
-    connection_name: str, commands: List[str]
-) -> None:
-    _write_commands_into_config_file(connection_name, BRIDGE_CONFIG_FILE, "a", commands)
-
-
-def _write_commands_to_tc_config_file(
-    connection_name: str, commands: List[str]
-) -> None:
-    _write_commands_into_config_file(connection_name, TC_CONFIG_FILE, "w", commands)
-
-
 def _add_and_activate_linux_bridge(connection_name: str) -> None:
     commands: List[str] = [
         f"ip link add name {connection_name} type bridge",
         f"ip link set dev {connection_name} up",
     ]
     _execute_commands(commands)
-    _write_commands_to_bridge_config_file(connection_name, commands)
 
 
 def _add_interfaces_to_bridge(
@@ -152,7 +115,6 @@ def _add_interfaces_to_bridge(
         for interface in (interface1_name, interface2_name)
     ]
     _execute_commands(commands)
-    _write_commands_to_bridge_config_file(connection_name, commands)
 
 
 def _delete_linux_bridge(connection_name: str) -> None:
@@ -178,7 +140,6 @@ def add_connection(
         WEmulateFileError: if the configuration files could not be created or modified
     """
     try:
-        _add_config_files_if_not_exist(connection_name)
         _add_and_activate_linux_bridge(connection_name)
         _add_interfaces_to_bridge(connection_name, interface1_name, interface2_name)
     except OSError as e:
@@ -201,7 +162,6 @@ def remove_connection(connection_name: str) -> None:
     """
     try:
         _delete_linux_bridge(connection_name)
-        _delete_config_files(connection_name)
     except OSError as e:
         raise WEmulateFileError(message=f"Error: {e.strerror} | Filename: {e.filename}")
 
@@ -246,7 +206,7 @@ def set_parameters(
     Raises:
         WEmulateExecutionError: if the parameters could not be applied to the interface
     """
-    config_commands : List[str] = []
+    config_commands: List[str] = []
     for direction in [INCOMING, OUTGOING]:
         if parameters[direction]:
             mean_delay = (
@@ -261,7 +221,6 @@ def set_parameters(
             config_commands.extend([ipv4_config_command, ipv6_config_command])
     remove_parameters(connection_name, interface_name)
     _execute_commands(config_commands)
-    _write_commands_to_tc_config_file(connection_name, config_commands)
 
 
 def remove_parameters(connection_name: str, interface_name: str) -> None:
@@ -278,6 +237,5 @@ def remove_parameters(connection_name: str, interface_name: str) -> None:
         WEmulateExecutionError: if the parameters could not be removed from the interface
     """
     ipv4_delete_command = f"tcdel {interface_name} --all"
-    ipv6_delete_command = ipv4_delete_command + " --ipv6" 
+    ipv6_delete_command = ipv4_delete_command + " --ipv6"
     _execute_commands([ipv4_delete_command, ipv6_delete_command])
-    _write_commands_to_tc_config_file(connection_name, [""])
