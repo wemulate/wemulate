@@ -14,7 +14,7 @@ app = typer.Typer(help="restore connections and parameters stored in the databas
 @app.command(help="restore all connections", no_args_is_help=False)
 def device():
     utils.restore_device()
-    console.print("device restored")
+    console.print("successfully restored device")
 
 
 @app.command(help="restore a specific connection", no_args_is_help=True)

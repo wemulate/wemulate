@@ -7,7 +7,7 @@ from wemulate.core.database.models import INCOMING, OUTGOING
 
 def restore_device() -> None:
     """
-    Restores all connections and tcparameters stored in the database.
+    Restores all connections and tc parameters stored in the database.
 
     Returns:
         None

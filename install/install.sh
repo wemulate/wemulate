@@ -86,7 +86,7 @@ create_startup_configuration() {
     sudo mkdir -p "$configuration_dir"
   fi
   sudo bash -c "cat >> "${cron_config_file}"" << EOF
-@reboot root    wemulate restore device >> $cron_config_file
+@reboot root    wemulate restore device
 EOF
   completed "Startup configuration created"
 }
