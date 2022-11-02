@@ -64,6 +64,8 @@
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.get_logical_interface_by_physical_name"><code class="docutils literal notranslate"><span class="pre">get_logical_interface_by_physical_name()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.get_logical_interface_by_id"><code class="docutils literal notranslate"><span class="pre">get_logical_interface_by_id()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.get_connection_list"><code class="docutils literal notranslate"><span class="pre">get_connection_list()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id0"><code class="docutils literal notranslate"><span class="pre">reset_connection()</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#id2"><code class="docutils literal notranslate"><span class="pre">reset_device()</span></code></a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="#setting-and-configuration-interface">Setting and Configuration Interface</a><ul>
@@ -112,8 +114,8 @@
         <div class="rst-content">
           <div role="navigation" aria-label="Page navigation">
   <ul class="wy-breadcrumbs">
-      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
-      <li>Developer Interface</li>
+      <li><a href="../index.html" class="icon icon-home"></a></li>
+      <li class="breadcrumb-item active">Developer Interface</li>
       <li class="wy-breadcrumbs-aside">
             <a href="../_sources/dev/developer-interface.rst.txt" rel="nofollow"> View page source</a>
       </li>
@@ -405,6 +407,31 @@ If not, the parameter will be removed in both directions (bidirectional, in-/out
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
 <dd class="field-odd"><p>Returns a list of connection objects.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id0">
+<span class="sig-prename descclassname"><span class="pre">wemulate.ext.utils.</span></span><span class="sig-name descname"><span class="pre">reset_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wemulate/ext/utils/reset.html#reset_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id0" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes all parameter on a specific connection</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>connection_name</strong> – Name of the connection which should be reset</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="id2">
+<span class="sig-prename descclassname"><span class="pre">wemulate.ext.utils.</span></span><span class="sig-name descname"><span class="pre">reset_device</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wemulate/ext/utils/reset.html#reset_device"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#id2" title="Permalink to this definition"></a></dt>
+<dd><p>Deletes all parameters and connection in the database and on the host system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>None</p>
 </dd>
 </dl>
 </dd></dl>
