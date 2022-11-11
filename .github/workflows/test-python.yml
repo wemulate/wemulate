@@ -1,0 +1,23 @@
+name: Test Code with Pytest
+
+on: [push]
+
+jobs:
+  build-n-publish:
+    name: Testing
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup python
+        uses: actions/setup-python@v1
+        with:
+          python-version: 3.9
+      
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+
+      - name: install dependencies
+        run: poetry install
+
+      - name: run pytest
+        run: pytest

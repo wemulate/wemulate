@@ -56,3 +56,10 @@ Install the virtualenv.
 ```
 $ poetry install
 ```
+
+### Testing
+In order to test WEmulate and to use an in-memory sqlite database, the following environment variable has to be set:
+```
+export WEMULATE_TESTING=true
+```
+The tests can then be executed with pytest.

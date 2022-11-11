@@ -269,6 +269,11 @@ def get_mgmt_interfaces(session: Session) -> List[ManagementInterfaceModel]:
 
 
 @use_db_session
+def get_logical_interfaces(session: Session) -> List[LogicalInterfaceModel]:
+    return session.query(LogicalInterfaceModel).all()
+
+
+@use_db_session
 def create_mgmt_interface(session: Session, interface_name: str) -> None:
     mgmt_interface: ManagementInterfaceModel = ManagementInterfaceModel(interface_name)
     session.add(mgmt_interface)
@@ -282,6 +287,11 @@ def delete_logical_interfaces(session: Session) -> None:
 @use_db_session
 def delete_mgmt_interfaces(session: Session) -> None:
     session.query(ManagementInterfaceModel).delete()
+
+
+@use_db_session
+def get_interfaces(session: Session) -> None:
+    return session.query(InterfaceModel).all()
 
 
 @use_db_session
