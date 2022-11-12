@@ -1,6 +1,9 @@
-name: Test Code with Pytest
+name: Tests
 
 on: [push]
+
+env: 
+  WEMULATE_TESTING: true
 
 jobs:
   build-n-publish:
@@ -17,7 +20,7 @@ jobs:
         uses: snok/install-poetry@v1
 
       - name: install dependencies
-        run: poetry install
+        run: poetry install --with dev-dependencies
 
       - name: run pytest
         run: pytest

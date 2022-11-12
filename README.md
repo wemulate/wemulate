@@ -62,4 +62,8 @@ In order to test WEmulate and to use an in-memory sqlite database, the following
 ```
 export WEMULATE_TESTING=true
 ```
+Install the dev dependencies:
+```
+poetry install --with dev-dependencies
+```
 The tests can then be executed with pytest.
