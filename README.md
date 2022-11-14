@@ -1,3 +1,4 @@
+[![Tests](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml)  
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 # WEmulate
 
