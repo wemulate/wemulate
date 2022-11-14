@@ -12,15 +12,9 @@ from wemulate.core.database.models import (
     DeviceModel,
     InterfaceModel,
     ConnectionModel,
-    ParameterModel,
     BANDWIDTH,
     DELAY,
-    PACKET_LOSS,
-    JITTER,
-    DUPLICATION,
-    CORRUPTION,
     INCOMING,
-    OUTGOING,
 )
 
 
@@ -120,11 +114,26 @@ def test_delete_all_parameter_on_connection(db_test_setup):
 
 
 def test_create_or_update_parameter(db_test_setup):
-    pass
+    create_one_connection()
+    dbutils.create_or_update_parameter(1, DELAY, 20, INCOMING)
+    dbutils.create_or_update_parameter(1, BANDWIDTH, 100, INCOMING)
+    connection: ConnectionModel = dbutils.get_connection_by_id(1)
+    for param in connection.parameters:
+        if param.parameter_name == DELAY:
+            assert param.value == 20
+            assert param.direction == INCOMING
+        if param.parameter_name == BANDWIDTH:
+            assert param.value == 100
+            assert param.direction == INCOMING
 
 
 def test_delete_parameter_on_connection_id(db_test_setup):
-    pass
+    create_one_connection()
+    dbutils.delete_parameter_on_connection_id(1, DELAY, INCOMING)
+    connection: ConnectionModel = dbutils.get_connection_by_id(1)
+    for param in connection.parameters:
+        if param.parameter_name == DELAY:
+            assert False
 
 
 def test_delete_connection_by_name(db_test_setup):
@@ -134,7 +143,10 @@ def test_delete_connection_by_name(db_test_setup):
 
 
 def test_reset_all_connections(db_test_setup):
-    pass
+    create_two_connections()
+    dbutils.reset_all_connections()
+    connection_list: List[ConnectionModel] = dbutils.get_connection_list()
+    assert connection_list == []
 
 
 def test_get_mgmt_interfaces(db_test_setup):
