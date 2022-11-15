@@ -1,4 +1,4 @@
-name: Tests
+name: CI
 
 on: [push]
 
@@ -23,4 +23,7 @@ jobs:
         run: poetry install --with dev-dependencies
 
       - name: run pytest
-        run: poetry run pytest --cov=wemulate
+        run: poetry run pytest --cov-report term --cov=wemulate
+
+      - name: Upload Coverage to Codecov
+        uses: codecov/codecov-action@v2
