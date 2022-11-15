@@ -204,3 +204,9 @@ def test_get_interfaces(db_test_setup):
         assert int.physical_name == f"ens{count}"
         dbcount += 1
         count += 1
+
+
+def test_connection_exists(db_test_setup):
+    assert not dbutils.connection_exists("test")
+    create_one_connection()
+    assert dbutils.connection_exists("test")
