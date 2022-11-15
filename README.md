@@ -1,3 +1,5 @@
+[![CI](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml)
+[![codecov](https://codecov.io/github/wemulate/wemulate/branch/main/graph/badge.svg?token=PCERPBMLFY)](https://codecov.io/github/wemulate/wemulate)  
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 # WEmulate
 
@@ -56,3 +58,14 @@ Install the virtualenv.
 ```
 $ poetry install
 ```
+
+### Testing
+In order to test WEmulate and to use an in-memory sqlite database, the following environment variable has to be set:
+```
+export WEMULATE_TESTING=true
+```
+Install the dev dependencies:
+```
+poetry install --with dev-dependencies
+```
+The tests can then be executed with pytest.

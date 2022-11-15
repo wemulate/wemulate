@@ -5,8 +5,6 @@ from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
-from wemulate.core.database.session import database_engine
-
 
 BANDWIDTH: str = "bandwidth"
 DELAY: str = "delay"
@@ -323,4 +321,5 @@ class ParameterModel(Base):
         )
 
 
-Base.metadata.create_all(database_engine)
+def init_database(database_engine):
+    Base.metadata.create_all(database_engine)
