@@ -37,6 +37,11 @@ def test_get_logical_interface_by_id(db_test_setup):
     assert logical_interface.logical_name == "LAN-A"
 
 
+def test_get_logical_interface_id_by_logical_name(db_test_setup):
+    logical_interface_id = dbutils.get_logical_interface_id_by_logical_name("LAN-A")
+    assert logical_interface_id == 1
+
+
 def test_get_logical_interface_by_name(db_test_setup):
     logical_interface: LogicalInterfaceModel = dbutils.get_logical_interface_by_name(
         "LAN-A"
