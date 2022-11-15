@@ -1,4 +1,5 @@
-[![CI](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml)  
+[![CI](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml)
+[![codecov](https://codecov.io/github/wemulate/wemulate/branch/main/graph/badge.svg?token=PCERPBMLFY)](https://codecov.io/github/wemulate/wemulate)  
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 # WEmulate
 
