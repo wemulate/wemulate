@@ -46,6 +46,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Developer Interface</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="#database-and-tc-interface">Database and TC Interface</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.add_connection"><code class="docutils literal notranslate"><span class="pre">add_connection()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.add_parameter"><code class="docutils literal notranslate"><span class="pre">add_parameter()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.set_parameter"><code class="docutils literal notranslate"><span class="pre">set_parameter()</span></code></a></li>
 <li class="toctree-l3"><a class="reference internal" href="#wemulate.ext.utils.create_or_update_parameters_in_db"><code class="docutils literal notranslate"><span class="pre">create_or_update_parameters_in_db()</span></code></a></li>
@@ -130,6 +131,24 @@
 <p>This part of the documentation covers all the interfaces of WEmulate.</p>
 <section id="database-and-tc-interface">
 <h2>Database and TC Interface<a class="headerlink" href="#database-and-tc-interface" title="Permalink to this heading"></a></h2>
+<dl class="py function">
+<dt class="sig sig-object py" id="wemulate.ext.utils.add_connection">
+<span class="sig-prename descclassname"><span class="pre">wemulate.ext.utils.</span></span><span class="sig-name descname"><span class="pre">add_connection</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">first_logical_interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">second_logical_interface</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wemulate/ext/utils/add.html#add_connection"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wemulate.ext.utils.add_connection" title="Permalink to this definition"></a></dt>
+<dd><p>Creates a new connection in the database and adds a linux bridge on the host system.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>connection_name</strong> – Name of the connection which should be created.</p></li>
+<li><p><strong>first_logical_interface</strong> – Name of the first logical interface.</p></li>
+<li><p><strong>second_logical_interface</strong> – Name of the second logical interface.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>None</p>
+</dd>
+</dl>
+</dd></dl>
+
 <dl class="py function">
 <dt class="sig sig-object py" id="wemulate.ext.utils.add_parameter">
 <span class="sig-prename descclassname"><span class="pre">wemulate.ext.utils.</span></span><span class="sig-name descname"><span class="pre">add_parameter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">connection_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">parameters</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">int</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">direction</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Optional</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="reference internal" href="../_modules/wemulate/ext/utils/add.html#add_parameter"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#wemulate.ext.utils.add_parameter" title="Permalink to this definition"></a></dt>
