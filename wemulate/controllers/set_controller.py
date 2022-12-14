@@ -17,10 +17,10 @@ app = typer.Typer(help="set parameters on a connection")
 )
 def parameter(
     connection_name: str = common.CONNECTION_NAME_PARAMETER,
-    delay: int = common.DELAY_PARAMETER,
-    jitter: int = common.JITTER_PARAMETER,
-    bandwidth: int = common.BANDWIDTH_PARAMTER,
-    packet_loss: int = common.PACKET_LOSS_PARAMETER,
+    delay: float = common.DELAY_PARAMETER,
+    jitter: float = common.JITTER_PARAMETER,
+    bandwidth: float = common.BANDWIDTH_PARAMTER,
+    packet_loss: float = common.PACKET_LOSS_PARAMETER,
     source: str = common.SOURCE,
     destination: str = common.DESTINATION,
 ):

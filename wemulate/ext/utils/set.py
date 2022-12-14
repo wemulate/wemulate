@@ -6,7 +6,7 @@ from wemulate.core.database.models import ConnectionModel
 
 
 def set_parameter(
-    connection_name: str, parameters: Dict[str, int], direction: Optional[str]
+    connection_name: str, parameters: Dict[str, float], direction: Optional[str]
 ) -> None:
     """
     Set parameters on the given connection. Replaces all parameters which are configured.

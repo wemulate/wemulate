@@ -99,12 +99,12 @@ def identify_direction(
 
 
 def generate_pargs(
-    delay: Optional[int],
-    jitter: Optional[int],
-    bandwidth: Optional[int],
-    packet_loss: Optional[int],
-) -> Dict[str, int]:
-    parameters: Dict[str, int] = {}
+    delay: Optional[float],
+    jitter: Optional[float],
+    bandwidth: Optional[float],
+    packet_loss: Optional[float],
+) -> Dict[str, float]:
+    parameters: Dict[str, float] = {}
     if bandwidth:
         parameters[BANDWIDTH] = bandwidth
     if delay:

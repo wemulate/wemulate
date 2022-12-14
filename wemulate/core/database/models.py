@@ -1,7 +1,7 @@
 import json
 from typing import Dict, List
 
-from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum, Boolean, Float
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy.ext.declarative import declarative_base
 
@@ -290,7 +290,7 @@ class ParameterModel(Base):
         ),
         nullable=False,
     )
-    value = Column(Integer, nullable=False)
+    value = Column(Float, nullable=False)
     direction = Column(
         Enum(
             INCOMING,
