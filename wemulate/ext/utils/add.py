@@ -40,7 +40,7 @@ def add_connection(
 
 
 def add_parameter(
-    connection_name: str, parameters: Dict[str, int], direction: Optional[str]
+    connection_name: str, parameters: Dict[str, float], direction: Optional[str]
 ) -> None:
     """
     Add parameters to the already configured parameters on the given connection.

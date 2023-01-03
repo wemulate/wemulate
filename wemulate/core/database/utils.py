@@ -39,7 +39,7 @@ def _get_specific_parameter_by_connection_id(
 def _create_parameter(
     session: Session,
     parameter_name: str,
-    value: int,
+    value: float,
     direction: str,
     connection_id: int,
 ) -> None:
@@ -225,7 +225,7 @@ def delete_all_parameter_on_connection(
 
 
 def create_or_update_parameter(
-    connection_id: int, parameter_name: str, value: int, direction: str
+    connection_id: int, parameter_name: str, value: float, direction: str
 ) -> None:
     parameter: Optional[ParameterModel] = _get_specific_parameter_by_connection_id(
         connection_id, parameter_name, direction
