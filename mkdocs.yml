@@ -1,0 +1,109 @@
+site_name: WEmulate
+site_description: A simple and modern WAN emulator
+# strict: true
+site_url: https://wemulate.github.io/wemulate
+repo_url: https://github.com/wemulate/wemulate
+repo_name: wemulate/wemulate
+copyright: Copyright &copy; 2023 INS - Institute for Network and Security
+
+theme:
+  name: material
+  features:
+    - content.code.copy
+    - content.tooltips
+
+    - navigation.sections
+    - navigation.footer
+    - navigation.indexes
+    - navigation.top
+    - navigation.tracking
+
+    - search.highlight
+    - search.share
+    - search.suggest
+
+    - toc.follow
+  palette: 
+    - scheme: slate
+      toggle:
+        icon: material/brightness-7
+        name: Switch to light mode
+      primary: orange
+      accent: indigo
+
+    - scheme: default
+      toggle:
+        icon: material/brightness-7
+        name: Switch to dark mode
+      primary: orange
+      accent: indigo
+  favicon: assets/favicon.png
+
+extra:
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/wemulate
+    - icon: fontawesome/brands/python
+      link: https://pypi.org/project/wemulate/
+    - icon: fontawesome/brands/twitter
+      link: https://twitter.com/insrapperswil
+
+markdown_extensions:
+  - abbr
+  - admonition
+  - attr_list
+  - def_list
+  - footnotes
+  - md_in_html
+  - toc:
+      permalink: true
+  - pymdownx.arithmatex:
+      generic: true
+  - pymdownx.betterem:
+      smart_enable: all
+  - pymdownx.caret
+  - pymdownx.details
+  - pymdownx.emoji:
+      emoji_generator: !!python/name:materialx.emoji.to_svg
+      emoji_index: !!python/name:materialx.emoji.twemoji
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.keys
+  - pymdownx.magiclink:
+      repo_url_shorthand: true
+      user: squidfunk
+      repo: mkdocs-material
+  - pymdownx.mark
+  - pymdownx.smartsymbols
+  - pymdownx.superfences:
+      custom_fences:
+        - name: mermaid
+          class: mermaid
+          format: !!python/name:pymdownx.superfences.fence_code_format
+  - pymdownx.tabbed:
+      alternate_style: true
+  - pymdownx.tasklist:
+      custom_checkbox: true
+  - pymdownx.tilde
+
+plugins:
+  - search
+  - mkdocstrings:
+      handlers:
+        python:
+          options:
+            heading_level: 3
+            show_root_heading: True
+
+nav:
+  - Home: index.md
+  - Getting started:
+    - Installation: getting-started/install.md
+    - Quickstart: getting-started/quickstart.md
+  - Developer:
+    - Interface: dev/developer-interface.md
+    - API Guide: dev/api.md
+    - Incoming/Outgoing Explanation: dev/incoming-outgoing-explanation.md
+  - Hardware Guide:
+    - DI-1000: hw/di-1000.md
