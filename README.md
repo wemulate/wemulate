@@ -1,5 +1,5 @@
 [![CI](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml/badge.svg)](https://github.com/wemulate/wemulate/actions/workflows/test-python.yml)
-[![codecov](https://codecov.io/github/wemulate/wemulate/branch/main/graph/badge.svg?token=PCERPBMLFY)](https://codecov.io/github/wemulate/wemulate)  
+[![codecov](https://codecov.io/github/wemulate/wemulate/branch/main/graph/badge.svg?token=PCERPBMLFY)](https://codecov.io/github/wemulate/wemulate)
 **A modern WAN Emulator developed by the Institute for Networked Solutions**
 # WEmulate
 
@@ -14,7 +14,7 @@ Have a look at the [documentation](https://wemulate.github.io/wemulate) for deta
 * Root permissions
 
 ### Getting Started
-To install only the WEmulate cli with bash, simply run this command in your terminal of choice:  
+To install only the WEmulate cli with bash, simply run this command in your terminal of choice:
 ```
 bash -c "$(curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh)"
 ```
@@ -31,7 +31,7 @@ You can for example install the cli, api and frontend module together with one m
 curl -fsSL https://raw.githubusercontent.com/wemulate/wemulate/main/install/install.sh | bash -s -- -a -v -i ens2 -f
 ```
 
-## Usage 
+## Usage
 ![WEmulate CLI Commands](/docs/img/animation-wemulate-cli.gif)
 
 ```bash
@@ -66,6 +66,9 @@ export WEMULATE_TESTING=true
 ```
 Install the dev dependencies:
 ```
-poetry install --with dev-dependencies
+poetry install --with dev
 ```
 The tests can then be executed with pytest.
+```
+poetry run pytest
+```
