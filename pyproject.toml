@@ -1,41 +1,34 @@
-[tool.poetry]
+[project]
 name = "wemulate"
-version = "2.0.5"
+version = "3.0.0"
 description = "A modern WAN Emulator"
-authors = ["Julian Klaiber <julian.klaiber@ost.ch>", "Severin Dellsperger <severin.dellsperger@ost.ch>"]
-license = "GNU General Public License v3.0"
+authors = [
+    {name = "Julian Klaiber", email = "julian.klaiber@ost.ch"},
+    {name = "Severin Dellsperger", email = "severin.dellsperger@ost.ch"},
+    {name = "Jan Untersander", email = "jan.untersander@ost.ch"},
+]
+license = {text = "GNU General Public License v3.0"}
 readme = "README.md"
-homepage = "https://wemulate.github.io/wemulate"
-documentation = "https://wemulate.github.io/wemulate"
-repository = "https://github.io/wemulate/wemulate"
-packages = [
-    { include = "wemulate" },
+requires-python = ">=3.8"
+dependencies = [
+    "typer==0.6.1",
+    "jinja2==3.1.2",
+    "pyyaml==6.0.1",
+    "colorlog==6.6.0",
+    "netifaces==0.11.0",
+    "SQLAlchemy==1.4.3",
+    "pyroute2==0.7.1",
+    "tcconfig==0.27.1",
+    "rich>=12.5.1",
+    "mkdocs>=1.4.2",
+    "mkdocs-material>=9.0.5",
+    "pymdown-extensions>=9.9.1",
+    "mkdocstrings[python]>=0.19.1",
 ]
 
-[tool.poetry.scripts]
+[project.scripts]
 wemulate = "wemulate.main:app"
 
-[tool.poetry.dependencies]
-python = "^3.8"
-typer = "0.6.1"
-jinja2 = "3.1.2"
-pyyaml = "6.0.1"
-colorlog = "6.6.0"
-netifaces = "0.11.0"
-SQLAlchemy = "1.4.3"
-pyroute2 = "0.7.1"
-tcconfig = "0.27.1"
-rich = "^12.5.1"
-mkdocs = "^1.4.2"
-mkdocs-material = "^9.0.5"
-pymdown-extensions = "^9.9.1"
-mkdocstrings = {extras = ["python"], version = "^0.19.1"}
 
-[tool.poetry.group.dev.dependencies]
-black = "^22.6.0"
-pytest = "^7.2.0"
-pytest-cov = "^4.0.0"
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+[dependency-groups]
+dev = ["black>=22.6.0", "pytest>=7.2.0", "pytest-cov>=4.0.0"]
